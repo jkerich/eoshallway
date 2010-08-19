@@ -10,6 +10,7 @@
 		private var dc:MovieClip;
 		private var titleContainer:MovieClip;
 		private var description:MovieClip;
+		private var largeImageContainer:MovieClip;
 		
 		//loaders
 		//private var loader:Loader;
@@ -58,6 +59,7 @@
 			dc = new MovieClip();
 			titleContainer = new MovieClip();
 			description = new MovieClip();
+			largeImageContainer = new MovieClip();
 			
 			mediaInfo = new Array();
 			mediaContent = new Array();
@@ -90,10 +92,10 @@
 			trace("TEMP LENGTH: " + temp.length);
 			if(mouseX >= center) {//next image
 				focusImage = (focusImage+1)%(temp.length);
-				changeDisplay(loadImage(temp[focusImage]));
+				changeContent(dc,loadImage(temp[focusImage]));
 			}else if(mouseX<center ){//previous imaged
 				focusImage = (focusImage>0) ? (focusImage-1)%temp.length: temp.length-1; //account for first image being zero
-				changeDisplay(loadImage(temp[focusImage]));
+				changeContent(dc,loadImage(temp[focusImage]));
 			}
 			trace("FOCUS IMAGE : " + focusImage);
 			
@@ -123,7 +125,7 @@
 					}
 				}
 			}
-			changeDisplay(loadImage(temp[0]));
+			changeContent(dc,loadImage(temp[0]));
 		}
 		private function loadImage(path:String):Loader {
 			trace("Loading image: " + path);
@@ -170,8 +172,8 @@
 			d.x = 0;
 			d.y = sH-d.height*1.5;
 			
-			changetitleContainer(t);
-			changeDescriptionContainer(d);
+			changeContent(titleContainer,t);
+			changeContent(description,d);
 			
 		}
 		private function loadProgress(e:ProgressEvent):void {
@@ -182,24 +184,12 @@
 		private function imageLoadFail(e:IOErrorEvent):void {
 			trace("load failed");
 		}
-		//utility functions -> combine change* functions
-		private function changeDisplay(obj:*):void {
-			while(dc.numChildren) {
-				dc.removeChildAt(0);
+		//utility functions
+		private function changeContent(con:*,obj:*):void { 
+			while(con.numChildren) {
+				con.removeChildAt(0);
 			}
-			dc.addChild(obj);
-		}
-		private function changetitleContainer(obj:*):void {
-			while(titleContainer.numChildren) {
-				titleContainer.removeChildAt(0);
-			}
-			titleContainer.addChild(obj);
-		}
-		private function changeDescriptionContainer(obj:*):void {
-			while(description.numChildren) {
-				description.removeChildAt(0);
-			}
-			description.addChild(obj);
+			con.addChild(obj);
 		}
 		private function scale(tar:Object,w:Number,h:Number):Object {
 			//scaling
