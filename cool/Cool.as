@@ -44,6 +44,8 @@
 			-add subbutton row
 			-add frame changing effect
 			
+			
+			-figure out liquid heights
 		*/
 		
 		public function Cool() {
@@ -51,7 +53,7 @@
 		}
 		private function init(e:Event):void {
 			homeRowButtons = [new HomeBtn(), new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
-			homeRowHandlers = [homeClick, mediaClick, orbitsClick ,factsClick]
+			homeRowHandlers = [homeClick, mediaClick, orbitsClick ,factsClick];
 			
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -60,6 +62,7 @@
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
 			titleH = (new EOSTitle()).height;
+			
 			titleW = (new EOSTitle()).width;
 			
 			slaveW = sW - paddingW;
@@ -68,14 +71,13 @@
 			subButtonH = 60;
 			
 			buttonW = slaveW/sats.length;
-			buttonH = 200; //430 is dc height
+			buttonH = 200;
 			
 			//add title
 			title = new EOSTitle();
 			title.x = (sW-slaveW)/2;
 			title.y = paddingH;
 			addChild(title);
-			trace(paddingH);
 			
 			//add display container
 			var dc:DisplayContainer = new DisplayContainer(slaveW,slaveH-buttonH);  //need to change slaveH to val specific to dc
