@@ -19,6 +19,8 @@
 		private var paddingH:Number = 15;
 		private var paddingW:Number = 35;
 		
+		
+		
 		//dynamic variables
 		//cannot access stage until class is added to display list which does not occur until after all objects 
 		//	already on stage are loaded -> use Event.ADDED_TO_STAGE
@@ -32,7 +34,8 @@
 		private var titleH:Number;
 		private var subButtonW:Number;
 		private var subButtonH:Number;
-		
+		private var homeRowButtons:Array;
+		private var homeRowHandlers:Array;
 		
 		/*
 		TODO:
@@ -47,6 +50,9 @@
 			addEventListener(Event.ADDED_TO_STAGE,init);
 		}
 		private function init(e:Event):void {
+			homeRowButtons = [new HomeBtn(), new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
+			homeRowHandlers = [homeClick, mediaClick, orbitsClick ,factsClick]
+			
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
 			
@@ -54,6 +60,7 @@
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
 			titleH = (new EOSTitle()).height;
+			titleW = (new EOSTitle()).width;
 			
 			slaveW = sW - paddingW;
 			slaveH = sH - paddingH;
@@ -61,22 +68,32 @@
 			subButtonH = 60;
 			
 			buttonW = slaveW/sats.length;
-			buttonH = slaveH - titleH - 430 - subButtonH;
+			buttonH = 200; //430 is dc height
 			
 			//add title
 			title = new EOSTitle();
 			title.x = (sW-slaveW)/2;
 			title.y = paddingH;
 			addChild(title);
-			
-			//add home buttons
-			homeButton.addEventListener(MouseEvent.CLICK,homeClick);
+			trace(paddingH);
 			
 			//add display container
-			var dc:DisplayContainer = new DisplayContainer(slaveW,430);  //need to change slaveH to val specific to dc
+			var dc:DisplayContainer = new DisplayContainer(slaveW,slaveH-buttonH);  //need to change slaveH to val specific to dc
 			dc.x = (sW-slaveW)/2;
 			dc.y = 75;
 			addChild(dc);
+			
+			//add home buttons
+			homeRow = new MovieClip();
+			for (var b:Number = 0;b<homeRowButtons.length;b++) {
+				homeRowButtons[b].x = homeRowButtons[b].width * b;
+				homeRowButtons[b].addEventListener(MouseEvent.CLICK,homeRowHandlers[b]);
+				homeRow.addChild(homeRowButtons[b]);
+			}
+			homeRow.x = titleW + title.x;
+			homeRow.y = dc.y - homeRow.height;
+			addChild(homeRow);
+			
 			
 			//add big buttons
 			buttonRow = new MovieClip();
@@ -92,13 +109,23 @@
 			addChild(buttonRow);
 			
 		}
-		private function homeClick(e:MouseEvent):void {
-			trace("home clicked");
-		}
+		
 		private function bigButtonClicked(e:MouseEvent):void {
 			trace(e.currentTarget.getName());
 		}
-		
+		//homerow handlers
+		private function mediaClick(e:MouseEvent):void {
+			trace("media clicked");
+		}
+		private function homeClick(e:MouseEvent):void {
+			trace("home clicked");
+		}
+		private function orbitsClick(e:MouseEvent):void {
+			trace("orbits clicked");
+		}
+		private function factsClick(e:MouseEvent):void {
+			trace("facts clicked");
+		}
 		//utility functions
 		
 	}//end class
