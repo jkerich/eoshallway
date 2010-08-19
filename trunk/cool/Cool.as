@@ -37,6 +37,10 @@
 		/*
 		TODO:
 			-consider scaling buttonH and buttonW
+			-automate positioning of homeRow
+			-add subbutton row
+			-add frame changing effect
+			
 		*/
 		
 		public function Cool() {
@@ -65,6 +69,9 @@
 			title.y = paddingH;
 			addChild(title);
 			
+			//add home buttons
+			homeButton.addEventListener(MouseEvent.CLICK,homeClick);
+			
 			//add display container
 			var dc:DisplayContainer = new DisplayContainer(slaveW,430);  //need to change slaveH to val specific to dc
 			dc.x = (sW-slaveW)/2;
@@ -84,6 +91,9 @@
 			buttonRow.y = dc.y + dc.height;
 			addChild(buttonRow);
 			
+		}
+		private function homeClick(e:MouseEvent):void {
+			trace("home clicked");
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
 			trace(e.currentTarget.getName());
