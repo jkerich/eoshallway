@@ -9,7 +9,7 @@
 	public class Cool extends MovieClip {
 		//mcs
 		private var masterDisplay:MovieClip;
-		private var slaveDisplay:MovieClip;
+		private var slaveDisplay:Array; //an array of 4 movie clips
 		private var title:MovieClip;
 		private var homeRow:MovieClip;
 		private var buttonRow:MovieClip;
@@ -24,9 +24,14 @@
 		private var sats:Array = ["aqua","aura","terra","trmm"];
 		var defaultNames:Array = new Array("about","presentations","videos","specs","images");
 		var defaultHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		var slimNames:Array = new Array("poot","minatuar","videos","specs","images");
-		var slimHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		
+		var aquaNames:Array = new Array("about","minatuar","videos","specs","images");
+		var aquaHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		var auraNames:Array = new Array("about","krakan","videos","specs","images");
+		var auraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		var terraNames:Array = new Array("about","golem","videos","specs","images");
+		var terraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		var trmmNames:Array = new Array("about","chimera","videos","specs","images");
+		var trmmHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
 		//dynamic variables
 		//cannot access stage until class is added to display list which does not occur until after all objects 
 		//	already on stage are loaded -> use Event.ADDED_TO_STAGE
@@ -49,9 +54,6 @@
 			-automate positioning of homeRow
 			-add subbutton row
 			-add frame changing effect
-			
-			
-			-figure out liquid heights
 		*/
 		
 		public function Cool() {
@@ -60,12 +62,11 @@
 		private function init(e:Event):void {
 			homeRowButtons = [new HomeBtn(), new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
 			homeRowHandlers = [homeClick, mediaClick, orbitsClick ,factsClick];
-			
+
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
 			
-			//derived vars
-			
+			//--derived vars
 			//compute heights
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
@@ -78,17 +79,32 @@
 			buttonW = slaveW/sats.length; //big buttons in middle, height is constant
 			subButtonW = slaveW;
 			
+			//slave containers
+			slaveDisplay = new Array();
+			/*slaveDisplay[0] = new MovieClip();
+			slaveDisplay[0].x = paddingW;
+			slaveDisplay[0].y = paddingH;
+			drawHitBox(slaveDisplay[0],slaveW,slaveH);*/
+			for(var a:Number = 0;a<slaveDisplay.length;a++) {
+				//random color
+				var color:uint = Math.random()*0xFFFFFF;
+				slaveDisplay[a] = new MovieClip();
+				slaveDisplay[a].x = paddingW*a;
+				slaveDisplay[a].y = paddingH;
+				drawHitBox(slaveDisplay[a],slaveW,slaveH,color,.9);
+			}
+			
+			
+			
 			//add title
 			title = new EOSTitle();
-			title.x = paddingW;
-			title.y = paddingH;
-			addChild(title);
+			slaveDisplay[0].addChild(title);
 			
 			//add display container
-			var dc:DisplayContainer = new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH);  //need to change slaveH to val specific to dc
-			dc.x = paddingW;
+			var dc:DisplayContainer = new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH);
+			//dc.x = paddingW;
 			dc.y = title.y + titleH;
-			addChild(dc);
+			slaveDisplay[0].addChild(dc);
 			
 			//add home buttons
 			homeRow = new MovieClip();
@@ -99,7 +115,7 @@
 			}
 			homeRow.x = titleW + title.x;
 			homeRow.y = dc.y - homeRow.height;
-			addChild(homeRow);
+			slaveDisplay[0].addChild(homeRow);
 			
 			
 			//add big buttons
@@ -110,31 +126,48 @@
 				btn.addEventListener(MouseEvent.CLICK,bigButtonClicked);
 				buttonRow.addChild(btn);
 			}
-			buttonRow.x = paddingW;
+			//buttonRow.x = paddingW;
 			buttonRow.y = dc.y + dc.height;
 			
 			//add frame
 			frame = new MovieClip();
 			drawHitBox(frame,buttonW,buttonH,0x000000,.65); //generalize dc color
-			frame.x = paddingW;
+			//frame.x = paddingW;
 			frame.y = buttonRow.y;
 			
 			//add sub buttons
 			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,defaultNames,defaultHandlers);
-			subButtonRow.x = paddingW;
+			//subButtonRow.x = paddingW;
 			subButtonRow.y = buttonRow.y + buttonH;
 			
-			addChild(frame);
-			addChild(buttonRow); //add after frame so button text appears in front of frame
-			addChild(subButtonRow);
+			slaveDisplay[0].addChild(frame);
+			slaveDisplay[0].addChild(buttonRow); //add after frame so button text appears in front of frame
+			slaveDisplay[0].addChild(subButtonRow);
+			
+			addChild(slaveDisplay[0]);
 
+
+			addEventListener(MouseEvent.CLICK,moveDisplay);
+		}
+		private function moveDisplay(e:MouseEvent):void {
+			//new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-slaveDisplay[1].x,20,true);
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
 			var tar:Object = e.currentTarget;
 			new Tween(frame,"x", Back.easeOut,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
 			
 			//change sub row
-			subButtonRow.changeSat(tar.getName(),slimNames,slimHandlers); //make specific to each sat
+			//make specific to each sat			
+			if (tar.getName() == "aqua") {
+				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
+			}else if(tar.getName() == "aura") {
+				subButtonRow.changeSat("aura",auraNames,auraHandlers); 
+			}else if(tar.getName() == "terra") {
+				subButtonRow.changeSat("terra",terraNames,terraHandlers); 
+			}else if(tar.getName() == "trmm") {
+				subButtonRow.changeSat("trmm",trmmNames,trmmHandlers); 
+			}
+			
 		}
 		//homerow handlers
 		private function mediaClick(e:MouseEvent):void {
@@ -165,7 +198,6 @@
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
 		}
-		
 		
 		//utility functions
 		private function changeContent(con:*,obj:*):void { 
