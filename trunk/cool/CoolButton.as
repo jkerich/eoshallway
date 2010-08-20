@@ -20,7 +20,7 @@
 			this.picW = pW;
 			this.picH = pH;
 			
-			drawHitBox();			
+			drawHitBox(this.picW,this.picH);			
 			addTitle();
 			
 			//loadImage(picPath);			
@@ -57,10 +57,10 @@
 			return this.n;
 		}
 		//hitbox
-		private function drawHitBox():void {
+		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
 			this.graphics.clear();
-			this.graphics.beginFill(0xFFFFFF,.5);
-			this.graphics.drawRect(0,0,this.picW,this.picH);
+			this.graphics.beginFill(color,a);
+			this.graphics.drawRect(0,0,w,h);
 			this.graphics.endFill();
 		}
 	}
