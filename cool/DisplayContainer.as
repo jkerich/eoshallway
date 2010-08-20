@@ -20,7 +20,7 @@
 			this.cont.alpha = 0;
 			
 			//reset
-			if(this.numChildren > 0) {
+			while(this.numChildren) {
 				this.removeChildAt(0);
 			}
 			
