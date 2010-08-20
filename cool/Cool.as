@@ -17,21 +17,21 @@
 		private var frame:MovieClip;
 		
 		//constants
-		private var paddingH:Number = 8; //do not use decimal values
-		private var paddingW:Number = 15;
+		private const paddingH:Number = 8; //do not use decimal values
+		private const paddingW:Number = 15;
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra","trmm"];
-		var defaultNames:Array = new Array("about","presentations","videos","specs","images");
-		var defaultHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		var aquaNames:Array = new Array("about","minatuar","videos","specs","images");
-		var aquaHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		var auraNames:Array = new Array("about","krakan","videos","specs","images");
-		var auraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		var terraNames:Array = new Array("about","golem","videos","specs","images");
-		var terraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		var trmmNames:Array = new Array("about","chimera","videos","specs","images");
-		var trmmHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var defaultNames:Array = new Array("about","presentations","videos","specs","images");
+		private var defaultHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var aquaNames:Array = new Array("about","minatuar","videos","specs","images");
+		private var aquaHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var auraNames:Array = new Array("about","krakan","videos","specs","images");
+		private var auraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var terraNames:Array = new Array("about","golem","videos","specs","images");
+		private var terraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var trmmNames:Array = new Array("about","chimera","videos","specs","images");
+		private var trmmHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
 		//dynamic variables
 		//cannot access stage until class is added to display list which does not occur until after all objects 
 		//	already on stage are loaded -> use Event.ADDED_TO_STAGE
@@ -80,21 +80,26 @@
 			subButtonW = slaveW;
 			
 			//slave containers
+			masterDisplay = new MovieClip();
 			slaveDisplay = new Array();
-			/*slaveDisplay[0] = new MovieClip();
+			for(var a:Number = 0;a<4;a++) {  //4 displays
+				//random color
+				var sd:MovieClip = new MovieClip(); 
+				var color:uint = Math.random()*0xFFFFFF;
+				sd = new MovieClip();
+				drawHitBox(sd,slaveW,slaveH,color,.3);
+				slaveDisplay.push(sd);
+				masterDisplay.addChild(slaveDisplay[a]);
+			}
+			//position slave displays
 			slaveDisplay[0].x = paddingW;
 			slaveDisplay[0].y = paddingH;
-			drawHitBox(slaveDisplay[0],slaveW,slaveH);*/
-			for(var a:Number = 0;a<slaveDisplay.length;a++) {
-				//random color
-				var color:uint = Math.random()*0xFFFFFF;
-				slaveDisplay[a] = new MovieClip();
-				slaveDisplay[a].x = paddingW*a;
-				slaveDisplay[a].y = paddingH;
-				drawHitBox(slaveDisplay[a],slaveW,slaveH,color,.9);
-			}
-			
-			
+			slaveDisplay[1].x = slaveW + paddingW*2; //coughsWcough
+			slaveDisplay[1].y = paddingH;
+			slaveDisplay[2].x = paddingW;
+			slaveDisplay[2].y = slaveH + paddingH*2;
+			slaveDisplay[3].x = slaveW + paddingW*2;
+			slaveDisplay[3].y = slaveH + paddingH*2;
 			
 			//add title
 			title = new EOSTitle();
@@ -144,17 +149,18 @@
 			slaveDisplay[0].addChild(buttonRow); //add after frame so button text appears in front of frame
 			slaveDisplay[0].addChild(subButtonRow);
 			
-			addChild(slaveDisplay[0]);
+			addChild(masterDisplay);
 
 
-			addEventListener(MouseEvent.CLICK,moveDisplay);
+			stage.addEventListener(MouseEvent.CLICK,moveDisplay);
 		}
 		private function moveDisplay(e:MouseEvent):void {
-			//new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-slaveDisplay[1].x,20,true);
+			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-sW+paddingW,.5,true);
+			
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
 			var tar:Object = e.currentTarget;
-			new Tween(frame,"x", Back.easeOut,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
+			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
 			
 			//change sub row
 			//make specific to each sat			
