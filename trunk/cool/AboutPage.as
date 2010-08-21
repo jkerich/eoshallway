@@ -6,19 +6,23 @@
 	import flash.display.SimpleButton;
 	import fl.transitions.Tween;
 	import flash.display.Stage;
+	import fl.transitions.TweenEvent;
 	
 	public class AboutPage extends MovieClip {
 		//mcs
 		private var displayContainer:MovieClip;
 		private var tabs:MovieClip;
 		private var buttons:MovieClip;
-		private var aboutTitle:TextField;
+		private var aboutTitle:MovieClip;
+		private var textContent:MovieClip; 
 		//constants
 		private var sH:Number;
 		private var sW:Number;
 		private var tabH:Number;
 		private var buttonH:Number;
-		private var titleH:Number = 36;
+		private var titleW:Number;
+		private var titleH:Number = 65;
+		private var titleSize:Number = 35;
 		private var outlineColor:uint = 0xFFFFFF;
 		private var displayWidth:Number = 700;
 		private var displayHeight:Number = 600;
@@ -27,59 +31,50 @@
 		private var tabButtons:Array;
 		private var picButtons:Array;
 		private var aT:Tween;
-		private var bT:Tween;
+		private var effectSpeed:Number = .5;	
 		
 		//title
-		
 		public function AboutPage(stageWidth:Number,stageHeight:Number) {
-			this.sW = stageWidth;
-			this.sH = stageHeight;
-			var buttonContainer:MovieClip = new ButtonContainer();
+			sW = stageWidth;
+			sH = stageHeight;
 			displayContainer = new MovieClip();
-			aboutTitle = new TextField();
+			textContent = new MovieClip();
+			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
 			tabButtons = [new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
 			picButtons = [new AquaButton(),new AuraButton(), new TerraButton(), new TrmmButton()];
 			
 			
-			//add background
-			var bg:MovieClip = new GradientBackground();
-			bg.width = sW;
-			bg.height = sH;
-			bg.x = 0;
-			bg.y = 0;
-			
 			//add title
-			var tf:TextFormat = new TextFormat("Walkway SemiBold",titleH,0xFFFFFF);
-			aboutTitle.text = "EOS Spacecraft Quick Facts";
-			aboutTitle.setTextFormat(tf);
-			aboutTitle.autoSize = TextFieldAutoSize.CENTER;
-			aboutTitle.x = 0;
-			aboutTitle.y = 0;
+			var tf:TextFormat = new TextFormat("Walkway Bold",titleSize,0xFFFFFF);
+			var t:TextField = new TextField();
+			t.text = "EOS Spacecraft Quick Facts";
+			t.setTextFormat(tf);
+			t.autoSize = TextFieldAutoSize.LEFT;
+			titleW = t.width * 1.1;
+			t.y = (titleH-t.height)/2;
+			aboutTitle.addChild(t);
+			drawHitBox(aboutTitle,titleW,titleH,0x000000,.65);
+			
+			
 			
 			//create tabs and button strip
 			buttons = createButtons();
 			tabs = createTabStrip();
 			//must be this order
 			buttons.x = 0;
-			tabs.y = 40;
-			buttons.y = tabs.y + tabs.height;
-			tabs.x = buttons.x + buttons.width; 
-			
+			tabs.y = titleH-tabs.height;
+			buttons.y = aboutTitle.y + titleH;
+			tabs.x = aboutTitle.x + aboutTitle.width; 
 			
 			
 			//display container hitbox
-			displayContainer.graphics.clear();
-			displayContainer.graphics.beginFill(0xFFFFFF,0);
-			displayContainer.graphics.drawRect(0,0,displayWidth,displayHeight);
-			displayContainer.graphics.endFill();
+			drawHitBox(displayContainer,displayWidth,displayHeight);
 			displayContainer.x = tabs.x + 10;
 			displayContainer.y = tabs.y + tabs.height + 10;
 			
 			
-			
 			//add mcs to stage
-			addChild(bg);
 			addChild(aboutTitle);
 			addChild(buttons);
 			addChild(tabs);
@@ -125,25 +120,41 @@
 			
 		}
 		public function changeDisplay(c:MovieClip):void {
+			textContent = c;
 			//hide
-			displayContainer.alpha = 0
-			//reset
-			if(displayContainer.numChildren > 0) {
-				displayContainer.removeChildAt(0);
-			}
-			//center content
-			if (c.width > displayContainer.width) {
-				c.width = displayContainer.width;
-			}else {
-				c.x = (displayContainer.width - c.width)/2;
-			}
-			if (c.height > displayContainer.height) {
-				c.height = displayContainer.height;
-			}
-			//add to stage and tween
-			displayContainer.addChild(c);
-			new Tween(displayContainer,"alpha",null,displayContainer.alpha,1,.5,true);
+			aT = new Tween(displayContainer,"alpha",null,displayContainer.alpha,0,effectSpeed,true);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
+			
 		}
+		private function effectOut(e:TweenEvent):void { //effect used to change display is done
+			//center content
+			if (textContent.width > displayContainer.width) {
+				textContent.width = displayContainer.width;
+			}else {
+				textContent.x = (displayContainer.width - textContent.width)/2;
+			}
+			if (textContent.height > displayContainer.height) {
+				textContent.height = displayContainer.height;
+			}
+			//change
+			changeContent(displayContainer,textContent);
+			//effect back in
+			new Tween(displayContainer,"alpha",null,displayContainer.alpha,1,effectSpeed,true);
+		}
+		//utility
+		private function changeContent(con:*,obj:*):void { 
+			while(con.numChildren) {
+				con.removeChildAt(0);
+			}
+			con.addChild(obj);
+		}
+		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
+			obj.graphics.clear();
+			obj.graphics.beginFill(color,a);
+			obj.graphics.drawRect(0,0,w,h);
+			obj.graphics.endFill();
+		}
+		
 	}
 	
 }
