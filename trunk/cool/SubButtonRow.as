@@ -33,9 +33,9 @@
 			
 		}
 		private function init(e:Event):void {
-			this.changeSat(this.getSatName(),this.names,this.handlers);
+			this.changeSat(this.getName(),this.names,this.handlers);
 		}
-		public function getSatName():String {
+		public function getName():String {
 			return this.satName;
 		}
 		public function changeSat(sn:String,names:Array,handlers:Array):void {
@@ -44,6 +44,7 @@
 				this.y = aT.finish;
 			}
 			//begin change
+			this.satName = sn;
 			this.names = names;
 			this.handlers = handlers;
 			aT = new Tween(this,"y",null,this.y,this.y+jumpDistance,aSpeed,true);

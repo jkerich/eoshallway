@@ -47,6 +47,7 @@
 		private var subButtonH:Number = 75;
 		private var homeRowButtons:Array;
 		private var homeRowHandlers:Array;
+		private var currentDisplay:Number = 0;
 		
 		/*
 		TODO:
@@ -88,6 +89,7 @@
 				var color:uint = Math.random()*0xFFFFFF;
 				sd = new MovieClip();
 				drawHitBox(sd,slaveW,slaveH,color,.3);
+				
 				slaveDisplay.push(sd);
 				masterDisplay.addChild(slaveDisplay[a]);
 			}
@@ -122,7 +124,6 @@
 			homeRow.y = dc.y - homeRow.height;
 			slaveDisplay[0].addChild(homeRow);
 			
-			
 			//add big buttons
 			buttonRow = new MovieClip();
 			for(var i:Number = 0;i<sats.length;i++) {
@@ -151,11 +152,17 @@
 			
 			addChild(masterDisplay);
 
-
-			stage.addEventListener(MouseEvent.CLICK,moveDisplay);
 		}
-		private function moveDisplay(e:MouseEvent):void {
-			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-sW+paddingW,.5,true);
+		private function moveDisplay(dir:String):void {
+			if(dir == "right") {
+				new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-sW+paddingW,.5,true);
+			}else if(dir == "down") {
+				new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,-sH+paddingH,.5,true);
+			}else if(dir == "left") {
+				new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
+			}else if(dir == "up") {
+				new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,sH-paddingH,.5,true);
+			}
 			
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
@@ -185,11 +192,15 @@
 		private function orbitsClick(e:MouseEvent):void {
 			trace("orbits clicked");
 		}
-		private function factsClick(e:MouseEvent):void {
+		private function factsClick(e:MouseEvent):void { //make about page look better and fit
+			var ap:AboutPage = new AboutPage(slaveW,slaveH);
+			changeContent(slaveDisplay[1],ap);
+			moveDisplay("right");
 			trace("facts clicked");
 		}
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
+			var sat:String = e.currentTarget.parent.getName();
 			trace("about clicked");
 		}
 		private function presentationsClick(e:MouseEvent):void {
