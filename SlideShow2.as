@@ -163,7 +163,7 @@
 			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
 			t.autoSize = TextFieldAutoSize.LEFT;
 			t.selectable = false;
-			d.setTextFormat(new TextFormat("Walkway Bold",16,0xFFFFFF));
+			d.setTextFormat(new TextFormat("Helvetica",16,0xFFFFFF));
 			d.autoSize = TextFieldAutoSize.CENTER;
 			d.selectable = false;
 			d.wordWrap = true;
