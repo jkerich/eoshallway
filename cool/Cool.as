@@ -150,7 +150,15 @@
 			slaveDisplay[0].addChild(subButtonRow);
 			
 			addChild(masterDisplay);
+			
+			//allow people to get back to home page
+			stage.addEventListener(KeyboardEvent.KEY_DOWN,returnHome);
 
+		}
+		private function returnHome(e:KeyboardEvent):void {
+			//trace("key down");
+			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
+			new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,0,.5,true);
 		}
 		private function moveDisplay(dir:String):void {
 			if(dir == "right") {
@@ -184,12 +192,15 @@
 		//homerow handlers
 		private function mediaClick(e:MouseEvent):void {
 			trace("media clicked");
+			moveDisplay("down");
+			moveDisplay("right");
 		}
 		private function homeClick(e:MouseEvent):void {
 			trace("home clicked");
 		}
 		private function orbitsClick(e:MouseEvent):void {
 			trace("orbits clicked");
+			moveDisplay("down");
 		}
 		private function factsClick(e:MouseEvent):void { //make about page look better and fit
 			var ap:AboutPage = new AboutPage(slaveW,slaveH);
@@ -199,6 +210,9 @@
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
 			var sat:String = e.currentTarget.parent.getName();
+			var ap:AboutPage = new AboutPage(slaveW,slaveH,sat);
+			changeContent(slaveDisplay[1],ap);
+			moveDisplay("right");
 			trace("about clicked");
 		}
 		private function presentationsClick(e:MouseEvent):void {

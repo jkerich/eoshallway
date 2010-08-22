@@ -31,10 +31,10 @@
 		private var tabButtons:Array;
 		private var picButtons:Array;
 		private var aT:Tween;
-		private var effectSpeed:Number = .5;	
+		private var effectSpeed:Number = .5;
 		
 		//title
-		public function AboutPage(stageWidth:Number,stageHeight:Number) {
+		public function AboutPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
 			sW = stageWidth;
 			sH = stageHeight;
 			displayContainer = new MovieClip();
@@ -62,6 +62,17 @@
 			displayContainer.x = tabs.x + 10;
 			displayContainer.y = tabs.y + tabs.height + 10;
 			
+			//initialize sat
+			sat = sat.toUpperCase();
+			if(sat == "AQUA") {
+				changeDisplay(new AquaAboutText());
+			}else if(sat == "AURA") {
+				changeDisplay(new AuraAboutText());
+			}else if(sat == "TERRA") {
+				changeDisplay(new TerraAboutText());
+			}else if(sat == "TRMM") {
+				changeDisplay(new TrmmAboutText());
+			}
 			
 			//add mcs to stage
 			addChild(aboutTitle);
@@ -109,6 +120,7 @@
 			
 		}
 		public function changeDisplay(c:MovieClip):void {
+			
 			textContent = c;
 			//hide
 			aT = new Tween(displayContainer,"alpha",null,displayContainer.alpha,0,effectSpeed,true);
