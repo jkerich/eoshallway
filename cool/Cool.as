@@ -53,7 +53,6 @@
 		TODO:
 			-consider scaling buttonH and buttonW
 			-automate positioning of homeRow
-			-add subbutton row
 			-add frame changing effect
 		*/
 		
@@ -142,7 +141,7 @@
 			frame.y = buttonRow.y;
 			
 			//add sub buttons
-			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,defaultNames,defaultHandlers);
+			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,aquaNames,aquaHandlers); //since aqua is first
 			//subButtonRow.x = paddingW;
 			subButtonRow.y = buttonRow.y + buttonH;
 			
@@ -196,7 +195,6 @@
 			var ap:AboutPage = new AboutPage(slaveW,slaveH);
 			changeContent(slaveDisplay[1],ap);
 			moveDisplay("right");
-			trace("facts clicked");
 		}
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
