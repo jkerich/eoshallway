@@ -44,19 +44,8 @@
 			tabButtons = [new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
 			picButtons = [new AquaButton(),new AuraButton(), new TerraButton(), new TrmmButton()];
 			
-			
 			//add title
-			var tf:TextFormat = new TextFormat("Walkway Bold",titleSize,0xFFFFFF);
-			var t:TextField = new TextField();
-			t.text = "EOS Spacecraft Quick Facts";
-			t.setTextFormat(tf);
-			t.autoSize = TextFieldAutoSize.LEFT;
-			titleW = t.width * 1.1;
-			t.y = (titleH-t.height)/2;
-			aboutTitle.addChild(t);
-			drawHitBox(aboutTitle,titleW,titleH,0x000000,.65);
-			
-			
+			aboutTitle.addChild(new AboutTitle());
 			
 			//create tabs and button strip
 			buttons = createButtons();
