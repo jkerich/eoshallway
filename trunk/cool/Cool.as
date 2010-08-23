@@ -5,6 +5,7 @@
 	import flash.text.*;
 	import fl.transitions.*;
 	import fl.transitions.easing.*;
+	import flash.system.*;
 	
 	public class Cool extends MovieClip {
 		//mcs
@@ -192,6 +193,11 @@
 		//homerow handlers
 		private function mediaClick(e:MouseEvent):void {
 			trace("media clicked");
+			//example load swf
+			var loader:Loader = new Loader();
+			var con:LoaderContext = new LoaderContext(false,ApplicationDomain.currentDomain,null); //-------fix this
+			loader.load(new URLRequest("../SlideShow.swf"),con);
+			changeContent(slaveDisplay[3],loader);
 			moveDisplay("down");
 			moveDisplay("right");
 		}
