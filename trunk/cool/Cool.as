@@ -195,8 +195,8 @@
 			trace("media clicked");
 			//example load swf
 			var loader:Loader = new Loader();
-			var con:LoaderContext = new LoaderContext(false,ApplicationDomain.currentDomain,null); //-------fix this
-			loader.load(new URLRequest("../SlideShow.swf"),con);
+			
+			loader.load(new URLRequest("SlideShow.swf"));
 			changeContent(slaveDisplay[3],loader);
 			moveDisplay("down");
 			moveDisplay("right");
