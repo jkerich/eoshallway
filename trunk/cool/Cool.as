@@ -193,11 +193,9 @@
 		//homerow handlers
 		private function mediaClick(e:MouseEvent):void {
 			trace("media clicked");
-			//example load swf
-			var loader:Loader = new Loader();
-			
-			loader.load(new URLRequest("SlideShow.swf"));
-			changeContent(slaveDisplay[3],loader);
+			//load media click
+			var ss:SlideShow = new SlideShow(slaveW,slaveH);
+			changeContent(slaveDisplay[3],ss);
 			moveDisplay("down");
 			moveDisplay("right");
 		}

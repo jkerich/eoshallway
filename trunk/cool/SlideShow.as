@@ -4,8 +4,9 @@
 	import flash.events.*;
 	import flash.text.*;
 	import fl.transitions.*;
+	import flash.media.Video;
 	
-	public class SlideShow2 extends MovieClip {
+	public class SlideShow extends MovieClip {
 		//mcs
 		private var dc:MovieClip;
 		private var titleContainer:MovieClip;
@@ -22,7 +23,7 @@
 		private var temp:Array; //contains loaded images for item clicked
 		
 		//constants
-		private var datasource:String = "../feedinfo.xml";
+		private var datasource:String = "feedinfo.xml";
 		private var slideW:Number = 800;
 		private var slideH:Number = 700;
 		var sH:Number;
@@ -54,7 +55,7 @@
 			
 			-make sure xml is reloaded every once in a while
 		*/
-		public function SlideShow2(w:Number,h:Number) {
+		public function SlideShow(w:Number,h:Number) {
 			//init
 			sW = w;
 			sH = h;
@@ -67,14 +68,20 @@
 			mediaContent = new Array();
 			temp = new Array();
 			//init paths
-			imgPath = "../media/img";
-			imgLargePath = "../"+imgPath+"/large";
-			imgRegularPath = "../"=imgPath+"/reg";
-			videoPath = "../"+"media/video";
+			imgPath = "media/img";
+			imgLargePath = imgPath+"/large";
+			imgRegularPath = imgPath+"/reg";
+			videoPath = "media/video";
 						
-			//event listeners
-			stage.addEventListener(MouseEvent.CLICK,shiftDisplay);
 			
+			//hit box
+			drawHitBox(this,sW,sH);
+			
+			//event listeners
+			//addEventListener(MouseEvent.CLICK,shiftDisplay);
+			
+			//add tool bar
+			createToolBar();
 			
 			//parse relevant xml info into array
 			xmlLoader = new URLLoader(new URLRequest(datasource));
@@ -87,11 +94,47 @@
 			//add description 
 			addChild(description);
 		}
+		//------video support
+		private function createToolBar():void {
+			var t:TextField = new TextField();
+			t.text = "videos";
+			var mc:MovieClip = new MovieClip();
+			drawHitBox(mc,100,100,0xffffff,1.0);
+			mc.addChild(t);
+			mc.addEventListener(MouseEvent.CLICK,loadVideos);
+			mc.x = sW-100;
+			mc.y = sH-100;
+			addChild(mc);
+			
+		}
+		private function loadVideos(e:MouseEvent):void {
+			trace("load button clicked");
+			var vid:Video = new Video(sW,sH);
+			
+			var nc:NetConnection = new NetConnection();
+			nc.connect(null);
+			nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+			var ns:NetStream = new NetStream(nc);
+			ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR,asyncError);
+			vid.attachNetStream(ns);
+			ns.play(videoPath+"/flare_stereoa_2010213-214_sm.mov");
+			
+			changeContent(dc,vid);
+		}
+		function netStatusHandler(e:NetStatusEvent):void {
+			/* stuff here*/
+		}
+
+		private function asyncError(e:AsyncErrorEvent):void {
+			
+			trace("sync error");
+		}
+		//----video support end
 		private function shiftDisplay(e:MouseEvent):void {
 			//trace("mouse click on stage");
 			var center:Number = sW/2;
 			
-			trace("TEMP LENGTH: " + temp.length);
+			//trace("TEMP LENGTH: " + temp.length);
 			if(mouseX >= center) {//next image
 				focusImage = (focusImage+1)%(temp.length);
 				changeContent(dc,loadImage(temp[focusImage]));
@@ -99,7 +142,7 @@
 				focusImage = (focusImage>0) ? (focusImage-1)%temp.length: temp.length-1; //account for first image being zero
 				changeContent(dc,loadImage(temp[focusImage]));
 			}
-			trace("FOCUS IMAGE : " + focusImage);
+			//trace("FOCUS IMAGE : " + focusImage);
 			
 			
 		}
@@ -200,6 +243,12 @@
 			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
 			
 			return tar;
+		}
+		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
+			obj.graphics.clear();
+			obj.graphics.beginFill(color,a);
+			obj.graphics.drawRect(0,0,w,h);
+			obj.graphics.endFill();
 		}
 	}//end class
 	
