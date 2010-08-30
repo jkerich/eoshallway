@@ -40,6 +40,10 @@
 		private var imgRegularPath:String;
 		private var videoPath:String;
 		
+		//net streams
+		private var nc:NetConnection;
+		private var ns:NetStream;
+		
 		/*
 		TODO: 
 			-push content into mediaContent array as an object
@@ -94,42 +98,84 @@
 			//add description 
 			addChild(description);
 		}
+		
+		
 		//------video support
 		private function createToolBar():void {
+			
 			var t:TextField = new TextField();
-			t.text = "videos";
+			t.autoSize = TextFieldAutoSize.NONE;
+			t.text = "V";
+			t.selectable = false;
+			t.setTextFormat(new TextFormat("Walkway Bold",20,0xffffff));
+			
 			var mc:MovieClip = new MovieClip();
-			drawHitBox(mc,100,100,0xffffff,1.0);
+			drawHitBox(mc,50,50,0x000000,.65);
 			mc.addChild(t);
 			mc.addEventListener(MouseEvent.CLICK,loadVideos);
-			mc.x = sW-100;
-			mc.y = sH-100;
+			mc.x = sW-50;
+			mc.y = sH/2 - mc.height/2;
 			addChild(mc);
 			
 		}
 		private function loadVideos(e:MouseEvent):void {
 			trace("load button clicked");
-			var vid:Video = new Video(sW,sH);
+			/*var vid:Video = new Video(sW,sH);
 			
-			var nc:NetConnection = new NetConnection();
+			nc = new NetConnection();
 			nc.connect(null);
 			nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-			var ns:NetStream = new NetStream(nc);
+			
+			ns = new NetStream(nc);
+			ns.client = new Object();
 			ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR,asyncError);
+			
 			vid.attachNetStream(ns);
 			ns.play(videoPath+"/flare_stereoa_2010213-214_sm.mov");
 			
-			changeContent(dc,vid);
+			changeContent(dc,vid);*/
+			
+			//list files
+			var v:URLVariables = new URLVariables();
+			v.path = "/";
+			var r:URLRequest = new URLRequest("listDir.php");
+			r.method = URLRequestMethod.POST;
+			r.data = v;
+			
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.VARIABLES;
+			loader.addEventListener(Event.COMPLETE,phpLoaded);
+			loader.load(r);
+			
 		}
-		function netStatusHandler(e:NetStatusEvent):void {
-			/* stuff here*/
+		function phpLoaded(e:Event):void {
+			trace("hi");
+			var res:URLVariables = new URLVariables(e.target.data);
+			trace(res.output);//------------------------------------------start here
+			
+		}
+		function netStatusHandler(event:NetStatusEvent):void {
+			// handles net status events
+			switch (event.info.code) {
+				// trace a messeage when the stream is not found
+				case "NetStream.Play.StreamNotFound":
+					//trace("Stream not found: " + strSource);
+				break;
+				
+				// when the video reaches its end, we stop the player
+				case "NetStream.Play.Stop":
+					//stopVideoPlayer();
+				break;
+			}
 		}
 
 		private function asyncError(e:AsyncErrorEvent):void {
 			
-			trace("sync error");
+			trace(e.toString());
 		}
 		//----video support end
+		
+		
 		private function shiftDisplay(e:MouseEvent):void {
 			//trace("mouse click on stage");
 			var center:Number = sW/2;
