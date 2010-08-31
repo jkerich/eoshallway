@@ -139,8 +139,8 @@
 			
 		}
 		function playerReady(e:Event):void {
-			//---------------------------------------------------------------------------------------start
-			player = e.target.content;
+			trace(e);
+			//player = e.target.content;
 			//player.setSize(sW,sH);
 		}
 		function netStatusHandler(event:NetStatusEvent):void {
