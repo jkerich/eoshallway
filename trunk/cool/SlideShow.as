@@ -5,6 +5,7 @@
 	import flash.text.*;
 	import fl.transitions.*;
 	import flash.media.Video;
+	import flash.system.*;
 	
 	public class SlideShow extends MovieClip {
 		//mcs
@@ -12,6 +13,7 @@
 		private var titleContainer:MovieClip;
 		private var description:MovieClip;
 		private var largeImageContainer:MovieClip;
+		var player:Object;
 		
 		//loaders
 		//private var loader:Loader;
@@ -82,7 +84,7 @@
 			drawHitBox(this,sW,sH);
 			
 			//event listeners
-			//addEventListener(MouseEvent.CLICK,shiftDisplay);
+			addEventListener(MouseEvent.CLICK,shiftDisplay);
 			
 			//add tool bar
 			createToolBar();
@@ -120,40 +122,26 @@
 		}
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		private function loadVideos(e:MouseEvent):void {
+			//disable slide show
+			removeEventListener(MouseEvent.CLICK,shiftDisplay);
+			
 			trace("load button clicked");
-			var vid:Video = new Video(sW,sH);
 			
-			nc = new NetConnection();
-			nc.connect(null);
-			nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+			Security.allowDomain("www.youtube.com");
+			var vl:Loader =  new Loader();
+			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
+			vl.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
 			
-			ns = new NetStream(nc);
-			ns.client = new Object();
-			ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR,asyncError);
-			
-			vid.attachNetStream(ns);
-			ns.play(videoPath+"/flare_stereoa_2010213-214_sm.mov");
-			
-			changeContent(dc,vid);
-			
-			//list files
-			/*var v:URLVariables = new URLVariables();
-			v.path = "/";
-			var r:URLRequest = new URLRequest("listDir.php");
-			r.method = URLRequestMethod.POST;
-			r.data = v;
-			
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.VARIABLES;
-			loader.addEventListener(Event.COMPLETE,phpLoaded);
-			loader.load(r);*/
+			changeContent(dc,vl);
+		}
+		function vidLoaded(e:Event):void {
+			e.target.content.addEventListener("onReady", playerReady);
 			
 		}
-		function phpLoaded(e:Event):void {
-			trace("hi");
-			var res:URLVariables = new URLVariables(e.target.data);
-			trace(res.output);//------------------------------------------start here
-			
+		function playerReady(e:Event):void {
+			//---------------------------------------------------------------------------------------start
+			player = e.target.content;
+			//player.setSize(sW,sH);
 		}
 		function netStatusHandler(event:NetStatusEvent):void {
 			// handles net status events
