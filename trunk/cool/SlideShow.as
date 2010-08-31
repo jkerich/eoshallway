@@ -118,9 +118,10 @@
 			addChild(mc);
 			
 		}
+		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		private function loadVideos(e:MouseEvent):void {
 			trace("load button clicked");
-			/*var vid:Video = new Video(sW,sH);
+			var vid:Video = new Video(sW,sH);
 			
 			nc = new NetConnection();
 			nc.connect(null);
@@ -133,10 +134,10 @@
 			vid.attachNetStream(ns);
 			ns.play(videoPath+"/flare_stereoa_2010213-214_sm.mov");
 			
-			changeContent(dc,vid);*/
+			changeContent(dc,vid);
 			
 			//list files
-			var v:URLVariables = new URLVariables();
+			/*var v:URLVariables = new URLVariables();
 			v.path = "/";
 			var r:URLRequest = new URLRequest("listDir.php");
 			r.method = URLRequestMethod.POST;
@@ -145,7 +146,7 @@
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.VARIABLES;
 			loader.addEventListener(Event.COMPLETE,phpLoaded);
-			loader.load(r);
+			loader.load(r);*/
 			
 		}
 		function phpLoaded(e:Event):void {
