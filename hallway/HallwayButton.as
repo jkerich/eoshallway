@@ -6,14 +6,14 @@
 	import flash.net.URLRequest;
 	import flash.text.*;
 	
-	public class CoolButton extends MovieClip{
+	public class HallwayButton extends MovieClip{
 		public var sButtons:Array; //array of secondary buttons
 		public var image:Bitmap; //icon
 		public var n:String; //name -> may not be necessary
 		public var picW:Number;
 		public var picH:Number;
 		
-		public function CoolButton(n:String,pW:Number, pH:Number,picPath:String = "") {
+		public function HallwayButton(n:String,pW:Number, pH:Number,picPath:String = "") {
 			
 			this.n = n;
 			this.sButtons = new Array();

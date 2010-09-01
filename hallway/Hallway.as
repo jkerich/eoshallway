@@ -7,7 +7,7 @@
 	import fl.transitions.easing.*;
 	import flash.system.*;
 	
-	public class Cool extends MovieClip {
+	public class Hallway extends MovieClip {
 		//mcs
 		private var masterDisplay:MovieClip;
 		private var slaveDisplay:Array; //an array of 4 movie clips
@@ -57,7 +57,7 @@
 			-add frame changing effect
 		*/
 		
-		public function Cool() {
+		public function Hallway() {
 			addEventListener(Event.ADDED_TO_STAGE,init);
 		}
 		private function init(e:Event):void {
@@ -127,7 +127,7 @@
 			//add big buttons
 			buttonRow = new MovieClip();
 			for(var i:Number = 0;i<sats.length;i++) {
-				var btn:CoolButton = new CoolButton(sats[i],buttonW,buttonH);
+				var btn:HallwayButton = new HallwayButton(sats[i],buttonW,buttonH);
 				btn.x = btn.width * i;
 				btn.addEventListener(MouseEvent.CLICK,bigButtonClicked);
 				buttonRow.addChild(btn);
