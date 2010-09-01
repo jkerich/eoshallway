@@ -18,6 +18,7 @@
 		//loaders
 		//private var loader:Loader;
 		private var xmlLoader:URLLoader;
+		private var vl:Loader; //video loader
 		
 		//arrays
 		private var mediaInfo:Array; //contains paths
@@ -128,20 +129,27 @@
 			trace("load button clicked");
 			
 			Security.allowDomain("www.youtube.com");
-			var vl:Loader =  new Loader();
+			vl =  new Loader();
 			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
-			vl.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
+			var vidID:String = "2xaRotYad1o";
+			vl.load(new URLRequest("http://www.youtube.com/v/"+vidID+"?version=3"));
 			
 			changeContent(dc,vl);
 		}
 		function vidLoaded(e:Event):void {
-			e.target.content.addEventListener("onReady", playerReady);
-			
+			vl.content.addEventListener("onReady", playerReady);
+			vl.content.addEventListener("onError", playerError);
+
 		}
 		function playerReady(e:Event):void {
+			player = vl.content;
+			player.setSize(sW,sH);
+			//play content
+			//player.loadVideoById("R8kDsM0M-vg");
+			//player.playVideo();
+		}
+		function playerError(e:Event):void {
 			trace(e);
-			//player = e.target.content;
-			//player.setSize(sW,sH);
 		}
 		function netStatusHandler(event:NetStatusEvent):void {
 			// handles net status events
@@ -159,7 +167,6 @@
 		}
 
 		private function asyncError(e:AsyncErrorEvent):void {
-			
 			trace(e.toString());
 		}
 		//----video support end
@@ -199,9 +206,9 @@
 				for each(var u:String in xmlItem.media.url.@localpath){
 					if(u.search(imgRegularPath) != -1) {
 						temp.push(u);
-						trace("ADDED: " + u);
+						//trace("ADDED: " + u);
 					}else {
-						trace("URL not added: " + u);
+						//trace("URL not added: " + u);
 					}
 				}
 			}
