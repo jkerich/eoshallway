@@ -122,12 +122,10 @@
 			
 		}
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
+		//how get youtube videos from a feed
 		private function loadVideos(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
-			
-			trace("load button clicked");
-			
 			Security.allowDomain("www.youtube.com");
 			vl =  new Loader();
 			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
@@ -139,14 +137,10 @@
 		function vidLoaded(e:Event):void {
 			vl.content.addEventListener("onReady", playerReady);
 			vl.content.addEventListener("onError", playerError);
-
 		}
 		function playerReady(e:Event):void {
 			player = vl.content;
 			player.setSize(sW,sH);
-			//play content
-			//player.loadVideoById("R8kDsM0M-vg");
-			//player.playVideo();
 		}
 		function playerError(e:Event):void {
 			trace(e);
