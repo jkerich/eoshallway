@@ -13,7 +13,8 @@
 		private var titleContainer:MovieClip;
 		private var description:MovieClip;
 		private var largeImageContainer:MovieClip;
-		var player:Object;
+		private var player:Object;
+		private var localVideo:Video;
 		
 		//loaders
 		//private var loader:Loader;
@@ -49,7 +50,6 @@
 		
 		/*
 		TODO: 
-			-push content into mediaContent array as an object
 			-properly place images into display container based on width
 				> consider using Array.shift() on a temp array of the urls to loop and use its length as the counter
 			-animate display container to change on click
@@ -61,8 +61,11 @@
 			-add view large image
 			
 			-make sure xml is reloaded every once in a while
+			
+			-add function for when video finishes playing 
+				perhaps a replay function
 		*/
-		public function SlideShow(w:Number,h:Number) {
+		public function SlideShow(w:Number,h:Number,imagePath:String = "") {
 			//init
 			sW = w;
 			sH = h;
@@ -100,6 +103,8 @@
 			addChild(titleContainer);
 			//add description 
 			addChild(description);
+			
+			
 		}
 		
 		
@@ -115,7 +120,7 @@
 			var mc:MovieClip = new MovieClip();
 			drawHitBox(mc,50,50,0x000000,.65);
 			mc.addChild(t);
-			mc.addEventListener(MouseEvent.CLICK,loadVideos);
+			mc.addEventListener(MouseEvent.CLICK,playLocalVideo);
 			mc.x = sW-50;
 			mc.y = sH/2 - mc.height/2;
 			addChild(mc);
@@ -126,6 +131,7 @@
 		private function loadVideos(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
+			
 			Security.allowDomain("www.youtube.com");
 			vl =  new Loader();
 			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
@@ -159,9 +165,42 @@
 				break;
 			}
 		}
-
 		private function asyncError(e:AsyncErrorEvent):void {
 			trace(e.toString());
+		}
+		//local videos
+		private function playLocalVideo(e:MouseEvent):void {
+			changeContent(dc,loadVideo(videoPath+"/"+"flare_stereoa_2010213-214_lrg.mov"));
+		}
+		private function setupLocalVideo():void {
+			//disable slide show
+			removeEventListener(MouseEvent.CLICK,shiftDisplay);
+			//create net connection
+			nc = new NetConnection();
+			nc.connect(null);
+			nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+			//create net stream
+			ns = new NetStream(nc);
+			ns.client = new Object();
+			ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR,asyncError);
+			
+			trace("local video set up");
+		}
+		
+		private function loadVideo(path:String):Video {
+			if(nc == null)
+				setupLocalVideo();
+			
+			var localVideo:Video = new Video();
+			localVideo.smoothing = true;
+			localVideo = scale(localVideo,sW,sH) as Video;
+			localVideo.x = (sW-localVideo.width)/2;
+			localVideo.y = (sH-localVideo.height)/2;
+			trace(localVideo.width,localVideo.height);
+			localVideo.attachNetStream(ns);
+			ns.play(path);
+			
+			return localVideo;
 		}
 		//----video support end
 		
@@ -274,10 +313,11 @@
 		}
 		private function scale(tar:Object,w:Number,h:Number):Object {
 			//scaling
+			trace(tar.width,tar.height);
 			tar.width = w;
 			tar.height = h;
 			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
-			
+			trace(tar.width,tar.height);
 			return tar;
 		}
 		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
