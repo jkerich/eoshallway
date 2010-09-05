@@ -12,28 +12,25 @@
 		//mcs
 		private var displayContainer:MovieClip;
 		private var tabs:MovieClip;
-		private var buttons:MovieClip;
 		private var aboutTitle:MovieClip;
 		private var textContent:MovieClip; 
+		
 		//constants
 		private var sH:Number;
 		private var sW:Number;
 		private var tabH:Number;
-		private var buttonH:Number;
 		private var titleW:Number;
 		private var titleH:Number = 65;
 		private var titleSize:Number = 35;
 		private var outlineColor:uint = 0xFFFFFF;
-		private var displayWidth:Number = 700;
-		private var displayHeight:Number = 600;
+	
 		private var tabFormat:TextFormat;
 		private var sats:Array = ["AQUA","AURA","TERRA","TRMM"];
 		private var tabButtons:Array;
-		private var picButtons:Array;
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
 		
-		//title
+		//insert a name title somewhere
 		public function AboutPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
 			sW = stageWidth;
 			sH = stageHeight;
@@ -42,25 +39,19 @@
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
 			tabButtons = [new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
-			picButtons = [new AquaButton(),new AuraButton(), new TerraButton(), new TrmmButton()];
-			
 			//add title
 			aboutTitle.addChild(new AboutTitle());
 			
-			//create tabs and button strip
-			buttons = createButtons();
+			//create tabs
 			tabs = createTabStrip();
-			//must be this order
-			buttons.x = 0;
 			tabs.y = titleH-tabs.height;
-			buttons.y = aboutTitle.y + titleH;
 			tabs.x = aboutTitle.x + aboutTitle.width; 
 			
 			
 			//display container hitbox
-			drawHitBox(displayContainer,displayWidth,displayHeight);
-			displayContainer.x = tabs.x + 10;
-			displayContainer.y = tabs.y + tabs.height + 10;
+			drawHitBox(displayContainer,sW,sH-titleH,0x000000,.65);
+			displayContainer.x = 0;
+			displayContainer.y = tabs.y + tabs.height;
 			
 			//initialize sat
 			sat = sat.toUpperCase();
@@ -76,20 +67,8 @@
 			
 			//add mcs to stage
 			addChild(aboutTitle);
-			addChild(buttons);
 			addChild(tabs);
 			addChild(displayContainer);
-		}
-		public function createButtons():MovieClip {
-			var container:MovieClip = new MovieClip();
-			for(var i:Number = 0; i<picButtons.length;i++) {
-				var btn:SimpleButton = picButtons[i];
-				btn.name = sats[i];
-				btn.y = btn.height * i;
-				btn.addEventListener(MouseEvent.CLICK,clicked);
-				container.addChild(btn);
-			}
-			return container;
 		}
 		//creates a tabStrip
 		public function createTabStrip():MovieClip {
@@ -120,7 +99,6 @@
 			
 		}
 		public function changeDisplay(c:MovieClip):void {
-			
 			textContent = c;
 			//hide
 			aT = new Tween(displayContainer,"alpha",null,displayContainer.alpha,0,effectSpeed,true);
