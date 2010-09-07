@@ -6,6 +6,7 @@
 	import fl.transitions.*;
 	import flash.media.Video;
 	import flash.system.*;
+	import flash.filesystem.*;
 	
 	public class SlideShow extends MovieClip {
 		//mcs
@@ -171,8 +172,14 @@
 		}
 		//local videos
 		private function playLocalVideo(e:MouseEvent):void {
+			//disable slide show
+			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			//changeContent(dc,loadVideo("video/"+"Polar Plot.flv"));
-			listFiles("videos");
+			var arr:Array = listFiles("video");
+			
+			for (var i:Number = 0;i<arr.length;i++) {
+				trace(arr[i].nativePath);
+			}
 		}
 		private function setupLocalVideo():void {
 			//disable slide show
@@ -306,37 +313,19 @@
 		private function imageLoadFail(e:IOErrorEvent):void {
 			trace("load failed");
 		}
-		//utility functions
-		//php
-		private function listFiles(dir:String):void {
-			var ul:URLLoader = new URLLoader();
-			ul.dataFormat = URLLoaderDataFormat.VARIABLES;
-			ul.load(new URLRequest("listDir.php"));
-			ul.addEventListener(Event.COMPLETE,phpLoaded);
-			ul.addEventListener(IOErrorEvent.IO_ERROR,onIOError);
-			ul.addEventListener(SecurityErrorEvent.SECURITY_ERROR,phpSecurityError);
-			ul.addEventListener(HTTPStatusEvent.HTTP_STATUS,phpHTTPStatus);
-			
-		}
-		private function phpLoaded(e:Event):void {
-			trace(e.target.data);
-			var list:Array = new Array();
-			for (var i:Number = 0; i<e.target.data.count;i++) {
-				trace(e.target.data["file_"+i]);
-				var file:String = e.target.data["file_"+i];
-				list.push(file);
+		//utility functions------------------------------------------------------\\
+		public static function listFiles(path:String):Array{
+			var dir:File = File.applicationDirectory.resolvePath(path);
+			var files:Array = dir.getDirectoryListing();
+			//get rid of hidden directories
+			var cleanFiles:Array = [];
+			for (var i:Number =0; i<files.length;i++) {
+				if(!files[i].isDirectory) {
+					cleanFiles.push(files[i]);
+				}
 			}
+			return cleanFiles;
 		}
-		private function onIOError(evt:IOErrorEvent){
-		   trace("IOError: "+evt.text)
-		}
-		private function phpHTTPStatus(evt:HTTPStatusEvent){
-			trace("HTTPStatus: "+evt.status)
-		}
-		private function phpSecurityError(evt:SecurityErrorEvent){
-			trace("SecurityError: "+evt.text)
-		}
-		//end php
 		private function changeContent(con:*,obj:*):void { 
 			while(con.numChildren) {
 				con.removeChildAt(0);
