@@ -31,23 +31,18 @@ while ( false !== ( $file_name = $dir->read() ) ) {
 
 		// Add file to the output string
 
-		$output_string .= "&file_" . ++$file_number . "=" . urlencode( $file_name );
+		$output_string .= "&file_" . ++$file_number . "=" .$file_name;
 
 	}
-
-
 
 } 
 
 $dir->close(); 
 
 
-
 // Return the result
 
-print("&file_count=$file_number&output=$output_string");
-
-
+echo "file_count=".$file_number.$output_string;
 
 
 ?>

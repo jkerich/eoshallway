@@ -128,7 +128,7 @@
 		}
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		//how get youtube videos from a feed
-		private function loadVideos(e:MouseEvent):void {
+		private function loadYouTubeVideos(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			
@@ -152,6 +152,7 @@
 			trace(e);
 		}
 		function netStatusHandler(event:NetStatusEvent):void {
+			trace("HI");
 			// handles net status events
 			switch (event.info.code) {
 				// trace a messeage when the stream is not found
@@ -161,7 +162,7 @@
 				
 				// when the video reaches its end, we stop the player
 				case "NetStream.Play.Stop":
-					//stopVideoPlayer();
+					trace("play time is over");
 				break;
 			}
 		}
@@ -170,7 +171,8 @@
 		}
 		//local videos
 		private function playLocalVideo(e:MouseEvent):void {
-			changeContent(dc,loadVideo(videoPath+"/"+"flare_stereoa_2010213-214_lrg.mov"));
+			//changeContent(dc,loadVideo("video/"+"Polar Plot.flv"));
+			listFiles("videos");
 		}
 		private function setupLocalVideo():void {
 			//disable slide show
@@ -196,7 +198,7 @@
 			localVideo = scale(localVideo,sW,sH) as Video;
 			localVideo.x = (sW-localVideo.width)/2;
 			localVideo.y = (sH-localVideo.height)/2;
-			trace(localVideo.width,localVideo.height);
+			//trace(localVideo.width,localVideo.height);
 			localVideo.attachNetStream(ns);
 			ns.play(path);
 			
@@ -305,6 +307,36 @@
 			trace("load failed");
 		}
 		//utility functions
+		//php
+		private function listFiles(dir:String):void {
+			var ul:URLLoader = new URLLoader();
+			ul.dataFormat = URLLoaderDataFormat.VARIABLES;
+			ul.load(new URLRequest("listDir.php"));
+			ul.addEventListener(Event.COMPLETE,phpLoaded);
+			ul.addEventListener(IOErrorEvent.IO_ERROR,onIOError);
+			ul.addEventListener(SecurityErrorEvent.SECURITY_ERROR,phpSecurityError);
+			ul.addEventListener(HTTPStatusEvent.HTTP_STATUS,phpHTTPStatus);
+			
+		}
+		private function phpLoaded(e:Event):void {
+			trace(e.target.data);
+			var list:Array = new Array();
+			for (var i:Number = 0; i<e.target.data.count;i++) {
+				trace(e.target.data["file_"+i]);
+				var file:String = e.target.data["file_"+i];
+				list.push(file);
+			}
+		}
+		private function onIOError(evt:IOErrorEvent){
+		   trace("IOError: "+evt.text)
+		}
+		private function phpHTTPStatus(evt:HTTPStatusEvent){
+			trace("HTTPStatus: "+evt.status)
+		}
+		private function phpSecurityError(evt:SecurityErrorEvent){
+			trace("SecurityError: "+evt.text)
+		}
+		//end php
 		private function changeContent(con:*,obj:*):void { 
 			while(con.numChildren) {
 				con.removeChildAt(0);
@@ -313,11 +345,11 @@
 		}
 		private function scale(tar:Object,w:Number,h:Number):Object {
 			//scaling
-			trace(tar.width,tar.height);
+			//trace(tar.width,tar.height);
 			tar.width = w;
 			tar.height = h;
 			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
-			trace(tar.width,tar.height);
+			//trace(tar.width,tar.height);
 			return tar;
 		}
 		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
