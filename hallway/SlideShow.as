@@ -44,7 +44,8 @@
 		private var imgLargePath:String;
 		private var imgRegularPath:String;
 		private var videoPath:String;
-		
+		private var localVideoPath:String = "localVideos";
+		private var localImagePath:String = "localImages";
 		//net streams
 		private var nc:NetConnection;
 		private var ns:NetStream;
@@ -111,7 +112,7 @@
 		
 		//------video support
 		private function createToolBar():void {
-			
+			//video
 			var t:TextField = new TextField();
 			t.autoSize = TextFieldAutoSize.NONE;
 			t.text = "V";
