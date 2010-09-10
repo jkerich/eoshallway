@@ -182,7 +182,7 @@
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			//changeContent(dc,loadVideo("video/"+"Polar Plot.flv"));
-			var arr:Array = listFiles("video");
+			var arr:Array = listFiles("localVideos/general");
 			
 			for (var i:Number = 0;i<arr.length;i++) {
 				trace(arr[i].nativePath);
