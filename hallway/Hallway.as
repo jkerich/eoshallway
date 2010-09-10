@@ -16,6 +16,7 @@
 		private var buttonRow:MovieClip;
 		private var subButtonRow:MovieClip;
 		private var frame:MovieClip;
+		private var dc:DisplayContainer;
 		
 		//constants
 		private const paddingH:Number = 8; //do not use decimal values
@@ -61,8 +62,8 @@
 			addEventListener(Event.ADDED_TO_STAGE,init);
 		}
 		private function init(e:Event):void {
-			homeRowButtons = [new HomeBtn(), new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
-			homeRowHandlers = [homeClick, mediaClick, orbitsClick ,factsClick];
+			homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
+			homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -108,7 +109,7 @@
 			slaveDisplay[0].addChild(title);
 			
 			//add display container
-			var dc:DisplayContainer = new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH);
+			dc= new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH,0x000000,.65,true);
 			//dc.x = paddingW;
 			dc.y = title.y + titleH;
 			slaveDisplay[0].addChild(dc);
@@ -154,6 +155,9 @@
 			
 			//allow people to get back to home page
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,returnHome);
+			
+			//load first about content
+			dc.changeContent(new AquaAboutText());
 
 		}
 		private function returnHome(e:KeyboardEvent):void {
@@ -214,10 +218,15 @@
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
 			var sat:String = e.currentTarget.parent.getName();
-			var ap:AboutPage = new AboutPage(slaveW,slaveH,sat);
-			changeContent(slaveDisplay[1],ap);
-			moveDisplay("right");
-			trace("about clicked");
+			if(sat == "aqua") {
+				dc.changeContent(new AquaAboutText());
+			}else if(sat == "aura") {
+				dc.changeContent(new AuraAboutText());
+			}else if(sat == "terra") {
+				dc.changeContent(new TerraAboutText());
+			}else if(sat == "trmm") {
+				dc.changeContent(new TrmmAboutText());
+			}
 		}
 		private function presentationsClick(e:MouseEvent):void {
 			trace("presentations clicked");
