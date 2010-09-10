@@ -10,7 +10,7 @@
 	
 	public class AboutPage extends MovieClip {
 		//mcs
-		private var displayContainer:MovieClip;
+		private var dc:DisplayContainer;
 		private var tabs:MovieClip;
 		private var aboutTitle:MovieClip;
 		private var textContent:MovieClip; 
@@ -25,7 +25,7 @@
 		private var outlineColor:uint = 0xFFFFFF;
 	
 		private var tabFormat:TextFormat;
-		private var sats:Array = ["AQUA","AURA","TERRA","TRMM"];
+		private var sats:Array = ["aqua","aura","terra","trmm"];
 		private var tabButtons:Array;
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
@@ -34,7 +34,7 @@
 		public function AboutPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
 			sW = stageWidth;
 			sH = stageHeight;
-			displayContainer = new MovieClip();
+			dc = new DisplayContainer(sW,sH,0x000000,0,true);
 			textContent = new MovieClip();
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
@@ -49,26 +49,26 @@
 			
 			
 			//display container hitbox
-			drawHitBox(displayContainer,sW,sH-titleH,0x000000,.65);
-			displayContainer.x = 0;
-			displayContainer.y = tabs.y + tabs.height;
+			drawHitBox(dc,sW,sH-titleH,0x000000,.65);
+			dc.x = 0;
+			dc.y = tabs.y + tabs.height;
 			
 			//initialize sat
-			sat = sat.toUpperCase();
-			if(sat == "AQUA") {
-				changeDisplay(new AquaAboutText());
-			}else if(sat == "AURA") {
-				changeDisplay(new AuraAboutText());
-			}else if(sat == "TERRA") {
-				changeDisplay(new TerraAboutText());
-			}else if(sat == "TRMM") {
-				changeDisplay(new TrmmAboutText());
+			sat = sat.toLowerCase();
+			if(sat == "aqua") {
+				dc.changeContent(new AquaAboutText());
+			}else if(sat == "aura") {
+				dc.changeContent(new AuraAboutText());
+			}else if(sat == "terra") {
+				dc.changeContent(new TerraAboutText());
+			}else if(sat == "trmm") {
+				dc.changeContent(new TrmmAboutText());
 			}
 			
 			//add mcs to stage
 			addChild(aboutTitle);
 			addChild(tabs);
-			addChild(displayContainer);
+			addChild(dc);
 		}
 		//creates a tabStrip
 		public function createTabStrip():MovieClip {
@@ -85,40 +85,40 @@
 			return tabStrip;
 		}
 		public function clicked(e:MouseEvent) {
-			var tar:Object = e.target;
+			var sat:String= e.target.name;
 			//find out which sat was clicked
-			if(tar.name == "AQUA") {
-				changeDisplay(new AquaAboutText());
-			}else if(tar.name == "AURA") {
-				changeDisplay(new AuraAboutText());
-			}else if(tar.name == "TERRA") {
-				changeDisplay(new TerraAboutText());
-			}else if(tar.name == "TRMM") {
-				changeDisplay(new TrmmAboutText());
+			if(sat == "aqua") {
+				dc.changeContent(new AquaAboutText());
+			}else if(sat == "aura") {
+				dc.changeContent(new AuraAboutText());
+			}else if(sat == "terra") {
+				dc.changeContent(new TerraAboutText());
+			}else if(sat == "trmm") {
+				dc.changeContent(new TrmmAboutText());
 			}
 			
 		}
 		public function changeDisplay(c:MovieClip):void {
 			textContent = c;
 			//hide
-			aT = new Tween(displayContainer,"alpha",null,displayContainer.alpha,0,effectSpeed,true);
+			aT = new Tween(dc,"alpha",null,dc.alpha,0,effectSpeed,true);
 			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
 			
 		}
 		private function effectOut(e:TweenEvent):void { //effect used to change display is done
 			//center content
-			if (textContent.width > displayContainer.width) {
-				textContent.width = displayContainer.width;
+			if (textContent.width > dc.width) {
+				textContent.width = dc.width;
 			}else {
-				textContent.x = (displayContainer.width - textContent.width)/2;
+				textContent.x = (dc.width - textContent.width)/2;
 			}
-			if (textContent.height > displayContainer.height) {
-				textContent.height = displayContainer.height;
+			if (textContent.height > dc.height) {
+				textContent.height = dc.height;
 			}
 			//change
-			changeContent(displayContainer,textContent);
+			changeContent(dc,textContent);
 			//effect back in
-			new Tween(displayContainer,"alpha",null,displayContainer.alpha,1,effectSpeed,true);
+			new Tween(dc,"alpha",null,dc.alpha,1,effectSpeed,true);
 		}
 		//utility
 		private function changeContent(con:*,obj:*):void { 

@@ -10,7 +10,7 @@
 	
 	public class SlideShow extends MovieClip {
 		//mcs
-		private var dc:MovieClip;
+		private var dc:DisplayContainer;
 		private var titleContainer:MovieClip;
 		private var description:MovieClip;
 		private var largeImageContainer:MovieClip;
@@ -29,10 +29,11 @@
 		
 		//constants
 		private var datasource:String = "feedinfo.xml";
-		private var slideW:Number = 800;
-		private var slideH:Number = 700;
+		private var slideW:Number;
+		private var slideH:Number;
 		var sH:Number;
 		var sW:Number;
+		private var effectSpeed:Number = .3;
 		
 		//dynamic variables
 		private var loadCount:Number = 0; //number of images to be loaded
@@ -46,10 +47,13 @@
 		private var videoPath:String;
 		private var localVideoPath:String = "localVideos";
 		private var localImagePath:String = "localImages";
+		
 		//net streams
 		private var nc:NetConnection;
 		private var ns:NetStream;
 		
+		//Tweens
+		private var aT:Tween;
 		/*
 		TODO: 
 			-properly place images into display container based on width
@@ -71,7 +75,9 @@
 			//init
 			sW = w;
 			sH = h;
-			dc = new MovieClip();
+			slideW = sW * .625;
+			slideH = sH * .94;
+			dc = new DisplayContainer(slideW,slideH);
 			titleContainer = new MovieClip();
 			description = new MovieClip();
 			largeImageContainer = new MovieClip();
@@ -222,10 +228,12 @@
 			//trace("TEMP LENGTH: " + temp.length);
 			if(mouseX >= center) {//next image
 				focusImage = (focusImage+1)%(temp.length);
-				changeContent(dc,loadImage(temp[focusImage]));
+				//changeDisplay(dc,loadImage(temp[focusImage]));
+				dc.changeContent(loadImage(temp[focusImage]));
 			}else if(mouseX<center ){//previous imaged
 				focusImage = (focusImage>0) ? (focusImage-1)%temp.length: temp.length-1; //account for first image being zero
-				changeContent(dc,loadImage(temp[focusImage]));
+				//changeDisplay(dc,loadImage(temp[focusImage]));
+				dc.changeContent(loadImage(temp[focusImage]));
 			}
 			//trace("FOCUS IMAGE : " + focusImage);
 			
@@ -255,7 +263,9 @@
 					}
 				}
 			}
-			changeContent(dc,loadImage(temp[0]));
+			
+			//changeContent(dc,loadImage(temp[0]));
+			dc.changeContent(loadImage(temp[0]));
 		}
 		private function loadImage(path:String):Loader {
 			trace("Loading image: " + path);
@@ -302,8 +312,8 @@
 			d.x = 0;
 			d.y = sH-d.height*1.5;
 			
-			changeContent(titleContainer,t);
-			changeContent(description,d);
+			changeDisplay(titleContainer,t);
+			changeDisplay(description,d);
 			
 		}
 		private function loadProgress(e:ProgressEvent):void {
@@ -326,6 +336,17 @@
 				}
 			}
 			return cleanFiles;
+		}
+		public function changeDisplay(display:*,c:*):void {
+			//hide
+			aT = new Tween(display,"alpha",null,display.alpha,0,effectSpeed,true);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,function(e:Event):void {//effect used to change display is done
+								//change
+								changeContent(display,c);
+								//effect back in
+								new Tween(display,"alpha",null,display.alpha,1,effectSpeed,true);
+								
+								});
 		}
 		private function changeContent(con:*,obj:*):void { 
 			while(con.numChildren) {
