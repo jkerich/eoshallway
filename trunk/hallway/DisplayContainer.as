@@ -34,7 +34,6 @@
 			//change
 			changeChild(cont,newCont);
 			
-			trace(cont.x, cont.y);
 			//center content
 			if(center) {
 				if (cont.width > this.width) {
