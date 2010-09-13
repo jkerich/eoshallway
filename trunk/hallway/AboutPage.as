@@ -1,12 +1,11 @@
 ﻿package  {
+	import flash.display.*;
+	import flash.net.*;
+	import flash.events.*;
 	import flash.text.*;
-	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.display.SimpleButton;
-	import fl.transitions.Tween;
-	import flash.display.Stage;
-	import fl.transitions.TweenEvent;
+	import fl.transitions.*;
+	import fl.transitions.easing.*;
+	import flash.system.*;
 	
 	public class AboutPage extends MovieClip {
 		//mcs
@@ -14,7 +13,7 @@
 		private var tabs:MovieClip;
 		private var aboutTitle:MovieClip;
 		private var textContent:MovieClip; 
-		
+		private var md:MovieClip; //master display
 		//constants
 		private var sH:Number;
 		private var sW:Number;
@@ -23,22 +22,24 @@
 		private var titleH:Number = 65;
 		private var titleSize:Number = 35;
 		private var outlineColor:uint = 0xFFFFFF;
+		private var RETURNEVENT:String = "RETURNHOME";
 	
 		private var tabFormat:TextFormat;
-		private var sats:Array = ["aqua","aura","terra","trmm"];
+		private var sats:Array = ["home","aqua","aura","terra","trmm"];
 		private var tabButtons:Array;
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
 		
 		//insert a name title somewhere
-		public function AboutPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
+		public function AboutPage(container:MovieClip,stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
+			md = container;
 			sW = stageWidth;
 			sH = stageHeight;
 			dc = new DisplayContainer(sW,sH,0x000000,0,true);
 			textContent = new MovieClip();
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
-			tabButtons = [new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
+			tabButtons = [new HomeBtn(),new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
 			//add title
 			aboutTitle.addChild(new AboutTitle());
 			
@@ -95,8 +96,9 @@
 				dc.changeContent(new TerraAboutText());
 			}else if(sat == "trmm") {
 				dc.changeContent(new TrmmAboutText());
+			}else if(sat == "home") {
+				dispatchEvent(new Event(RETURNEVENT)); // -----change this later
 			}
-			
 		}
 		public function changeDisplay(c:MovieClip):void {
 			textContent = c;

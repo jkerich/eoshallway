@@ -21,6 +21,7 @@
 		//constants
 		private const paddingH:Number = 8; //do not use decimal values
 		private const paddingW:Number = 15;
+		private var RETURNEVENT:String = "RETURNHOME";
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra","trmm"];
@@ -160,7 +161,7 @@
 			dc.changeContent(new AquaAboutText());
 
 		}
-		private function returnHome(e:KeyboardEvent):void {
+		private function returnHome(e:Event):void {
 			//trace("key down");
 			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
 			new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,0,.5,true);
@@ -185,12 +186,16 @@
 			//make specific to each sat			
 			if (tar.getName() == "aqua") {
 				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
+				dc.changeContent(new AquaAboutText());
 			}else if(tar.getName() == "aura") {
 				subButtonRow.changeSat("aura",auraNames,auraHandlers); 
+				dc.changeContent(new AuraAboutText());
 			}else if(tar.getName() == "terra") {
 				subButtonRow.changeSat("terra",terraNames,terraHandlers); 
+				dc.changeContent(new TerraAboutText());
 			}else if(tar.getName() == "trmm") {
 				subButtonRow.changeSat("trmm",trmmNames,trmmHandlers); 
+				dc.changeContent(new TrmmAboutText());
 			}
 			
 		}
@@ -211,22 +216,14 @@
 			moveDisplay("down");
 		}
 		private function factsClick(e:MouseEvent):void { //make about page look better and fit
-			var ap:AboutPage = new AboutPage(slaveW,slaveH);
+			var ap:AboutPage = new AboutPage(masterDisplay,slaveW,slaveH);
+			ap.addEventListener(RETURNEVENT,returnHome);
 			changeContent(slaveDisplay[1],ap);
 			moveDisplay("right");
 		}
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
-			var sat:String = e.currentTarget.parent.getName();
-			if(sat == "aqua") {
-				dc.changeContent(new AquaAboutText());
-			}else if(sat == "aura") {
-				dc.changeContent(new AuraAboutText());
-			}else if(sat == "terra") {
-				dc.changeContent(new TerraAboutText());
-			}else if(sat == "trmm") {
-				dc.changeContent(new TrmmAboutText());
-			}
+			
 		}
 		private function presentationsClick(e:MouseEvent):void {
 			trace("presentations clicked");
