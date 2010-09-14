@@ -27,13 +27,13 @@
 		private var sats:Array = ["aqua","aura","terra","trmm"];
 		private var defaultNames:Array = new Array("about","presentations","videos","specs","images");
 		private var defaultHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var aquaNames:Array = new Array("about","minatuar","videos","specs","images");
+		private var aquaNames:Array = new Array("about","a","videos","specs","images");
 		private var aquaHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var auraNames:Array = new Array("about","krakan","videos","specs","images");
+		private var auraNames:Array = new Array("about","b","videos","specs","images");
 		private var auraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var terraNames:Array = new Array("about","golem","videos","specs","images");
+		private var terraNames:Array = new Array("about","c","videos","specs","images");
 		private var terraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var trmmNames:Array = new Array("about","chimera","videos","specs","images");
+		private var trmmNames:Array = new Array("about","d","videos","specs","images");
 		private var trmmHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
 		//dynamic variables
 		//cannot access stage until class is added to display list which does not occur until after all objects 
@@ -204,6 +204,7 @@
 			trace("media clicked");
 			//load media click
 			var ss:SlideShow = new SlideShow(slaveW,slaveH);
+			ss.addEventListener(RETURNEVENT,returnHome);
 			changeContent(slaveDisplay[3],ss);
 			moveDisplay("down");
 			moveDisplay("right");
