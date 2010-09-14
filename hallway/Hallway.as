@@ -25,16 +25,16 @@
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra","trmm"];
-		private var defaultNames:Array = new Array("about","presentations","videos","specs","images");
-		private var defaultHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var aquaNames:Array = new Array("about","a","videos","specs","images");
-		private var aquaHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var auraNames:Array = new Array("about","b","videos","specs","images");
-		private var auraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var terraNames:Array = new Array("about","c","videos","specs","images");
-		private var terraHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
-		private var trmmNames:Array = new Array("about","d","videos","specs","images");
-		private var trmmHandlers:Array = new Array(aboutClick,presentationsClick,videosClick,specsClick,imagesClick);
+		private var defaultNames:Array = new Array("presentations","videos","specs","images");
+		private var defaultHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var aquaNames:Array = new Array("presentations","videos","specs","images");
+		private var aquaHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var auraNames:Array = new Array("b","videos","specs","images");
+		private var auraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var terraNames:Array = new Array("c","videos","specs","images");
+		private var terraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var trmmNames:Array = new Array("d","videos","specs","images");
+		private var trmmHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		//dynamic variables
 		//cannot access stage until class is added to display list which does not occur until after all objects 
 		//	already on stage are loaded -> use Event.ADDED_TO_STAGE
