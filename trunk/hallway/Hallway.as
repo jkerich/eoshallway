@@ -217,14 +217,14 @@
 			moveDisplay("down");
 		}
 		private function factsClick(e:MouseEvent):void { //make about page look better and fit
-			var ap:AboutPage = new AboutPage(masterDisplay,slaveW,slaveH);
-			ap.addEventListener(RETURNEVENT,returnHome);
-			changeContent(slaveDisplay[1],ap);
+			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
+			sp.addEventListener(RETURNEVENT,returnHome);
+			changeContent(slaveDisplay[1],sp);
 			moveDisplay("right");
 		}
 		//sub button handlers
 		private function aboutClick(e:MouseEvent):void {
-			
+			trace("about click");
 		}
 		private function presentationsClick(e:MouseEvent):void {
 			trace("presentations clicked");
@@ -233,7 +233,12 @@
 			trace("videos clicked");
 		}
 		private function specsClick(e:MouseEvent):void {
-			trace("specs clicked");
+			var sat:String = e.currentTarget.parent.getName();
+			sat = sat.toLowerCase();
+			var sp:SpecsPage = new SpecsPage(slaveW,slaveH,sat);
+			sp.addEventListener(RETURNEVENT,returnHome);
+			changeContent(slaveDisplay[1],sp);
+			moveDisplay("right");
 		}
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
