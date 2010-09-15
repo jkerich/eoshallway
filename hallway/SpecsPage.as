@@ -7,13 +7,12 @@
 	import fl.transitions.easing.*;
 	import flash.system.*;
 	
-	public class AboutPage extends MovieClip {
+	public class SpecsPage extends MovieClip {
 		//mcs
 		private var dc:DisplayContainer;
 		private var tabs:MovieClip;
 		private var aboutTitle:MovieClip;
 		private var textContent:MovieClip; 
-		private var md:MovieClip; //master display
 		//constants
 		private var sH:Number;
 		private var sW:Number;
@@ -31,8 +30,8 @@
 		private var effectSpeed:Number = .5;
 		
 		//insert a name title somewhere
-		public function AboutPage(container:MovieClip,stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
-			md = container;
+		public function SpecsPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
+			
 			sW = stageWidth;
 			sH = stageHeight;
 			dc = new DisplayContainer(sW,sH,0x000000,0,true);
@@ -57,13 +56,13 @@
 			//initialize sat
 			sat = sat.toLowerCase();
 			if(sat == "aqua") {
-				dc.changeContent(new AquaAboutText());
+				dc.changeContent(new AquaSpecs());
 			}else if(sat == "aura") {
-				dc.changeContent(new AuraAboutText());
+				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
-				dc.changeContent(new TerraAboutText());
+				dc.changeContent(new TerraSpecs());
 			}else if(sat == "trmm") {
-				dc.changeContent(new TrmmAboutText());
+				dc.changeContent(new TrmmSpecs());
 			}
 			
 			//add mcs to stage
@@ -89,13 +88,13 @@
 			var sat:String= e.target.name;
 			//find out which sat was clicked
 			if(sat == "aqua") {
-				dc.changeContent(new AquaAboutText());
+				dc.changeContent(new AquaSpecs());
 			}else if(sat == "aura") {
-				dc.changeContent(new AuraAboutText());
+				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
-				dc.changeContent(new TerraAboutText());
+				dc.changeContent(new TerraSpecs());
 			}else if(sat == "trmm") {
-				dc.changeContent(new TrmmAboutText());
+				dc.changeContent(new TrmmSpecs());
 			}else if(sat == "home") {
 				dispatchEvent(new Event(RETURNEVENT)); // -----change this later
 			}

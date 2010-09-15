@@ -96,8 +96,8 @@
 			videoPath = "media/video";
 						
 			//arrays
-			toolBarNames = ["Home","Youtube","TERRA","AQUA","AURA","IotD","General"];
-			toolBarHandlers = [homeClick,youtubeClick,terraImages,aquaImages,auraImages,iotdClick,generalClick];
+			toolBarNames = ["Home","Youtube","IotD","TERRA","AQUA","AURA","General"];
+			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,terraImages,aquaImages,auraImages,generalClick];
 			
 			//hit box
 			drawHitBox(this,sW,sH);
@@ -157,9 +157,6 @@
 		private function homeClick(e:MouseEvent):void {
 			dispatchEvent(new Event(RETURNEVENT));
 		}
-		private function youtubeClick(e:MouseEvent):void {
-			trace("youtube clicked");
-		}
 		private function terraImages(e:MouseEvent):void {
 			trace("terra images clicked");
 		}
@@ -170,7 +167,10 @@
 			trace("aura images clicked");
 		}
 		private function iotdClick(e:MouseEvent):void {
-			trace("iotd clicked");
+			//trace("iotd clicked");
+			focusImage = 0;
+			dc.changeContent(loadImage(temp[0]));
+			addEventListener(MouseEvent.CLICK,shiftDisplay);
 		}
 		private function generalClick(e:MouseEvent):void {
 			trace("general images clicked");
@@ -182,6 +182,9 @@
 		private function loadYouTubeVideos(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
+			changeContent(descContainer,new MovieClip());
+			changeContent(titleContainer,new MovieClip());
+			
 			
 			Security.allowDomain("www.youtube.com");
 			vl =  new Loader();
@@ -189,19 +192,26 @@
 			var vidID:String = "2xaRotYad1o";
 			vl.load(new URLRequest("http://www.youtube.com/v/"+vidID+"?version=3"));
 			
-			changeContent(dc,vl);
+			dc.changeContent(vl);
 		}
 		function vidLoaded(e:Event):void {
 			vl.content.addEventListener("onReady", playerReady);
 			vl.content.addEventListener("onError", playerError);
+			vl.content.addEventListener("onStateChange", onPlayerStateChange);
+
 		}
 		function playerReady(e:Event):void {
 			player = vl.content;
-			player.setSize(sW,sH);
+			player.setSize(sW-toolBar.width,sH);
 		}
 		function playerError(e:Event):void {
 			trace(e);
 		}
+		function onPlayerStateChange(event:Event):void {
+			// Event.data contains the event parameter, which is the new player state
+			trace("player state:", Object(event).data);
+		}
+
 		function netStatusHandler(event:NetStatusEvent):void {
 			// handles net status events
 			switch (event.info.code) {
@@ -307,7 +317,7 @@
 			dc.changeContent(loadImage(temp[0]));
 		}
 		private function loadImage(path:String):Loader {
-			trace("Loading image: " + path);
+			//trace("Loading image: " + path);
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,loadProgress);
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageLoaded);
@@ -416,7 +426,7 @@
 			}
 			con.addChild(obj);
 		}
-		private function scale(tar:Object,w:Number,h:Number):Object {
+		private function scale(tar:*,w:Number,h:Number):* {
 			//scaling
 			//trace(tar.width,tar.height);
 			tar.width = w;
