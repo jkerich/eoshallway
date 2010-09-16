@@ -31,7 +31,7 @@
 		private var aquaHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		private var auraNames:Array = new Array("b","videos","specs","images");
 		private var auraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
-		private var terraNames:Array = new Array("c","videos","specs","images");
+		private var terraNames:Array = new Array("news","videos","specs","images");
 		private var terraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		private var trmmNames:Array = new Array("d","videos","specs","images");
 		private var trmmHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
@@ -214,7 +214,7 @@
 		}
 		private function orbitsClick(e:MouseEvent):void {
 			trace("orbits clicked");
-			moveDisplay("down");
+			//moveDisplay("down");
 		}
 		private function factsClick(e:MouseEvent):void { //make about page look better and fit
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
