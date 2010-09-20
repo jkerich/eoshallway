@@ -9,8 +9,11 @@
 		private var cont:MovieClip;
 		private var newCont:*;
 		private var aT:Tween;
+		private var bT:Tween;
 		private var effectSpeed:Number = .3;
 		private var center:Boolean;
+		//check if animating
+		private var animating:Boolean = false;
 		
 		public function DisplayContainer(w:Number,h:Number,color:uint=0x000000,a:Number = 0,center:Boolean = false,initialContent:* = null, t:Tween = null) {
 			this.center = center;
@@ -25,12 +28,18 @@
 			this.addChild(cont);
 		}
 		public function changeContent(c:*):void {
+			if(animating) {
+				return;
+			}
+			animating = true;
 			newCont = c;
 			//hide
 			aT = new Tween(cont,"alpha",null,cont.alpha,0,effectSpeed,true);
 			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
 		}
 		private function effectOut(e:TweenEvent):void { 
+			trace("effecting out");
+			
 			//change
 			changeChild(cont,newCont);
 			
@@ -47,8 +56,14 @@
 					cont.y = (this.height - cont.height)/2;
 				}
 			}
+			trace("effecting back in");
 			//effect back in
-			aT = new Tween(cont,"alpha",null,cont.alpha,1,effectSpeed,true);
+			bT = new Tween(cont,"alpha",null,cont.alpha,1,effectSpeed,true);
+			bT.addEventListener(Event.COMPLETE,endEffect);
+		}
+		private function endEffect(e:Event):void {
+			trace("effect end");
+			animating = false;
 		}
 		//utility
 		private function changeChild(con:*,obj:*):void { 
