@@ -52,6 +52,9 @@
 		private var homeRowHandlers:Array;
 		private var currentDisplay:Number = 0;
 		
+		//check if animating
+		//private var animating:Boolean = false;
+		
 		/*
 		TODO:
 			-consider scaling buttonH and buttonW
@@ -179,6 +182,7 @@
 			
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
+			
 			var tar:Object = e.currentTarget;
 			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
 			
@@ -214,7 +218,7 @@
 		}
 		private function orbitsClick(e:MouseEvent):void {
 			trace("orbits clicked");
-			//moveDisplay("down");
+			moveDisplay("down");
 		}
 		private function factsClick(e:MouseEvent):void { //make about page look better and fit
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
