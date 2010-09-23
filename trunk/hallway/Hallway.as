@@ -187,7 +187,8 @@
 			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
 			
 			//change sub row
-			//make specific to each sat			
+			//make specific to each sat		
+			trace("clicked", tar.getName());
 			if (tar.getName() == "aqua") {
 				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
 				dc.changeContent(new AquaAboutText());
