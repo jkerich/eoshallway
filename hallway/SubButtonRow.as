@@ -16,6 +16,7 @@
 		private var handlers:Array;
 		private var aSpeed:Number = .3;
 		private var jumpDistance:Number =150; //make dynamic
+		private var animating:Boolean = false;
 		//add text format
 		public function SubButtonRow(sn:String,w:Number,h:Number,names:Array,handlers:Array,tf:TextFormat = null) {
 			this.satName = sn;
@@ -35,14 +36,16 @@
 		private function init(e:Event):void {
 			this.changeSat(this.getName(),this.names,this.handlers);
 		}
-		public function getName():String {
-			return this.satName;
-		}
+		
 		public function changeSat(sn:String,names:Array,handlers:Array):void {
 			//reset
-			if(aT) {
+			/*if(aT) {
 				this.y = aT.finish;
+			}*/
+			if(animating) {
+				return;
 			}
+			animating = true;
 			//begin change
 			this.satName = sn;
 			this.names = names;
@@ -66,6 +69,13 @@
 				addChild(sbutton);
 			}
 			aT = new Tween(this,"y",null,this.y,this.y-jumpDistance,aSpeed/2,true);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,endReturn);
+		}
+		private function endReturn(e:TweenEvent):void {
+			animating = false;
+		}
+		public function getName():String {
+			return this.satName;
 		}
 		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
 			this.graphics.clear();

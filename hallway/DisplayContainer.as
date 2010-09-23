@@ -12,10 +12,14 @@
 		private var bT:Tween;
 		private var effectSpeed:Number = .3;
 		private var center:Boolean;
+		private var w:Number;
+		private var h:Number;
 		//check if animating
 		private var animating:Boolean = false;
 		
 		public function DisplayContainer(w:Number,h:Number,color:uint=0x000000,a:Number = 0,center:Boolean = false,initialContent:* = null, t:Tween = null) {
+			this.w = w;
+			this.h = h;
 			this.center = center;
 			cont = new MovieClip();
 			//draw hitbox
@@ -42,6 +46,7 @@
 			
 			//change
 			changeChild(cont,newCont);
+			scale(cont,w,h);
 			
 			//center content
 			if(center) {
@@ -59,9 +64,9 @@
 			trace("effecting back in");
 			//effect back in
 			bT = new Tween(cont,"alpha",null,cont.alpha,1,effectSpeed,true);
-			bT.addEventListener(Event.COMPLETE,endEffect);
+			bT.addEventListener(TweenEvent.MOTION_FINISH,endEffect);
 		}
-		private function endEffect(e:Event):void {
+		private function endEffect(e:TweenEvent):void {
 			trace("effect end");
 			animating = false;
 		}
@@ -77,6 +82,15 @@
 			this.graphics.beginFill(color,a);
 			this.graphics.drawRect(0,0,w,h);
 			this.graphics.endFill();
+		}
+		private function scale(tar:*,w:Number,h:Number):* {
+			//scaling
+			//trace(tar.width,tar.height);
+			tar.width = w;
+			tar.height = h;
+			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
+			//trace(tar.width,tar.height);
+			return tar;
 		}
 
 	}
