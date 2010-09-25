@@ -44,6 +44,7 @@
 		private var loadCount:Number = 0; //number of images to be loaded
 		private var currentIndex:Number; //current index of item clicked
 		private var focusImage:Number = 0; //index of item being displayed
+		private var animating:Boolean = false;
 		
 		//path vars
 		private var imgPath:String;
@@ -97,7 +98,7 @@
 						
 			//arrays
 			toolBarNames = ["Home","Youtube","IotD","TERRA","AQUA","AURA","General"];
-			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,terraImages,aquaImages,auraImages,generalClick];
+			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,playLocalVideo,aquaImages,auraImages,generalClick];
 			
 			//hit box
 			drawHitBox(this,sW,sH);
@@ -158,6 +159,8 @@
 			dispatchEvent(new Event(RETURNEVENT));
 		}
 		private function terraImages(e:MouseEvent):void {
+			var lv:LocalVideo = new LocalVideo(localVideoPath+"/terra/Terra.mp4");
+			dc.changeContent(lv);
 			trace("terra images clicked");
 		}
 		private function aquaImages(e:MouseEvent):void {
@@ -211,21 +214,6 @@
 			// Event.data contains the event parameter, which is the new player state
 			trace("player state:", Object(event).data);
 		}
-
-		function netStatusHandler(event:NetStatusEvent):void {
-			// handles net status events
-			switch (event.info.code) {
-				// trace a messeage when the stream is not found
-				case "NetStream.Play.StreamNotFound":
-					//trace("Stream not found: " + strSource);
-				break;
-				
-				// when the video reaches its end, we stop the player
-				case "NetStream.Play.Stop":
-					trace("play time is over");
-				break;
-			}
-		}
 		private function asyncError(e:AsyncErrorEvent):void {
 			trace(e.toString());
 		}
@@ -234,41 +222,11 @@
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			var arr:Array = listFiles("localVideos/general");
-			
 			for (var i:Number = 0;i<arr.length;i++) {
 				trace(arr[i].nativePath);
 			}
 		}
-		private function setupLocalVideo():void {
-			//disable slide show
-			removeEventListener(MouseEvent.CLICK,shiftDisplay);
-			//create net connection
-			nc = new NetConnection();
-			nc.connect(null);
-			nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-			//create net stream
-			ns = new NetStream(nc);
-			ns.client = new Object();
-			ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR,asyncError);
-			
-			trace("local video set up");
-		}
 		
-		private function loadVideo(path:String):Video {
-			if(nc == null)
-				setupLocalVideo();
-			
-			var localVideo:Video = new Video();
-			localVideo.smoothing = true;
-			localVideo = scale(localVideo,sW,sH) as Video;
-			localVideo.x = (sW-localVideo.width)/2;
-			localVideo.y = (sH-localVideo.height)/2;
-			//trace(localVideo.width,localVideo.height);
-			localVideo.attachNetStream(ns);
-			ns.play(path);
-			
-			return localVideo;
-		}
 		//----video support end
 		
 		
