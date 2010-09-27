@@ -66,6 +66,9 @@
 			addEventListener(Event.ADDED_TO_STAGE,init);
 		}
 		private function init(e:Event):void {
+			//security
+			Security.allowDomain("http://www.youtube.com");
+			
 			homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
 			homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
 

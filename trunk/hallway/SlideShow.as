@@ -183,39 +183,17 @@
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		//how get youtube videos from a feed
 		private function loadYouTubeVideos(e:MouseEvent):void {
+			Security.allowDomain("http://www.youtube.com");
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			changeContent(descContainer,new MovieClip());
 			changeContent(titleContainer,new MovieClip());
 			
-			
-			Security.allowDomain("www.youtube.com");
-			vl =  new Loader();
-			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
 			var vidID:String = "2xaRotYad1o";
-			vl.load(new URLRequest("http://www.youtube.com/v/"+vidID+"?version=3"));
+			var yt:YoutubeVideo = new YoutubeVideo(sW,sH,null,vidID);
 			
-			dc.changeContent(vl);
-		}
-		function vidLoaded(e:Event):void {
-			vl.content.addEventListener("onReady", playerReady);
-			vl.content.addEventListener("onError", playerError);
-			vl.content.addEventListener("onStateChange", onPlayerStateChange);
-
-		}
-		function playerReady(e:Event):void {
-			player = vl.content;
-			player.setSize(sW-toolBar.width,sH);
-		}
-		function playerError(e:Event):void {
-			trace(e);
-		}
-		function onPlayerStateChange(event:Event):void {
-			// Event.data contains the event parameter, which is the new player state
-			trace("player state:", Object(event).data);
-		}
-		private function asyncError(e:AsyncErrorEvent):void {
-			trace(e.toString());
+			dc.changeContent(yt);
+			trace(yt);
 		}
 		//local videos
 		private function playLocalVideo(e:MouseEvent):void {
