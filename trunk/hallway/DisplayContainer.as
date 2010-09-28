@@ -42,7 +42,7 @@
 			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
 		}
 		private function effectOut(e:TweenEvent):void { 
-			trace("effecting out");
+			//trace("effecting out");
 			
 			//change
 			changeChild(cont,newCont);
@@ -61,13 +61,13 @@
 					cont.y = (this.height - cont.height)/2;
 				}
 			}
-			trace("effecting back in");
+			//trace("effecting back in");
 			//effect back in
 			bT = new Tween(cont,"alpha",null,cont.alpha,1,effectSpeed,true);
 			bT.addEventListener(TweenEvent.MOTION_FINISH,endEffect);
 		}
 		private function endEffect(e:TweenEvent):void {
-			trace("effect end");
+			//trace("effect end");
 			animating = false;
 		}
 		//utility

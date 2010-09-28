@@ -11,28 +11,43 @@
 		private var vl:Loader;
 		private var w:Number;
 		private var h:Number;
+		private var t:TextField;
+		private var player:Object;
+		private var url:String;
+		private var id:String;
+		
 		
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		public function YoutubeVideo(w:Number,h:Number,url:String="",id:String="") {
+			Security.allowDomain("http://www.youtube.com");
 			vl = new Loader();
-			this.w = w;
-			this.h = h;
-			drawHitBox(w,h,0x000000,1.0);
 			vl.contentLoaderInfo.addEventListener(Event.COMPLETE,vidLoaded);
 			
-			if(url)
-				loadYouTubeVideo(url);
-			else if(id) 
-				loadYouTubeVideo(id);
+			this.w = w;
+			this.h = h;
+			
+			t = new TextField();
+			t.text = "NULLO";
+			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
+			t.autoSize = TextFieldAutoSize.LEFT;
+			t.selectable = false;
+			t.x = w +100;
+			t.y = h + 100;
+			addChild(t);
+			
+			
+			
+			loadYouTubeVideo(url,id);
+				
+			this.addChild(vl);
 		}
 
 		public function loadYouTubeVideo(url:String="",id:String=""):void {
-			Security.allowDomain("http://www.youtube.com");
+			vl.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
+
+			this.url = url;
+			this.id = id;
 			
-			if(url) 
-				vl.load(new URLRequest(url));
-			else if(id) 
-				vl.load(new URLRequest("http://www.youtube.com/v/"+id+"?version=3"));
 		}
 		
 		function vidLoaded(e:Event):void {
@@ -41,7 +56,10 @@
 			vl.content.addEventListener("onStateChange", onPlayerStateChange);
 		}
 		function playerReady(e:Event):void {
-			this.addChild(scale(vl,w,h));
+			player = vl.content;
+			player.loadVideoById(id);
+			player.setSize(w,h);
+			//t.text = player.width+ " - " + player.height;
 		}
 		function playerError(e:Event):void {
 			trace(e);
