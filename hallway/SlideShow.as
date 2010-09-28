@@ -194,6 +194,7 @@
 			
 			dc.changeContent(yt);
 			trace(yt);
+			
 		}
 		//local videos
 		private function playLocalVideo(e:MouseEvent):void {
@@ -206,8 +207,6 @@
 		}
 		
 		//----video support end
-		
-		
 		private function shiftDisplay(e:MouseEvent):void {
 			//trace("mouse click on stage");
 			var center:Number = sW/2 - toolBar.width;
