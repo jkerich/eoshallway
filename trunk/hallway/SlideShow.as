@@ -183,6 +183,7 @@
 		//http://www.youtube.com/watch?v=R8kDsM0M-vg
 		//how get youtube videos from a feed
 		private function loadYouTubeVideos(e:MouseEvent):void {
+			
 			Security.allowDomain("http://www.youtube.com");
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
