@@ -25,6 +25,7 @@
 			
 			this.w = w;
 			this.h = h;
+			drawHitBox(w,h,0x000000,1.0);
 			
 			t = new TextField();
 			t.text = "NULLO";
@@ -35,14 +36,13 @@
 			t.y = h + 100;
 			addChild(t);
 			
-			
-			
 			loadYouTubeVideo(url,id);
 				
 			this.addChild(vl);
 		}
 
 		public function loadYouTubeVideo(url:String="",id:String=""):void {
+			player = new Object();
 			vl.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
 
 			this.url = url;
@@ -59,7 +59,8 @@
 			player = vl.content;
 			player.loadVideoById(id);
 			player.setSize(w,h);
-			//t.text = player.width+ " - " + player.height;
+			t.text = this.parent+ " - ";
+			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
 		}
 		function playerError(e:Event):void {
 			trace(e);

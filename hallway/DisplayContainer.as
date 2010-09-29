@@ -46,7 +46,7 @@
 			
 			//change
 			changeChild(cont,newCont);
-			scale(cont,w,h);
+			//scale(cont,w,h);
 			
 			//center content
 			if(center) {
