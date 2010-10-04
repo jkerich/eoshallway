@@ -44,9 +44,10 @@
 		private function effectOut(e:TweenEvent):void { 
 			//trace("effecting out");
 			
+			
 			//change
 			changeChild(cont,newCont);
-			//scale(cont,w,h);
+			cont = Utils.scale(cont,w,h);
 			
 			//center content
 			if(center) {
@@ -85,6 +86,7 @@
 		}
 		private function scale(tar:*,w:Number,h:Number):* {
 			//scaling
+			trace("dc scale");
 			//trace(tar.width,tar.height);
 			tar.width = w;
 			tar.height = h;

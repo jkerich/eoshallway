@@ -25,16 +25,7 @@
 			
 			this.w = w;
 			this.h = h;
-			drawHitBox(w,h,0x000000,1.0);
-			
-			t = new TextField();
-			t.text = "NULLO";
-			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
-			t.autoSize = TextFieldAutoSize.LEFT;
-			t.selectable = false;
-			t.x = w +100;
-			t.y = h + 100;
-			addChild(t);
+			Utils.drawHitBox(w,h,0x000000,1.0);
 			
 			loadYouTubeVideo(url,id);
 				
@@ -57,7 +48,14 @@
 		}
 		function playerReady(e:Event):void {
 			player = vl.content;
-			player.loadVideoById(id);
+			
+			if(id) 
+				player.loadVideoById(id);
+			else if(url) 
+				player.loadVideoByUrl(url);
+			else
+				trace("error no id or url for youtube feed");
+				
 			player.setSize(w,h);
 			t.text = this.parent+ " - ";
 			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
@@ -71,22 +69,6 @@
 		}
 		private function asyncError(e:AsyncErrorEvent):void {
 			trace(e.toString());
-		}
-		//utility
-		private function scale(tar:*,w:Number,h:Number):* {
-			//scaling
-			//trace(tar.width,tar.height);
-			tar.width = w;
-			tar.height = h;
-			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
-			//trace(tar.width,tar.height);
-			return tar;
-		}
-		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			this.graphics.clear();
-			this.graphics.beginFill(color,a);
-			this.graphics.drawRect(0,0,w,h);
-			this.graphics.endFill();
 		}
 	}
 	
