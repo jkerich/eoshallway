@@ -98,7 +98,7 @@
 						
 			//arrays
 			toolBarNames = ["Home","Youtube","IotD","TERRA","AQUA","AURA","General"];
-			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,playLocalVideo,aquaImages,auraImages,generalClick];
+			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,terraImages,aquaImages,auraImages,generalClick];
 			
 			//hit box
 			drawHitBox(this,sW,sH);
@@ -160,8 +160,13 @@
 		}
 		private function terraImages(e:MouseEvent):void {
 			var lv:LocalVideo = new LocalVideo(localVideoPath+"/terra/Terra.mp4");
+			lv = scale(lv,sW,sH);
+			//trace(dc.parent.scaleX,dc.parent.scaleY);
+			//lv.width = sW;
+			//lv.scaleY = lv.scaleX;
 			dc.changeContent(lv);
-			trace("terra images clicked");
+			
+			//trace("terra images clicked");
 		}
 		private function aquaImages(e:MouseEvent):void {
 			trace("aqua imagese clicked");
@@ -198,7 +203,7 @@
 			
 		}
 		//local videos
-		private function playLocalVideo(e:MouseEvent):void {
+		private function listLocalVideo(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
 			var arr:Array = listFiles("localVideos/general");
@@ -367,6 +372,7 @@
 			//trace(tar.width,tar.height);
 			tar.width = w;
 			tar.height = h;
+			trace(tar.scaleX,tar.scaleY);
 			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
 			//trace(tar.width,tar.height);
 			return tar;
