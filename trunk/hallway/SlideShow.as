@@ -73,6 +73,8 @@
 				
 			-make class for slide description
 			-make class for tool bar
+			
+			-make sure to kill netstream when navigating away or selecting different item
 		*/
 		public function SlideShow(w:Number,h:Number,imagePath:String = "") {
 			//init
@@ -101,7 +103,7 @@
 			toolBarHandlers = [homeClick,loadYouTubeVideos,iotdClick,terraImages,aquaImages,auraImages,generalClick];
 			
 			//hit box
-			drawHitBox(this,sW,sH);
+			Utils.drawHitBox(this,sW,sH);
 			
 			//event listeners
 			addEventListener(MouseEvent.CLICK,shiftDisplay);
@@ -148,7 +150,7 @@
 			
 			//button
 			var button:MovieClip = new MovieClip();
-			drawHitBox(button,t.width+pad,t.height+pad,0x000000,.65);
+			Utils.drawHitBox(button,t.width+pad,t.height+pad,0x000000,.65);
 			button.addChild(t);
 			button.addEventListener(MouseEvent.CLICK,h);
 			
@@ -159,11 +161,10 @@
 			dispatchEvent(new Event(RETURNEVENT));
 		}
 		private function terraImages(e:MouseEvent):void {
-			var lv:LocalVideo = new LocalVideo(localVideoPath+"/terra/Terra.mp4");
-			lv = scale(lv,sW,sH);
-			//trace(dc.parent.scaleX,dc.parent.scaleY);
-			//lv.width = sW;
-			//lv.scaleY = lv.scaleX;
+			var lv:LocalVideo = new LocalVideo(localVideoPath+"/general/Ares 1-X Test Rocket Launches 1080p.mp4");
+			trace(sW,sH);
+			/*lv.width = sW;
+			lv.scaleY = lv.scaleX;*/
 			dc.changeContent(lv);
 			
 			//trace("terra images clicked");
@@ -192,8 +193,8 @@
 			Security.allowDomain("http://www.youtube.com");
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
-			changeContent(descContainer,new MovieClip());
-			changeContent(titleContainer,new MovieClip());
+			Utils.changeContent(descContainer,new MovieClip());
+			Utils.changeContent(titleContainer,new MovieClip());
 			
 			var vidID:String = "2xaRotYad1o";
 			var yt:YoutubeVideo = new YoutubeVideo(sW,sH,null,vidID);
@@ -206,7 +207,7 @@
 		private function listLocalVideo(e:MouseEvent):void {
 			//disable slide show
 			removeEventListener(MouseEvent.CLICK,shiftDisplay);
-			var arr:Array = listFiles("localVideos/general");
+			var arr:Array = Utils.listFiles("localVideos/general");
 			for (var i:Number = 0;i<arr.length;i++) {
 				trace(arr[i].nativePath);
 			}
@@ -273,7 +274,7 @@
 			trace("Image loaded");
 			//get loader
 			var l:Loader = e.target.loader as Loader;
-			l = scale(l,slideW,slideH) as Loader;
+			l = Utils.scale(l,slideW,slideH) as Loader;
 			l.x = (sW-l.width)/2;
 			l.y = (sH-l.height)/2; // remember to subtract out the bottom bar's height
 			
@@ -298,8 +299,8 @@
 			desc.x = 0;
 			desc.y = sH-desc.height*1.5;
 			
-			changeDisplay(titleContainer,t);
-			changeDisplay(descContainer,desc);
+			Utils.changeDisplay(titleContainer,t,effectSpeed);
+			Utils.changeDisplay(descContainer,desc,effectSpeed);
 			
 		}
 		private function createSlideDescContainer(t:String=""):MovieClip {
@@ -319,12 +320,12 @@
 			d.wordWrap = true;
 			d.width = sW;
 			var dbg:MovieClip = new MovieClip(); //description text background (which also includes the text)
-			drawHitBox(dbg,d.width,d.height,0x000000,.65);
+			Utils.drawHitBox(dbg,d.width,d.height,0x000000,.65);
 			dbg.y = info.height;
 			dbg.addChild(d);
 			
 			var container:MovieClip = new MovieClip();
-			drawHitBox(container,info.width+pad,info.height+pad,0x000000,.65);//make alphas consistent across all classes
+			Utils.drawHitBox(container,info.width+pad,info.height+pad,0x000000,.65);//make alphas consistent across all classes
 			container.addChild(info);
 			container.addChild(dbg);
 			return container;
@@ -336,52 +337,6 @@
 		}
 		private function imageLoadFail(e:IOErrorEvent):void {
 			trace("load failed");
-		}
-		//utility functions------------------------------------------------------\\
-		public static function listFiles(path:String):Array{
-			var dir:File = File.applicationDirectory.resolvePath(path);
-			var files:Array = dir.getDirectoryListing();
-			//get rid of hidden directories
-			var cleanFiles:Array = [];
-			for (var i:Number =0; i<files.length;i++) {
-				if(!files[i].isDirectory) {
-					cleanFiles.push(files[i]);
-				}
-			}
-			return cleanFiles;
-		}
-		public function changeDisplay(display:*,c:*):void {
-			//hide
-			aT = new Tween(display,"alpha",null,display.alpha,0,effectSpeed,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,function(e:Event):void {//effect used to change display is done
-								//change
-								changeContent(display,c);
-								//effect back in
-								new Tween(display,"alpha",null,display.alpha,1,effectSpeed,true);
-								
-								});
-		}
-		private function changeContent(con:*,obj:*):void { 
-			while(con.numChildren) {
-				con.removeChildAt(0);
-			}
-			con.addChild(obj);
-		}
-		private function scale(tar:*,w:Number,h:Number):* {
-			//scaling
-			//trace(tar.width,tar.height);
-			tar.width = w;
-			tar.height = h;
-			trace(tar.scaleX,tar.scaleY);
-			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
-			//trace(tar.width,tar.height);
-			return tar;
-		}
-		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			obj.graphics.clear();
-			obj.graphics.beginFill(color,a);
-			obj.graphics.drawRect(0,0,w,h);
-			obj.graphics.endFill();
 		}
 	}//end class
 	
