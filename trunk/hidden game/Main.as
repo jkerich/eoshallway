@@ -6,6 +6,7 @@
 	import fl.transitions.*;
 	import fl.transitions.easing.*;
 	import flash.system.*;
+	import flash.geom.Point;
 	
 	public class Main extends MovieClip{
 		
@@ -28,19 +29,30 @@
 			//trace(mouseX,mouseY);
 			this.graphics.clear();
 			this.graphics.lineStyle(2,0xFFFFFF,1.0);
-			this.graphics.moveTo(sW/2,sH);
-			this.graphics.lineTo(mouseX,mouseY);
-			this.graphics.lineTo(mouseX,sH);
-			this.graphics.lineTo(sW/2,sH);
 			
 			
-			//calc angle
-			var angle:Number = 0;
-			var dx:Number = Math.abs(mouseX - sW/2);
-			var dy:Number = Math.abs(mouseY - sH);
+			//using points
+			var p1:Point = new Point();
+			p1.x = mouseX;
+			p1.y = mouseY;
 			
+			var base:Point = new Point();
+			base.x = sW/2;
+			base.y = sH;
 			
+			this.graphics.moveTo(base.x,base.y);
+			this.graphics.lineTo(p1.x,p1.y);
+			this.graphics.lineTo(p1.x,base.y);
+			this.graphics.lineTo(base.x,base.y);
 			
+			//calc angle - default radians
+			var dx:Number = p1.x - base.x;
+			var dy:Number = p1.y - base.y;
+			var angle:Number = Math.atan2(dy,dx);
+			//convert to degrees
+			angle = angle * (180/Math.PI);
+			
+			trace(angle);
 		}
 		private function fire(e:MouseEvent):void {
 			var s:MovieClip = makeShot();
