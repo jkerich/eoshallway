@@ -60,7 +60,7 @@
 			}else if(sat == "aura") {
 				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
-				dc.changeContent(new TerraSpecs());
+				dc.changeContent(new TerraDetails());
 			}else if(sat == "trmm") {
 				dc.changeContent(new TrmmSpecs());
 			}
@@ -92,7 +92,7 @@
 			}else if(sat == "aura") {
 				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
-				dc.changeContent(new TerraSpecs());
+				dc.changeContent(new TerraDetails());
 			}else if(sat == "trmm") {
 				dc.changeContent(new TrmmSpecs());
 			}else if(sat == "home") {
