@@ -32,14 +32,14 @@
 		}
 		public static function scale(tar:*,w:Number,h:Number):* {
 			//scaling
-			trace("util scale");
+			//trace("util scale");
 			//trace(tar.scaleX,tar.scaleY);
 			//trace(tar.width,tar.height);
 			trace(w,h);
 			tar.width = w;
 			tar.height = h;
-			trace(tar.width,tar.height);
-			trace(tar.scaleX,tar.scaleY);
+			//trace(tar.width,tar.height);
+			//trace(tar.scaleX,tar.scaleY);
 			(tar.scaleX < tar.scaleY) ? tar.scaleY = tar.scaleX:tar.scaleX = tar.scaleY;
 			
 			//trace(tar.width,tar.height);

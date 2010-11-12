@@ -24,7 +24,7 @@
 		private var RETURNEVENT:String = "RETURNHOME";
 	
 		private var tabFormat:TextFormat;
-		private var sats:Array = ["home","aqua","aura","terra","trmm"];
+		private var sats:Array = ["home","aqua","aura","terra"];
 		private var tabButtons:Array;
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
@@ -38,7 +38,7 @@
 			textContent = new MovieClip();
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
-			tabButtons = [new HomeBtn(),new AquaTab(),new AuraTab(),new TerraTab(), new TrmmTab()];
+			tabButtons = [new HomeBtn(),new AquaTab(),new AuraTab(),new TerraTab()];
 			//add title
 			aboutTitle.addChild(new AboutTitle());
 			
@@ -56,7 +56,7 @@
 			//initialize sat
 			sat = sat.toLowerCase();
 			if(sat == "aqua") {
-				dc.changeContent(new AquaSpecs());
+				dc.changeContent(new AquaDetails());
 			}else if(sat == "aura") {
 				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
@@ -81,14 +81,14 @@
 				sTab.addEventListener(MouseEvent.CLICK,clicked);
 				tabStrip.addChild(sTab);
 			}
-			
+			tabStrip = Utils.scale(tabStrip,sW - aboutTitle.width,tabStrip.height); //resize properly
 			return tabStrip;
 		}
 		public function clicked(e:MouseEvent) {
 			var sat:String= e.target.name;
 			//find out which sat was clicked
 			if(sat == "aqua") {
-				dc.changeContent(new AquaSpecs());
+				dc.changeContent(new AquaDetails());
 			}else if(sat == "aura") {
 				dc.changeContent(new AuraSpecs());
 			}else if(sat == "terra") {
