@@ -162,7 +162,7 @@
 		}
 		private function terraImages(e:MouseEvent):void {
 			var lv:LocalVideo = new LocalVideo(localVideoPath+"/general/Ares 1-X Test Rocket Launches 1080p.mp4");
-			trace(sW,sH);
+			//trace(sW,sH);
 			/*lv.width = sW;
 			lv.scaleY = lv.scaleX;*/
 			dc.changeContent(lv);

@@ -24,7 +24,7 @@
 		private var RETURNEVENT:String = "RETURNHOME";
 		
 		//arrays
-		private var sats:Array = ["aqua","aura","terra","trmm"];
+		private var sats:Array = ["aqua","aura","terra"];
 		private var defaultNames:Array = new Array("presentations","videos","specs","images");
 		private var defaultHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		private var aquaNames:Array = new Array("presentations","videos","specs","images");
