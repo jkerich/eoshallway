@@ -96,7 +96,7 @@
 				var sd:MovieClip = new MovieClip(); 
 				var color:uint = Math.random()*0xFFFFFF;
 				sd = new MovieClip();
-				drawHitBox(sd,slaveW,slaveH,color,.3);
+				Utils.drawHitBox(sd,slaveW,slaveH,color,.3);
 				
 				slaveDisplay.push(sd);
 				masterDisplay.addChild(slaveDisplay[a]);
@@ -145,7 +145,7 @@
 			
 			//add frame
 			frame = new MovieClip();
-			drawHitBox(frame,buttonW,buttonH,0x000000,.65); //generalize dc color
+			Utils.drawHitBox(frame,buttonW,buttonH,0x000000,.65); //generalize dc color
 			//frame.x = paddingW;
 			frame.y = buttonRow.y;
 			
@@ -212,7 +212,7 @@
 			//load media click
 			var ss:SlideShow = new SlideShow(slaveW,slaveH);
 			ss.addEventListener(RETURNEVENT,returnHome);
-			changeContent(slaveDisplay[3],ss);
+			Utils.changeContent(slaveDisplay[3],ss);
 			moveDisplay("down");
 			moveDisplay("right");
 		}
@@ -223,10 +223,10 @@
 			trace("orbits clicked");
 			moveDisplay("down");
 		}
-		private function factsClick(e:MouseEvent):void { //make about page look better and fit
+		private function factsClick(e:MouseEvent):void { //this is top row Quick Facts button
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
 			sp.addEventListener(RETURNEVENT,returnHome);
-			changeContent(slaveDisplay[1],sp);
+			Utils.changeContent(slaveDisplay[1],sp);
 			moveDisplay("right");
 		}
 		//sub button handlers
@@ -243,30 +243,16 @@
 		private function videosClick(e:MouseEvent):void {
 			trace("videos clicked");
 		}
-		private function specsClick(e:MouseEvent):void {
+		private function specsClick(e:MouseEvent):void { //this is subbutton row details button
 			var sat:String = e.currentTarget.parent.getName();
 			sat = sat.toLowerCase();
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH,sat);
 			sp.addEventListener(RETURNEVENT,returnHome);
-			changeContent(slaveDisplay[1],sp);
+			Utils.changeContent(slaveDisplay[1],sp);
 			moveDisplay("right");
 		}
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
-		}
-		
-		//utility functions
-		private function changeContent(con:*,obj:*):void { 
-			while(con.numChildren) {
-				con.removeChildAt(0);
-			}
-			con.addChild(obj);
-		}
-		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			obj.graphics.clear();
-			obj.graphics.beginFill(color,a);
-			obj.graphics.drawRect(0,0,w,h);
-			obj.graphics.endFill();
 		}
 	}//end class
 	

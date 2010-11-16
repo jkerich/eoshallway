@@ -49,7 +49,7 @@
 			
 			
 			//display container hitbox
-			drawHitBox(dc,sW,sH-titleH,0x000000,.65);
+			Utils.drawHitBox(dc,sW,sH-titleH,0x000000,.65);
 			dc.x = 0;
 			dc.y = tabs.y + tabs.height;
 			
@@ -117,22 +117,9 @@
 				textContent.height = dc.height;
 			}
 			//change
-			changeContent(dc,textContent);
+			Utils.changeContent(dc,textContent);
 			//effect back in
 			new Tween(dc,"alpha",null,dc.alpha,1,effectSpeed,true);
-		}
-		//utility
-		private function changeContent(con:*,obj:*):void { 
-			while(con.numChildren) {
-				con.removeChildAt(0);
-			}
-			con.addChild(obj);
-		}
-		private function drawHitBox(obj:*,w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			obj.graphics.clear();
-			obj.graphics.beginFill(color,a);
-			obj.graphics.drawRect(0,0,w,h);
-			obj.graphics.endFill();
 		}
 		
 	}
