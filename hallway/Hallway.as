@@ -25,9 +25,9 @@
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra"];
-		private var defaultNames:Array = new Array("presentations","videos","specs","images");
-		private var defaultHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
-		private var aquaNames:Array = new Array("presentations","videos","specs","images");
+		private var defaultNames:Array = new Array("news","details");
+		private var defaultHandlers:Array = new Array(newsClick,specsClick);
+		private var aquaNames:Array = new Array("presentations","videos","details","images");
 		private var aquaHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		private var auraNames:Array = new Array("b","videos","specs","images");
 		private var auraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
@@ -67,8 +67,10 @@
 		}
 		private function init(e:Event):void {
 			
-			homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
+			//homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
 			homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
+			homeRowButtons = [new QuickFactsBtn()];
+			homeRowHandlers = [factsClick];
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -148,7 +150,7 @@
 			frame.y = buttonRow.y;
 			
 			//add sub buttons
-			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,aquaNames,aquaHandlers); //since aqua is first
+			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,defaultNames,defaultHandlers); //since aqua is first
 			//subButtonRow.x = paddingW;
 			subButtonRow.y = buttonRow.y + buttonH;
 			
@@ -188,16 +190,15 @@
 			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
 			
 			//change sub row
-			//make specific to each sat		
 			trace("clicked", tar.getName());
 			if (tar.getName() == "aqua") {
-				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
+				subButtonRow.changeSat("aqua",defaultNames,defaultHandlers); 
 				dc.changeContent(new AquaAboutText());
 			}else if(tar.getName() == "aura") {
-				subButtonRow.changeSat("aura",auraNames,auraHandlers); 
+				subButtonRow.changeSat("aura",defaultNames,defaultHandlers); 
 				dc.changeContent(new AuraAboutText());
 			}else if(tar.getName() == "terra") {
-				subButtonRow.changeSat("terra",terraNames,terraHandlers); 
+				subButtonRow.changeSat("terra",defaultNames,defaultHandlers); 
 				dc.changeContent(new TerraAboutText());
 			}else if(tar.getName() == "trmm") {
 				subButtonRow.changeSat("trmm",trmmNames,trmmHandlers); 
@@ -229,6 +230,10 @@
 			moveDisplay("right");
 		}
 		//sub button handlers
+		private function newsClick(e:MouseEvent):void {
+			trace("news click");
+			
+		}
 		private function aboutClick(e:MouseEvent):void {
 			trace("about click");
 		}
