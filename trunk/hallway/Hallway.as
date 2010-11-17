@@ -169,6 +169,7 @@
 			
 			//load first about content
 			dc.changeContent(new AquaAboutText());
+			
 
 		}
 		private function returnHome(e:Event):void {
@@ -260,7 +261,10 @@
 		}
 		//silly code to fix idiot syncrancies 
 		private function killTakeOver(e:Event):void {
-			if (e.target is FLVPlayback) e.target.fullScreenTakeOver = false;
+			if (e.target is FLVPlayback) {
+				e.target.fullScreenTakeOver = false;
+				
+			}
 		}
 	}//end class
 	

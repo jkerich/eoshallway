@@ -23,7 +23,7 @@
 			this.center = center;
 			cont = new MovieClip();
 			//draw hitbox
-			drawHitBox(w,h,color,a);
+			Utils.drawHitBox(this,w,h,color,a);
 			
 			//initialize content variable
 			if(initialContent != null)
@@ -72,28 +72,13 @@
 			animating = false;
 		}
 		//utility
-		private function changeChild(con:*,obj:*):void { 
+		private function changeChild(con:*,obj:*):void { //change to default in Utils
 			while(con.numChildren) {
 				con.removeChildAt(0);
 			}
 			con.addChild(obj);
 		}
-		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			this.graphics.clear();
-			this.graphics.beginFill(color,a);
-			this.graphics.drawRect(0,0,w,h);
-			this.graphics.endFill();
-		}
-		private function scale(tar:*,w:Number,h:Number):* {
-			//scaling
-			trace("dc scale");
-			//trace(tar.width,tar.height);
-			tar.width = w;
-			tar.height = h;
-			(tar.scaleX > tar.scaleY) ? tar.scaleX = tar.scaleY:tar.scaleY = tar.scaleX;
-			//trace(tar.width,tar.height);
-			return tar;
-		}
+		
 
 	}
 	
