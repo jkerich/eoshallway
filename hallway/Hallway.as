@@ -6,6 +6,7 @@
 	import fl.transitions.*;
 	import fl.transitions.easing.*;
 	import flash.system.*;
+	import fl.video.FLVPlayback;
 	
 	public class Hallway extends MovieClip {
 		//mcs
@@ -64,8 +65,11 @@
 		
 		public function Hallway() {
 			addEventListener(Event.ADDED_TO_STAGE,init);
+			
 		}
 		private function init(e:Event):void {
+			//prevent flv fullscreen takeover
+			stage.addEventListener(Event.ADDED,killTakeOver);
 			
 			//homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
 			homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
@@ -253,6 +257,10 @@
 		}
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
+		}
+		//silly code to fix idiot syncrancies 
+		private function killTakeOver(e:Event):void {
+			if (e.target is FLVPlayback) e.target.fullScreenTakeOver = false;
 		}
 	}//end class
 	
