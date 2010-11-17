@@ -58,7 +58,7 @@
 			if(sat == "aqua") {
 				dc.changeContent(new AquaDetails());
 			}else if(sat == "aura") {
-				dc.changeContent(new AuraSpecs());
+				dc.changeContent(new AuraDetails());
 			}else if(sat == "terra") {
 				dc.changeContent(new TerraDetails());
 			}else if(sat == "trmm") {
@@ -90,7 +90,7 @@
 			if(sat == "aqua") {
 				dc.changeContent(new AquaDetails());
 			}else if(sat == "aura") {
-				dc.changeContent(new AuraSpecs());
+				dc.changeContent(new AuraDetails());
 			}else if(sat == "terra") {
 				dc.changeContent(new TerraDetails());
 			}else if(sat == "trmm") {
