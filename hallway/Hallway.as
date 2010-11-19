@@ -64,6 +64,7 @@
 		*/
 		
 		public function Hallway() {
+			stage.displayState = StageDisplayState.FULL_SCREEN;
 			addEventListener(Event.ADDED_TO_STAGE,init);
 			
 		}
