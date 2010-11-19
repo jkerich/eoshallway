@@ -5,6 +5,8 @@
 	import flash.text.*;
 	import fl.transitions.*;
 	import flash.media.Video;
+	import fl.video.FLVPlayback;
+	import flash.media.SoundMixer;
 	import flash.system.*;
 	import flash.filesystem.*;
 	
@@ -63,6 +65,18 @@
 			}
 			return cleanFiles;
 		}
+		
+		//flvplayback compent nuisance fixes
+		public static function stopPlayback(tar:Object):void {
+			//kill sounds
+			SoundMixer.stopAll();
+			
+			//stop video playback
+			for(var i=0;i<tar.numChildren;i++)
+				if(tar.getChildAt(i) is FLVPlayback) 
+					tar.getChildAt(i).stop();
+		}
+
 	}
 	
 }

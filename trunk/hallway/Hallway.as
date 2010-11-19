@@ -236,8 +236,16 @@
 		}
 		//sub button handlers
 		private function newsClick(e:MouseEvent):void {
-			trace("news click");
+			var sat:String = e.currentTarget.parent.getName();
+			sat = sat.toLowerCase();
 			
+			if (sat == "aqua") {
+				dc.changeContent(new AquaNews());
+			}else if(sat == "aura") {
+				dc.changeContent(new AuraNews());
+			}else if(sat == "terra") {
+				dc.changeContent(new TerraNews());
+			}
 		}
 		private function aboutClick(e:MouseEvent):void {
 			trace("about click");
