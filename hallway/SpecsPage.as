@@ -86,6 +86,9 @@
 		}
 		public function clicked(e:MouseEvent) {
 			var sat:String= e.target.name;
+			//kill any flv videos playing on frame
+			Utils.stopPlayback(dc.getContent());
+			
 			//find out which sat was clicked
 			if(sat == "aqua") {
 				dc.changeContent(new AquaDetails());

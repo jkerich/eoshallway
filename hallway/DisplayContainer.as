@@ -7,7 +7,7 @@
 	
 	public class DisplayContainer extends MovieClip{
 		private var cont:MovieClip;
-		private var newCont:*;
+		private var newCont:*; //temporary holder
 		private var aT:Tween;
 		private var bT:Tween;
 		private var effectSpeed:Number = .3;
@@ -77,6 +77,9 @@
 				con.removeChildAt(0);
 			}
 			con.addChild(obj);
+		}
+		public function getContent():MovieClip {
+			return cont;
 		}
 		
 
