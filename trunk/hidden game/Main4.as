@@ -5,17 +5,19 @@
 	
 	public class Main4 extends MovieClip{
 		private var shooter:MovieClip;
-		private var speed:Number = 1.5;
+		private var speed:Number = 4.5;
 		private var force:Number = .5;
 		private var friction:Number = .98;
 		private var vx:Number = 0;
 		private var vy:Number = 0;
 		private var sW:Number;
 		private var sH:Number;
+		private var shots:Array;
 		
 		public function Main4() {
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
+			shots = new Array();
 			
 			//create shooter
 			shooter = new Shooter();
@@ -33,10 +35,15 @@
 		private function fire(e:MouseEvent):void {
 			//create shot
 			var shot:MovieClip = new Shot();
-			shot.x = shooter.x;
-			shot.y = shooter.y;
-			shot.rotation =shooter.rotation;
-			trace(shooter.rotation,shot.rotation);
+			//radius of circle in the shooter
+			var r:Number = shooter.height/2;
+			//angle of shooter in rads
+			var rads:Number = shooter.rotation * Math.PI/180;
+			//move shot to outer rim of shooter
+			shot.x = shooter.x + Math.cos(rads)*r;
+			shot.y = shooter.y + Math.sin(rads)*r;
+			shot.rotation = shooter.rotation;
+			
 			//add shot event listener
 			shot.addEventListener(Event.ENTER_FRAME,propel);
 			
@@ -48,13 +55,16 @@
 			var shot:MovieClip = e.target as MovieClip;
 			
 			//check if out of bounds, if so destroy
-			if(shot.x > sW || shot.x < 0 || shot.y > sH || shot.y < sH) {
-				//removeChild(e.target as DisplayObject);
+			if(shot.x > sW || shot.x < 0 || shot.y > sH || shot.y < 0) {
+				removeChild(shot);
 			}
 			
+			//convert angle to rads
+			var rads:Number = shot.rotation * Math.PI/180;
+			
 			//add velocity
-			shot.x += Math.cos(shot.rotation) * speed;
-			shot.y += Math.sin(shot.rotation) * speed;
+			shot.x += Math.cos(rads) * speed;
+			shot.y += Math.sin(rads) * speed;
 			
 		}
 		private function rotate(e:Event):void {
@@ -66,7 +76,7 @@
 			var angle:Number = Math.atan2(dy,dx);
 			
 			//rotation
-			shooter.rotation = angle * 180/Math.PI + 90; //add 90 to point in right direction
+			shooter.rotation = angle * 180/Math.PI; 
 			
 			
 		}
