@@ -10,12 +10,17 @@
 		private var friction:Number = .98;
 		private var vx:Number = 0;
 		private var vy:Number = 0;
+		private var sW:Number;
+		private var sH:Number;
 		
 		public function Main4() {
+			sW = stage.stageWidth;
+			sH = stage.stageHeight;
+			
 			//create shooter
 			shooter = new Shooter();
-			shooter.x = (stage.stageWidth - shooter.width)/2;
-			shooter.y = stage.stageHeight; 
+			shooter.x = (sW - shooter.width)/2;
+			shooter.y = sH; 
 			
 			//make it aware
 			shooter.addEventListener(Event.ENTER_FRAME,rotate); //could be enterframe as well
@@ -26,14 +31,30 @@
 			
 		}
 		private function fire(e:MouseEvent):void {
+			//create shot
 			var shot:MovieClip = new Shot();
 			shot.x = shooter.x;
 			shot.y = shooter.y;
+			shot.rotation =shooter.rotation;
+			trace(shooter.rotation,shot.rotation);
+			//add shot event listener
+			shot.addEventListener(Event.ENTER_FRAME,propel);
 			
-			var vx:Number = Math.cos(shooter.rotation) * speed;
-			var vy:Number = Math.sin(shooter.rotation) * speed;
+			//add to stage
+			addChild(shot);
 			
-			//add shot event listener to shot
+		}
+		private function propel(e:Event):void {
+			var shot:MovieClip = e.target as MovieClip;
+			
+			//check if out of bounds, if so destroy
+			if(shot.x > sW || shot.x < 0 || shot.y > sH || shot.y < sH) {
+				//removeChild(e.target as DisplayObject);
+			}
+			
+			//add velocity
+			shot.x += Math.cos(shot.rotation) * speed;
+			shot.y += Math.sin(shot.rotation) * speed;
 			
 		}
 		private function rotate(e:Event):void {
