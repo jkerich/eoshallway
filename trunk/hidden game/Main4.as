@@ -23,30 +23,28 @@
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
 			shots = new Array();
-			timer = new Timer(coolDown);
 			
 			//create shooter
-			shooter = new Shooter();
+			shooter = new Cannon();
 			shooter.x = (sW - shooter.width)/2;
-			shooter.y = sH; 
+			shooter.y = sH;
 			
-			//make it aware
-			shooter.addEventListener(Event.ENTER_FRAME,rotate); //could be enterframe as well
-			stage.addEventListener(MouseEvent.CLICK,fire); 
+			//initialize timer
+			timer = new Timer(shooter.coolDown);
+			//setup timer to arm cannon
+			timer.addEventListener(TimerEvent.TIMER,armCannon);
 			
 			//add shooter to stage
 			addChild(shooter);
 			
-			//add timer for shots
-			timer.addEventListener(TimerEvent.TIMER,armShooter);
-			timer.start();
-		}
-		private function armShooter(e:TimerEvent):void {
-			armed = true;
+			//add fire
+			stage.addEventListener(MouseEvent.CLICK,fire);
 		}
 		private function fire(e:MouseEvent):void {
-			if(!armed) 
+			if(!shooter.armed) 
 				return;
+			//reset timer
+			timer.reset();
 			//create shot
 			var shot:MovieClip = new Shot();
 			//radius of circle in the shooter
@@ -65,7 +63,9 @@
 			addChild(shot);
 			
 			//disarm
-			armed = false;
+			shooter.disarm();
+			//restart timer
+			timer.start();			
 		}
 		private function propel(e:Event):void {
 			var shot:MovieClip = e.target as MovieClip;
@@ -84,36 +84,8 @@
 			shot.y += Math.sin(rads) * speed;
 			
 		}
-		private function rotate(e:Event):void {
-			//distance
-			var dx:Number = mouseX - shooter.x;
-			var dy:Number = mouseY - shooter.y;
-			
-			//find angle
-			var angle:Number = Math.atan2(dy,dx);
-			
-			//rotation
-			shooter.rotation = angle * 180/Math.PI; 
-			
-			
-		}
-		
-		private function follow(e:Event):void {
-			e.target.x = mouseX;
-			e.target.y = mouseY;
-		}
-		private function drawTriangle(h:Number):MovieClip {
-			var con:MovieClip = new MovieClip();
-			var tri:Shape = new Shape();
-			tri.graphics.lineStyle(1,0xffffff,1);
-			tri.graphics.lineTo(-h/2,h);
-			tri.graphics.lineTo(h/2,h);
-			tri.graphics.lineTo(0,0);
-			tri.graphics.lineStyle(1,0x00ff00,1);
-			tri.graphics.moveTo(-h/2,0);
-			tri.graphics.lineTo(h/2,0);
-			con.addChild(tri);
-			return con;
+		private function armCannon(e:TimerEvent):void {
+			shooter.armed = true;
 		}
 	}
 }
