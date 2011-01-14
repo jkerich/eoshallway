@@ -5,6 +5,7 @@
 		public function Shot() {
 			// constructor code
 			
+			
 		}
 		
 		
