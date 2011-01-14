@@ -39,30 +39,9 @@
 			//get utc time
 			var hours:Number = today.getUTCHours();
 			var mins:Number = roundDownByValue(today.getUTCMinutes(),5);
-			
-			trace(today.toLocaleString(),today.toUTCString());
-			
-			//get utc time + five mins
-			var endMins:Number = mins+5; //don't need to round because mins is already rounded
-			var endHours:Number = hours;
-			if(endMins >=60) {
-				//rotate the minutes
-				endMins = endMins - 60;
-				//need to change the hour too
-				endHours++;
-				if(endHours > 24)
-					endHours = 0;
-			}
-				
-			
+					
 			//construct url
-			//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011012/crefl1_143.A2011012145000-2011012145500.2km.jpg -real
-			//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011014/crefl1_143.A2011014193000-2011014193500.2km.jpg
-			//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011014/crefl1_143.A2011014182000-2011014182500.2km.jpg -real
-
-			var url:String = terraModisUrl +year +padDOY(doy)+ "/crefl1_143.A"+year+padDOY(doy)+padTime(hours)+padTime(mins)+"00"+"-"+year+padDOY(doy)+padTime(endHours)+padTime(endMins)+"00.2km.jpg";
-			
-			trace(createImageUrl(terraModisUrl,year,doy,hours,mins),url);
+			trace(createImageUrl(terraModisUrl,year,doy,hours,mins))
 		}
 		private function createImageUrl(base:String,year:Number,doy:Number,hours:Number,mins:Number):String {
 			//get utc time + five mins
