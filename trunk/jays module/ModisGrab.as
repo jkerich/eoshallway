@@ -1,25 +1,47 @@
 ﻿package  {
 	import flash.display.Loader;
 	import flash.net.URLRequest;
-	import flash.events.Event;
+	import flash.events.*;
 	import flash.display.MovieClip;
+	import flash.errors.*;
 	
 	public class ModisGrab extends MovieClip{
-
+		private var imageLoader:Loader;
+		private var currentURL:String;
+		private var urlObj:Object;
 		public function ModisGrab() {
-			//load image from internet on click
-			var loader:Loader = new Loader();
+			urlObj = generateURLObject();
+			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
+			loadImage(currentURL);
 			
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageLoaded);
-			loader.load(new URLRequest("http://rapidfire.sci.gsfc.nasa.gov/realtime/2011012/crefl1_143.A2011012145000-2011012145500.2km.jpg"));
-			
-			addChild(loader);
 		}
-		private function imageLoaded(e:Event):void {
-			//stuff
-			generateURL();
+		private function loadImage(url:String):void {
+			imageLoader = new Loader();
+			imageLoader.load(new URLRequest(url));
+			imageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noimg);
+			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageDone);
 		}
-		private function generateURL():void {
+		private function imageDone(e:Event):void {
+			trace("Success");
+			addChild(imageLoader);
+		}
+		private function noimg(e:IOErrorEvent):void {
+			trace("Url not valid");
+			//THIS NEEDS TO BE RE DONE, only goes back into days not years
+			if(urlObj.mins > 0) {//only flip mins
+				urlObj.mins -= 5;
+			}else if(urlObj.hours > 1){//flip the hour
+				urlObj.hours -= 1;
+				urlObj.mins = 55;
+			}else { //hours and mins are zero (00:00), flip day
+				urlObj.hours = 23;
+				urlObj.mins = 55;
+				urlObj.doy -= 1;
+			}
+			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
+			loadImage(currentURL);
+		}
+		private function generateURLObject():Object {
 			//base url
 			var terraModisUrl:String = "http://rapidfire.sci.gsfc.nasa.gov/realtime/";
 
@@ -39,11 +61,15 @@
 			//get utc time
 			var hours:Number = today.getUTCHours();
 			var mins:Number = roundDownByValue(today.getUTCMinutes(),5);
-					
+
 			//construct url
-			trace(createImageUrl(terraModisUrl,year,doy,hours,mins))
+			return {base:terraModisUrl,
+					year:year,
+					doy:doy,
+					hours:hours,
+					mins:mins};
 		}
-		private function createImageUrl(base:String,year:Number,doy:Number,hours:Number,mins:Number):String {
+		private function createImageURL(base:String,year:Number,doy:Number,hours:Number,mins:Number):String {
 			//get utc time + five mins
 			var endMins:Number = mins+5; //don't need to round because mins is already rounded
 			var endHours:Number = hours;
@@ -81,6 +107,7 @@
 		private function roundDownByValue(num:Number,roundBy:Number):Number {
 			return Math.floor(num/roundBy)*roundBy;
 		}
+		//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011025/crefl1_143.A2011025162500-2011025163000.2km.jpg
 	}
 	
 }
