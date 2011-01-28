@@ -4,7 +4,20 @@
 	import flash.events.*;
 	import flash.display.MovieClip;
 	import flash.errors.*;
+	/*
+	HOW MAKE WORK:
 	
+	Call loadImage() with a url formatted for the current timestamp
+	The program will check if the url exists if not, it will move backwards in time until it finds one that does.
+	
+	To refresh, simply call the loadImage() function again with a fresh url formatted for the current timestamp using createImageURL()
+	
+	TODO (by priority):
+	-count back years
+	-add aqua modis base
+	-array that holds validated urls
+	-implement count that prevents the program from looping back ininitely
+	*/
 	public class ModisGrab extends MovieClip{
 		private var imageLoader:Loader;
 		private var currentURL:String;
@@ -18,25 +31,29 @@
 		private function loadImage(url:String):void {
 			imageLoader = new Loader();
 			imageLoader.load(new URLRequest(url));
-			imageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noimg);
+			imageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage);
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageDone);
 		}
 		private function imageDone(e:Event):void {
 			trace("Success");
 			addChild(imageLoader);
 		}
-		private function noimg(e:IOErrorEvent):void {
+		private function noImage(e:IOErrorEvent):void {
 			trace("Url not valid");
-			//THIS NEEDS TO BE RE DONE, only goes back into days not years
+			//THIS NEEDS TO BE RE DONE, only goes back into days not years which could create problems at
+			//the very beginning of a year
 			if(urlObj.mins > 0) {//only flip mins
 				urlObj.mins -= 5;
 			}else if(urlObj.hours > 1){//flip the hour
 				urlObj.hours -= 1;
 				urlObj.mins = 55;
-			}else { //hours and mins are zero (00:00), flip day
+			}else if(urlObj.doy > 0){ //hours and mins are zero (00:00), flip day
 				urlObj.hours = 23;
 				urlObj.mins = 55;
 				urlObj.doy -= 1;
+			}else {
+				//just stop for now
+				//technically need to find the last day of the previous year
 			}
 			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
 			loadImage(currentURL);
