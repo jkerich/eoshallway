@@ -13,7 +13,6 @@
 	To refresh, simply call the loadImage() function again with a fresh url formatted for the current timestamp using createImageURL()
 	
 	TODO (by priority):
-	-count back years
 	-add aqua modis base
 	-array that holds validated urls
 	-implement count that prevents the program from looping back ininitely
@@ -32,16 +31,15 @@
 			imageLoader = new Loader();
 			imageLoader.load(new URLRequest(url));
 			imageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage);
-			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageDone);
+			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageFound);
 		}
-		private function imageDone(e:Event):void {
+		private function imageFound(e:Event):void {
 			trace("Success");
 			addChild(imageLoader);
 		}
 		private function noImage(e:IOErrorEvent):void {
 			trace("Url not valid");
-			//THIS NEEDS TO BE RE DONE, only goes back into days not years which could create problems at
-			//the very beginning of a year
+			//The year flip is untested
 			if(urlObj.mins > 0) {//only flip mins
 				urlObj.mins -= 5;
 			}else if(urlObj.hours > 1){//flip the hour
@@ -51,9 +49,18 @@
 				urlObj.hours = 23;
 				urlObj.mins = 55;
 				urlObj.doy -= 1;
-			}else {
-				//just stop for now
-				//technically need to find the last day of the previous year
+			}else if(urlObj.year > 0){ //not really necessary but just in case
+				//first day of previous year
+				var firstDay:Date = new Date(urlObj.year-1,1,null,0,0,0,0);//jan of current year
+				firstDay.setDate(1);
+				//last day of previous year
+				var lastDay:Date = new Date(urlObj.year,1,null,0,0,0,0);//jan of current year
+				lastDay.setDate(0); //last day of dec
+				var diff:Number = lastDay.valueOf() - firstDay.valueOf();
+				urlObj.doy = Math.ceil(diff/(1000 * 60 * 60 * 24)); //rounding errors could occur here
+				urlObj.mins = 55;
+				urlObj.hours = 23;
+				urlObj.year -= 1;
 			}
 			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
 			loadImage(currentURL);
