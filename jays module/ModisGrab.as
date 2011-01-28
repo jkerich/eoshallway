@@ -5,16 +5,27 @@
 	import flash.display.MovieClip;
 	import flash.errors.*;
 	/*
-	HOW MAKE WORK:
+	Based on code by Jay Kim
+	
+	HOW TO USE:
 	
 	Call loadImage() with a url formatted for the current timestamp
 	The program will check if the url exists if not, it will move backwards in time until it finds one that does.
 	
 	To refresh, simply call the loadImage() function again with a fresh url formatted for the current timestamp using createImageURL()
 	
+	EXAMPLE URL(days are julian days):
+		------------------base----------------------|year|day|-terra or aqua id--|year|day|time|---|year|day|time|----------
+		http://rapidfire.sci.gsfc.nasa.gov/realtime/ 2011 025 /crefl1_143.A       2011 025 1625 00- 2011 025 1630 00.2km.jpg
+	
+		TERRA MODIS -> crefl1_143.A 
+		AQUA MODIS  -> crefl2_143.A
+		
+		
 	TODO (by priority):
 	-add aqua modis base
 	-array that holds validated urls
+	-different zoom levels other than 2km.jpg
 	-implement count that prevents the program from looping back ininitely
 	*/
 	public class ModisGrab extends MovieClip{
@@ -22,10 +33,22 @@
 		private var currentURL:String;
 		private var urlObj:Object;
 		public function ModisGrab() {
-			urlObj = generateURLObject();
-			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
-			loadImage(currentURL);
-			
+		}
+		public function getLatestImage(sat:String):Boolean {
+			urlObj = generateURLObject(sat);
+			if(urlObj) {
+				currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
+				loadImage(currentURL);
+				return true;
+			}else {
+				return false;
+			}
+		}
+		private function prevImage():void {
+			//if imageLoader is empty -> getLatestImage()
+		}
+		private function nextImage():void {
+			//if imageLoader is empty -> getLatestImage(), trace last image
 		}
 		private function loadImage(url:String):void {
 			imageLoader = new Loader();
@@ -38,7 +61,7 @@
 			addChild(imageLoader);
 		}
 		private function noImage(e:IOErrorEvent):void {
-			trace("Url not valid");
+			trace("URL not valid");
 			//The year flip is untested
 			if(urlObj.mins > 0) {//only flip mins
 				urlObj.mins -= 5;
@@ -62,12 +85,21 @@
 				urlObj.hours = 23;
 				urlObj.year -= 1;
 			}
-			currentURL = createImageURL(urlObj.base,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
+			currentURL = createImageURL(urlObj.modisURL,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
 			loadImage(currentURL);
 		}
-		private function generateURLObject():Object {
-			//base url
-			var terraModisUrl:String = "http://rapidfire.sci.gsfc.nasa.gov/realtime/";
+		private function generateURLObject(satName:String):Object {
+			//pick which modis to get images from
+			var modisURL:String = "";
+			satName = satName.toUpperCase();
+			if(satName == "TERRA")
+				modisURL = "/crefl1_143.A";
+			else if(satName == "AQUA") 
+				modisURL = "/crefl2_143.A";
+			else {
+				trace("Sat name error");
+				return null;
+			}
 
 			//today's date
 			var today:Date = new Date();
@@ -87,13 +119,13 @@
 			var mins:Number = roundDownByValue(today.getUTCMinutes(),5);
 
 			//construct url
-			return {base:terraModisUrl,
+			return {modisURL:modisURL,
 					year:year,
 					doy:doy,
 					hours:hours,
 					mins:mins};
 		}
-		private function createImageURL(base:String,year:Number,doy:Number,hours:Number,mins:Number):String {
+		private function createImageURL(modisURL:String,year:Number,doy:Number,hours:Number,mins:Number):String {
 			//get utc time + five mins
 			var endMins:Number = mins+5; //don't need to round because mins is already rounded
 			var endHours:Number = hours;
@@ -106,7 +138,20 @@
 					endHours = 0;
 			}
 			
-			return base+year+padDOY(doy)+"/crefl1_143.A"+year+padDOY(doy)+padTime(hours)+padTime(mins)+"00-"+year+padDOY(doy)+padTime(endHours)+padTime(endMins)+"00.2km.jpg";
+			return "http://rapidfire.sci.gsfc.nasa.gov/realtime/"+
+					year+
+					padDOY(doy)+
+					modisURL+
+					year+
+					padDOY(doy)+
+					padTime(hours)+
+					padTime(mins)+
+					"00-"+
+					year+
+					padDOY(doy)+
+					padTime(endHours)+
+					padTime(endMins)+
+					"00.2km.jpg";
 		}
 		//utility
 		private function padTime(num:Number):String {
@@ -131,7 +176,6 @@
 		private function roundDownByValue(num:Number,roundBy:Number):Number {
 			return Math.floor(num/roundBy)*roundBy;
 		}
-		//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011025/crefl1_143.A2011025162500-2011025163000.2km.jpg
 	}
 	
 }
