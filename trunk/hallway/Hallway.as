@@ -73,9 +73,9 @@
 			stage.addEventListener(Event.ADDED,killTakeOver);
 			
 			//homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
-			homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
-			homeRowButtons = [new QuickFactsBtn()];
-			homeRowHandlers = [factsClick];
+			//homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
+			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn()];
+			homeRowHandlers = [factsClick,powerPointClick];
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -100,7 +100,7 @@
 				//random color
 				var sd:MovieClip = new MovieClip(); 
 				var color:uint = Math.random()*0xFFFFFF;
-				sd = new MovieClip();
+				sd = new MovieClip();//----------------------------------redundant
 				Utils.drawHitBox(sd,slaveW,slaveH,color,.3);
 				
 				slaveDisplay.push(sd);
@@ -213,6 +213,13 @@
 			
 		}
 		//homerow handlers
+		private function powerPointClick(e:MouseEvent):void {
+			trace("power point clicked");
+			//Utils.launchApp("Automation Systems BRS.ppsx","PowerPoints");
+			var pp:PPTViewer = new PPTViewer();
+			Utils.changeContent(slaveDisplay[2],pp);
+			moveDisplay("down");
+		}
 		private function mediaClick(e:MouseEvent):void {
 			trace("media clicked");
 			//load media click
@@ -268,7 +275,7 @@
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
 		}
-		//silly code to fix idiot syncrancies 
+		//silly code to fix idiot syncrasies 
 		private function killTakeOver(e:Event):void {
 			if (e.target is FLVPlayback) {
 				e.target.fullScreenTakeOver = false;
