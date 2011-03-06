@@ -43,8 +43,6 @@
 		}
 		private function effectOut(e:TweenEvent):void { 
 			//trace("effecting out");
-			
-			
 			//change
 			changeChild(cont,newCont);
 			cont = Utils.scale(cont,w,h);

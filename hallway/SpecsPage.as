@@ -34,7 +34,7 @@
 			
 			sW = stageWidth;
 			sH = stageHeight;
-			dc = new DisplayContainer(sW,sH,0x000000,0,true);
+			dc = new DisplayContainer(sW,sH,0x000000,0,true); //TODO: why draw hitbox twice (see statements below)?
 			textContent = new MovieClip();
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);

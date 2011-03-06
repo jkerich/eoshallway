@@ -58,7 +58,8 @@
 		}
 		//os file manipulation
 		//requires run.cmd, use ONLY extendedDesktop profile in AIR 2.0
-		public static function launchApp(fileName:String,workingDir:String):Boolean {//working dir limited to app directory
+		//try to catch flag (ex: echo "EXIT") at the end of cmd file using standard output
+		public static function launchApp(fileName:String,workingDir:String,exitListener:Function = null):Boolean {//working dir limited to app directory
 			if(NativeProcess.isSupported) {			
 				trace("Launching app: " + fileName);
 				//arguments
@@ -81,7 +82,8 @@
 				
 				//create and start process
 				var process:NativeProcess = new NativeProcess();
-				
+				if(exitListener != null) 
+					process.addEventListener(NativeProcessExitEvent.EXIT,exitListener);
 				//start process
 				process.start(startInfo);
 				return true;
