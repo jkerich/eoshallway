@@ -215,8 +215,8 @@
 		//homerow handlers
 		private function powerPointClick(e:MouseEvent):void {
 			trace("power point clicked");
-			//Utils.launchApp("Automation Systems BRS.ppsx","PowerPoints");
-			var pp:PPTViewer = new PPTViewer();
+			var pp:PPTViewer = new PPTViewer(slaveW,slaveH);
+			pp.addEventListener(RETURNEVENT,returnHome);
 			Utils.changeContent(slaveDisplay[2],pp);
 			moveDisplay("down");
 		}

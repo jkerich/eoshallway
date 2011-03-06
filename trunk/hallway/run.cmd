@@ -7,4 +7,5 @@ IF "%1" =="" GOTO Continue
 SHIFT
 GOTO Loop
 :Continue
-start "" "%fileName%"
+start "" /WAIT "%fileName%"
+echo "Exit"
