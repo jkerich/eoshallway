@@ -28,12 +28,12 @@
 		private var sats:Array = ["aqua","aura","terra"];
 		private var defaultNames:Array = new Array("news","details");
 		private var defaultHandlers:Array = new Array(newsClick,specsClick);
-		private var aquaNames:Array = new Array("presentations","videos","details","images");
-		private var aquaHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var aquaNames:Array = new Array("news","details","MODIS images");
+		private var aquaHandlers:Array = new Array(newsClick,specsClick,modisClick);
 		private var auraNames:Array = new Array("b","videos","specs","images");
 		private var auraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
-		private var terraNames:Array = new Array("news","videos","specs","images");
-		private var terraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var terraNames:Array = new Array("news","details","MODIS images");
+		private var terraHandlers:Array = new Array(newsClick,specsClick,modisClick);
 		private var trmmNames:Array = new Array("d","videos","specs","images");
 		private var trmmHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
 		//dynamic variables
@@ -64,7 +64,7 @@
 		*/
 		
 		public function Hallway() {
-			stage.displayState = StageDisplayState.FULL_SCREEN;
+			//stage.displayState = StageDisplayState.FULL_SCREEN;
 			addEventListener(Event.ADDED_TO_STAGE,init);
 			
 		}
@@ -74,8 +74,8 @@
 			
 			//homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
 			//homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
-			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn()];
-			homeRowHandlers = [factsClick,powerPointClick];
+			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn(),new FullscreenBtn()];
+			homeRowHandlers = [factsClick,powerPointClick,fullscreenMode];
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -155,7 +155,7 @@
 			frame.y = buttonRow.y;
 			
 			//add sub buttons
-			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,defaultNames,defaultHandlers); //since aqua is first
+			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,aquaNames,aquaHandlers); //since aqua is first
 			//subButtonRow.x = paddingW;
 			subButtonRow.y = buttonRow.y + buttonH;
 			
@@ -198,13 +198,13 @@
 			//change sub row
 			trace("clicked", tar.getName());
 			if (tar.getName() == "aqua") {
-				subButtonRow.changeSat("aqua",defaultNames,defaultHandlers); 
+				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
 				dc.changeContent(new AquaAboutText());
 			}else if(tar.getName() == "aura") {
 				subButtonRow.changeSat("aura",defaultNames,defaultHandlers); 
 				dc.changeContent(new AuraAboutText());
 			}else if(tar.getName() == "terra") {
-				subButtonRow.changeSat("terra",defaultNames,defaultHandlers); 
+				subButtonRow.changeSat("terra",terraNames,terraHandlers); 
 				dc.changeContent(new TerraAboutText());
 			}else if(tar.getName() == "trmm") {
 				subButtonRow.changeSat("trmm",trmmNames,trmmHandlers); 
@@ -213,6 +213,9 @@
 			
 		}
 		//homerow handlers
+		private function fullscreenMode(e:MouseEvent):void {
+			stage.displayState = StageDisplayState.FULL_SCREEN;
+		}
 		private function powerPointClick(e:MouseEvent):void {
 			trace("power point clicked");
 			var pp:PPTViewer = new PPTViewer(slaveW,slaveH);
@@ -243,6 +246,15 @@
 			moveDisplay("right");
 		}
 		//sub button handlers
+		private function modisClick(e:MouseEvent):void {
+			trace("modis click");
+			var sat:String = e.currentTarget.parent.getName();
+			var mm:ModisModule = new ModisModule(slaveW,slaveH,sat);
+			mm.addEventListener(RETURNEVENT,returnHome);
+			Utils.changeContent(slaveDisplay[3],mm);
+			moveDisplay("down");
+			moveDisplay("right");
+		}
 		private function newsClick(e:MouseEvent):void {
 			var sat:String = e.currentTarget.parent.getName();
 			sat = sat.toLowerCase();
