@@ -9,7 +9,7 @@
 		
 		public function ModisTest() {
 			// constructor code
-			mg = new ModisGrab();
+			mg = new ModisGrabTest();
 			
 			mg.getLatestImage("aqua");
 			this.addChild(mg);
