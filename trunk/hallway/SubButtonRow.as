@@ -4,9 +4,10 @@
 	import flash.text.TextFormat;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import fl.transitions.*;
-	import fl.transitions.easing.*;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
 	import flash.events.Event;
+	//import fl.transitions.easing.*;
 
 	public class SubButtonRow extends MovieClip{
 		private var satName:String;

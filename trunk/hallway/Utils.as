@@ -1,15 +1,20 @@
 ﻿package  {
-	import flash.display.*;
-	import flash.net.*;
-	import flash.events.*;
-	import flash.text.*;
-	import fl.transitions.*;
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.NativeProcessExitEvent;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
 	import flash.media.Video;
 	import fl.video.FLVPlayback;
 	import flash.media.SoundMixer;
-	import flash.system.*;
-	import flash.filesystem.*;
-	import flash.desktop.*;
+	import flash.filesystem.File;
+	import flash.desktop.NativeProcess;
+	import flash.desktop.NativeProcessStartupInfo;
+	
+	//import flash.text.*;
+	//import flash.net.*;
+	//import flash.system.*;
+	
 	//main one
 	public class Utils {
 
@@ -38,7 +43,7 @@
 			//trace("util scale");
 			//trace(tar.scaleX,tar.scaleY);
 			//trace(tar.width,tar.height);
-			trace(w,h);
+			//trace(w,h);
 			tar.width = w;
 			tar.height = h;
 			//trace(tar.width,tar.height);

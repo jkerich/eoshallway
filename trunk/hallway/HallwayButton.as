@@ -4,8 +4,11 @@
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.net.URLRequest;
-	import flash.text.*;
-	
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+
+	//this is for the big middle buttons on the front page
 	public class HallwayButton extends MovieClip{
 		public var sButtons:Array; //array of secondary buttons
 		public var image:Bitmap; //icon
