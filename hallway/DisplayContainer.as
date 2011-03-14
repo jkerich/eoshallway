@@ -1,9 +1,10 @@
 ﻿package  {
-	import flash.display.*;
-	import flash.net.*;
-	import flash.events.*;
-	import flash.text.*;
-	import fl.transitions.*;
+	import flash.display.MovieClip;
+	//import flash.net.*;
+	//import flash.events.*;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
+	import fl.transitions.easing.Back;
 	
 	public class DisplayContainer extends MovieClip{
 		private var cont:MovieClip;

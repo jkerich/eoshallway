@@ -1,12 +1,18 @@
 ﻿package  {
-	import flash.display.*;
-	import flash.net.*;
-	import flash.events.*;
-	import flash.text.*;
-	import fl.transitions.*;
+	
+	import flash.net.NetConnection;
+	import flash.net.NetStream;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.events.NetStatusEvent;
+	import flash.events.AsyncErrorEvent;
+	import flash.filesystem.File;
 	import flash.media.Video;
-	import flash.system.*;
-	import flash.filesystem.*;
+	//import flash.text.*;
+	//import fl.transitions.*;
+	//import flash.system.*;
+	
+	//import flash.display.MovieClip;
 	public class LocalVideo extends Video{
 		//net streams
 		private var nc:NetConnection;

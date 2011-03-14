@@ -1,11 +1,16 @@
 ﻿package  {
-	import flash.display.*;
-	import flash.net.*;
-	import flash.events.*;
-	import flash.text.*;
-	import fl.transitions.*;
-	import fl.transitions.easing.*;
-	import flash.system.*;
+	import flash.display.MovieClip;
+	import flash.display.SimpleButton;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
+	//import flash.system.*;
+	//import flash.net.*;
+	//import fl.transitions.easing.*;
 	
 	public class SpecsPage extends MovieClip {
 		//mcs

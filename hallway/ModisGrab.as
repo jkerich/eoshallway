@@ -1,9 +1,10 @@
 ﻿package  {
 	import flash.display.Loader;
 	import flash.net.URLRequest;
-	import flash.events.*;
+	import flash.events.IOErrorEvent;
+	import flash.events.Event;
 	import flash.display.MovieClip;
-	import flash.errors.*;
+	//import flash.errors.*;
 	/*
 	Based on code by Jay Kim
 	
@@ -51,10 +52,7 @@
 			maxWidth = w;
 			maxHeight = h;
 			locImage = new Loader();
-			
-			
-			
-		
+					
 		}
 		public function getLatestImage(sat:String):Boolean {
 			currentSat = sat;

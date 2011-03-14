@@ -1,8 +1,11 @@
 ﻿package  {
 	import flash.display.MovieClip;
-	import flash.events.*;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.display.Loader;
-	import flash.text.*;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	
 	
 	public class ModisModule extends MovieClip {
@@ -16,8 +19,7 @@
 		private var locImageContainer:MovieClip;
 		private var infoBox:MovieClip;
 		private var loadingImage:LoadingSign;
-		//info box
-
+	
 		public function ModisModule(w:Number,h:Number,satName:String) {
 			sW = w;
 			sH = h;
@@ -39,7 +41,7 @@
 			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
 			t.autoSize = TextFieldAutoSize.LEFT;
 			t.selectable = false;
-			Utils.drawHitBox(satTitle,t.width+20,t.textHeight+20);
+			Utils.drawHitBox(satTitle,t.width+20,t.textHeight+40);
 			t.x = (satTitle.width - t.width)/2;
 			t.y = (satTitle.height - t.textHeight)/2;
 			satTitle.addChild(t);

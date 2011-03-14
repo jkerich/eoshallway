@@ -1,12 +1,20 @@
 ﻿package  {
-	import flash.display.*;
-	import flash.net.*;
-	import flash.events.*;
-	import flash.text.*;
-	import fl.transitions.*;
-	import fl.transitions.easing.*;
-	import flash.system.*;
+	import flash.display.MovieClip;
+	import flash.display.Stage;
+	import flash.display.StageDisplayState;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.events.KeyboardEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
+	import fl.transitions.easing.Back;
 	import fl.video.FLVPlayback;
+	//import flash.net.*;
+	//import flash.system.*;
+	
 	
 	public class Hallway extends MovieClip {
 		//mcs
@@ -58,8 +66,6 @@
 		
 		/*
 		TODO:
-			-consider scaling buttonH and buttonW
-			-automate positioning of homeRow
 			-add frame changing effect
 		*/
 		
@@ -72,10 +78,8 @@
 			//prevent flv fullscreen takeover
 			stage.addEventListener(Event.ADDED,killTakeOver);
 			
-			//homeRowButtons = [new MediaBtn(), new OrbitsBtn() ,new QuickFactsBtn()];
-			//homeRowHandlers = [mediaClick, orbitsClick ,factsClick];
-			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn(),new FullscreenBtn()];
-			homeRowHandlers = [factsClick,powerPointClick,fullscreenMode];
+			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn()];
+			homeRowHandlers = [factsClick,powerPointClick];
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -137,6 +141,14 @@
 			homeRow.y = dc.y - homeRow.height;
 			slaveDisplay[0].addChild(homeRow);
 			
+			//add fullscreen button
+			var fsb:FullscreenBtn = new FullscreenBtn();
+			fsb.addEventListener(MouseEvent.CLICK,fullscreenMode);
+			fsb.x = slaveW - fsb.width - 10;
+			fsb.y = 10;
+			slaveDisplay[0].addChild(fsb);
+			
+			
 			//add big buttons
 			buttonRow = new MovieClip();
 			for(var i:Number = 0;i<sats.length;i++) {
@@ -158,7 +170,6 @@
 			subButtonRow = new SubButtonRow(sats[0],subButtonW,subButtonH,aquaNames,aquaHandlers); //since aqua is first
 			//subButtonRow.x = paddingW;
 			subButtonRow.y = buttonRow.y + buttonH;
-			
 			slaveDisplay[0].addChild(frame);
 			slaveDisplay[0].addChild(buttonRow); //add after frame so button text appears in front of frame
 			slaveDisplay[0].addChild(subButtonRow);

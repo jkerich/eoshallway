@@ -1,10 +1,14 @@
 ﻿package {
-	import flash.display.*;
+	import flash.display.MovieClip;
 	import flash.filesystem.File;
-	import flash.events.*;
-	import flash.text.*;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.events.NativeProcessExitEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	import flash.utils.ByteArray;
-	import fl.managers.StyleManager;
+	//import fl.managers.StyleManager;
 
 	public class PPTViewer extends MovieClip {
 
@@ -86,6 +90,7 @@
 			t.defaultTextFormat = new TextFormat("Walkway SemiBold",24,0xFFFFFF);
 			t.autoSize = TextFieldAutoSize.LEFT;
 			t.text = "Launch";
+			t.selectable = false;
 			Utils.drawHitBox(launch,150,50,0xFF1111,1);
 			t.x = (launch.width - t.width)/2;
 			t.y = (launch.height - t.textHeight)/2;
