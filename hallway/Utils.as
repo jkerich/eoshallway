@@ -62,8 +62,8 @@
 			obj.graphics.endFill();
 		}
 		//os file manipulation
-		//requires run.cmd, use ONLY extendedDesktop profile in AIR 2.0
-		//try to catch flag (ex: echo "EXIT") at the end of cmd file using standard output
+		//requires run.cmd, use extendedDesktop profile in AIR 2.0, in descriptor file make sure extendedDesktop appears 
+		//before desktop
 		public static function launchApp(fileName:String,workingDir:String,exitListener:Function = null):Boolean {//working dir limited to app directory
 			if(NativeProcess.isSupported) {			
 				trace("Launching app: " + fileName);

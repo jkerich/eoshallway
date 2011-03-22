@@ -131,6 +131,7 @@
 			}
 			
 			//launch
+			//trace(scrollBox.selectedItem.label);
 			Utils.launchApp(scrollBox.selectedItem.label,"PowerPoints",pEnd);
 			fileOpen = true;
 			

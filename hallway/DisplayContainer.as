@@ -49,6 +49,7 @@
 			cont = Utils.scale(cont,w,h);
 			
 			//center content
+			cont.x = cont.y = 0; //reset position
 			if(center) {
 				if (cont.width > this.width) {
 					cont.width = this.width;

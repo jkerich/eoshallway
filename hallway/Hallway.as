@@ -1,5 +1,6 @@
 ﻿package  {
 	import flash.display.MovieClip;
+	import flash.display.Loader;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -12,6 +13,8 @@
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.Back;
 	import fl.video.FLVPlayback;
+	import flash.net.URLRequest;
+	import flash.events.IOErrorEvent;
 	//import flash.net.*;
 	//import flash.system.*;
 	
@@ -26,11 +29,13 @@
 		private var subButtonRow:MovieClip;
 		private var frame:MovieClip;
 		private var dc:DisplayContainer;
+		//private var feedback:MovieClip;
 		
 		//constants
 		private const paddingH:Number = 8; //do not use decimal values
 		private const paddingW:Number = 15;
 		private var RETURNEVENT:String = "RETURNHOME";
+		private var BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg";
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra"];
@@ -38,15 +43,14 @@
 		private var defaultHandlers:Array = new Array(newsClick,specsClick);
 		private var aquaNames:Array = new Array("news","details","MODIS images");
 		private var aquaHandlers:Array = new Array(newsClick,specsClick,modisClick);
-		private var auraNames:Array = new Array("b","videos","specs","images");
-		private var auraHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var auraNames:Array = new Array("news","details");
+		private var auraHandlers:Array = new Array(newsClick,specsClick);
 		private var terraNames:Array = new Array("news","details","MODIS images");
 		private var terraHandlers:Array = new Array(newsClick,specsClick,modisClick);
-		private var trmmNames:Array = new Array("d","videos","specs","images");
-		private var trmmHandlers:Array = new Array(presentationsClick,videosClick,specsClick,imagesClick);
+		private var trmmNames:Array = new Array("news","details");
+		private var trmmHandlers:Array = new Array(newsClick,specsClick);
+		
 		//dynamic variables
-		//cannot access stage until class is added to display list which does not occur until after all objects 
-		//	already on stage are loaded -> use Event.ADDED_TO_STAGE
 		private var sW:Number;
 		private var sH:Number;
 		private var slaveW:Number;
@@ -71,6 +75,7 @@
 		
 		public function Hallway() {
 			//stage.displayState = StageDisplayState.FULL_SCREEN;
+			//Document class loaded to stage after everything thats already on the stage so wait until loaded
 			addEventListener(Event.ADDED_TO_STAGE,init);
 			
 		}
@@ -78,13 +83,13 @@
 			//prevent flv fullscreen takeover
 			stage.addEventListener(Event.ADDED,killTakeOver);
 			
-			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn()];
-			homeRowHandlers = [factsClick,powerPointClick];
+			//click feedback for users
+			this.addEventListener(MouseEvent.CLICK,clickFeedback);
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
 			
-			//--derived vars
+			//derived vars
 			//compute heights
 			sW = stage.stageWidth;
 			sH = stage.stageHeight;
@@ -97,6 +102,10 @@
 			buttonW = slaveW/sats.length; //big buttons in middle, height is constant
 			subButtonW = slaveW;
 			
+			//top tab row 
+			homeRowButtons = [new QuickFactsBtn(),new PowerPointBtn()];
+			homeRowHandlers = [factsClick,powerPointClick];
+			
 			//slave containers
 			masterDisplay = new MovieClip();
 			slaveDisplay = new Array();
@@ -104,7 +113,6 @@
 				//random color
 				var sd:MovieClip = new MovieClip(); 
 				var color:uint = Math.random()*0xFFFFFF;
-				sd = new MovieClip();//----------------------------------redundant
 				Utils.drawHitBox(sd,slaveW,slaveH,color,.3);
 				
 				slaveDisplay.push(sd);
@@ -119,6 +127,14 @@
 			slaveDisplay[2].y = slaveH + paddingH*2;
 			slaveDisplay[3].x = slaveW + paddingW*2;
 			slaveDisplay[3].y = slaveH + paddingH*2;
+			
+			//load background picture
+			var bgl:Loader = new Loader();
+			bgl.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,function() { trace("no background image");});
+			bgl.contentLoaderInfo.addEventListener(Event.COMPLETE,function(){Utils.scale(bgl,sW,sH);});
+			bgl.load(new URLRequest(BACKGROUNDIMAGE));
+			addChild(bgl);
+			
 			
 			//add title
 			title = new EOSTitle();
@@ -202,12 +218,12 @@
 			
 		}
 		private function bigButtonClicked(e:MouseEvent):void {
-			
+			//move button highlight over
 			var tar:Object = e.currentTarget;
-			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); //adjust easing
+			new Tween(frame,"x", Back.easeIn,frame.x,tar.x+buttonRow.x,.3,true); 
 			
 			//change sub row
-			trace("clicked", tar.getName());
+			//trace("clicked", tar.getName());
 			if (tar.getName() == "aqua") {
 				subButtonRow.changeSat("aqua",aquaNames,aquaHandlers); 
 				dc.changeContent(new AquaAboutText());
@@ -243,13 +259,6 @@
 			moveDisplay("down");
 			moveDisplay("right");
 		}
-		private function homeClick(e:MouseEvent):void {
-			trace("home clicked");
-		}
-		private function orbitsClick(e:MouseEvent):void {
-			trace("orbits clicked");
-			moveDisplay("down");
-		}
 		private function factsClick(e:MouseEvent):void { //this is top row Quick Facts button
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
 			sp.addEventListener(RETURNEVENT,returnHome);
@@ -278,12 +287,6 @@
 				dc.changeContent(new TerraNews());
 			}
 		}
-		private function aboutClick(e:MouseEvent):void {
-			trace("about click");
-		}
-		private function presentationsClick(e:MouseEvent):void {
-			trace("presentations clicked");
-		}
 		private function videosClick(e:MouseEvent):void {
 			trace("videos clicked");
 		}
@@ -302,8 +305,34 @@
 		private function killTakeOver(e:Event):void {
 			if (e.target is FLVPlayback) {
 				e.target.fullScreenTakeOver = false;
-				
 			}
+		}
+		private function clickFeedback(e:MouseEvent):void {
+			var feedback:MovieClip = new MovieClip();
+			var mc:MovieClip = new MovieClip();
+			mc.graphics.lineStyle(3,0xffffff,1);
+			mc.graphics.drawCircle(0,0,10);
+			feedback.addChild(mc);
+			feedback.addEventListener(Event.ENTER_FRAME,redrawCircle);
+			feedback.x = mouseX;
+			feedback.y = mouseY;
+			addChild(feedback);
+		}
+		private function redrawCircle(e:Event):void {
+			var feedback:MovieClip = e.target as MovieClip;
+			var radius:Number = feedback.width/2;
+			//when it gets too big remove it 
+			if (radius > 50) {
+				feedback.removeEventListener(Event.ENTER_FRAME,redrawCircle);
+				removeChild(feedback);
+			}
+			//remove previous smaller circle
+			feedback.removeChildAt(0);
+			//create new circle
+			var mc:MovieClip = new MovieClip();
+			mc.graphics.lineStyle(3,0xffffff,1- radius*.02);//fade as it expands
+			mc.graphics.drawCircle(0,0,radius+2);//increase sizes
+			feedback.addChild(mc);
 		}
 	}//end class
 	
