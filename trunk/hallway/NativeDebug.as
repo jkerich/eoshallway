@@ -12,7 +12,9 @@
 	This file should be used to debug the launchApp() function in Utils.as should it fail. The only difference
 	is this version contains a bunch of event listeners. 
 	
-	As with Utils.as the AIR application has to be 2.0 and use only the "ExtendedDesktop" profile.
+	As with Utils.as the AIR application has to be 2.0 and use the "ExtendedDesktop" profile.
+		ADDENDUM:
+			In Hallway-app.xml "extendedDesktop" must appear before "desktop" in "<supportedProfiles>"
 	
 	Notes about script file (under windows, untested in other environments):
 	-It has to be cmd. Flash filters bat files.
