@@ -43,7 +43,7 @@
 		//image loading
 		private function loadImage(path:String):void {
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageloaded);
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageloaded,false,0,true);
 			loader.load(new URLRequest(path));
 		}
 		private function imageloaded(e:Event):void {

@@ -50,7 +50,7 @@
 			
 			//create home button
 			var home:* = new HomeBtn();
-			home.addEventListener(MouseEvent.CLICK,homeClick);
+			home.addEventListener(MouseEvent.CLICK,homeClick,false,0,true);
 			home.x = satTitle.width + satTitle.x;
 			home.y = satTitle.height - home.height;
 			
@@ -65,19 +65,19 @@
 												  mg.x = (sW - mg.width)/2;
 												  //update date and location text
 												  updateInfo();
-												  });
+												  },false,0,true);
 			mg.locImage.contentLoaderInfo.addEventListener(Event.COMPLETE,function() {
 												//grab location image
 												(locImageContainer.numChildren) ? locImageContainer.removeChildAt(0):null;
 												 locImageContainer.addChild(mg.locImage);
 												 locImageContainer.x = date.x;
 												 locImageContainer.y = date.y + date.textHeight + 10;
-												});
+												},false,0,true);
 			//loading image event
 			mg.contentLoaderInfo.addEventListener(Event.INIT,function() {
 												  loadingImage.gotoAndPlay(1);
 												  loadingImage.alpha = 1;
-												  });
+												  },false,0,true);
 			
 			mg.y = satTitle.height + satTitle.y;
 			
@@ -109,12 +109,12 @@
 			//create next and prev button
 			var n:MovieClip = new MovieClip();
 			Utils.drawHitBox(n,sW/2,sH);
-			n.addEventListener(MouseEvent.CLICK,nextPic);
+			n.addEventListener(MouseEvent.CLICK,nextPic,false,0,true);
 			n.x = sW/2;
 			
 			var p:MovieClip = new MovieClip();
 			Utils.drawHitBox(p,sW/2,sH);
-			p.addEventListener(MouseEvent.CLICK,prevPic);
+			p.addEventListener(MouseEvent.CLICK,prevPic,false,0,true);
 			
 			addChild(mg);
 			addChild(infoBox);

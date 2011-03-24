@@ -15,6 +15,7 @@
 	import fl.video.FLVPlayback;
 	import flash.net.URLRequest;
 	import flash.events.IOErrorEvent;
+
 	//import flash.net.*;
 	//import flash.system.*;
 	
@@ -70,21 +71,22 @@
 		
 		/*
 		TODO:
-			-add frame changing effect
+			-modis page needs to work on memory management
 		*/
 		
 		public function Hallway() {
 			//stage.displayState = StageDisplayState.FULL_SCREEN;
 			//Document class loaded to stage after everything thats already on the stage so wait until loaded
-			addEventListener(Event.ADDED_TO_STAGE,init);
+			addEventListener(Event.ADDED_TO_STAGE,init,false,0,true);
 			
 		}
 		private function init(e:Event):void {
+			
 			//prevent flv fullscreen takeover
-			stage.addEventListener(Event.ADDED,killTakeOver);
+			stage.addEventListener(Event.ADDED,killTakeOver,false,0,true);
 			
 			//click feedback for users
-			this.addEventListener(MouseEvent.CLICK,clickFeedback);
+			this.addEventListener(MouseEvent.CLICK,clickFeedback,false,0,true);
 
 			//prevent repeats
 			removeEventListener(Event.ADDED_TO_STAGE,init);
@@ -118,6 +120,7 @@
 				slaveDisplay.push(sd);
 				masterDisplay.addChild(slaveDisplay[a]);
 			}
+			
 			//position slave displays
 			slaveDisplay[0].x = paddingW;
 			slaveDisplay[0].y = paddingH;
@@ -130,11 +133,10 @@
 			
 			//load background picture
 			var bgl:Loader = new Loader();
-			bgl.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,function() { trace("no background image");});
-			bgl.contentLoaderInfo.addEventListener(Event.COMPLETE,function(){Utils.scale(bgl,sW,sH);});
+			bgl.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,function() { trace("no background image");},false,0,true);
+			bgl.contentLoaderInfo.addEventListener(Event.COMPLETE,function(){Utils.scale(bgl,sW,sH);},false,0,true);
 			bgl.load(new URLRequest(BACKGROUNDIMAGE));
 			addChild(bgl);
-			
 			
 			//add title
 			title = new EOSTitle();
@@ -150,7 +152,7 @@
 			homeRow = new MovieClip();
 			for (var b:Number = 0;b<homeRowButtons.length;b++) {
 				homeRowButtons[b].x = homeRowButtons[b].width * b;
-				homeRowButtons[b].addEventListener(MouseEvent.CLICK,homeRowHandlers[b]);
+				homeRowButtons[b].addEventListener(MouseEvent.CLICK,homeRowHandlers[b],false,0,true);
 				homeRow.addChild(homeRowButtons[b]);
 			}
 			homeRow.x = titleW + title.x;
@@ -159,7 +161,7 @@
 			
 			//add fullscreen button
 			var fsb:FullscreenBtn = new FullscreenBtn();
-			fsb.addEventListener(MouseEvent.CLICK,fullscreenMode);
+			fsb.addEventListener(MouseEvent.CLICK,fullscreenMode,false,0,true);
 			fsb.x = slaveW - fsb.width - 10;
 			fsb.y = 10;
 			slaveDisplay[0].addChild(fsb);
@@ -170,7 +172,7 @@
 			for(var i:Number = 0;i<sats.length;i++) {
 				var btn:HallwayButton = new HallwayButton(sats[i],buttonW,buttonH);
 				btn.x = btn.width * i;
-				btn.addEventListener(MouseEvent.CLICK,bigButtonClicked);
+				btn.addEventListener(MouseEvent.CLICK,bigButtonClicked,false,0,true);
 				buttonRow.addChild(btn);
 			}
 			//buttonRow.x = paddingW;
@@ -193,17 +195,28 @@
 			addChild(masterDisplay);
 			
 			//allow people to get back to home page
-			stage.addEventListener(KeyboardEvent.KEY_DOWN,returnHome);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN,returnHome,false,0,true);
 			
 			//load first about content
 			dc.changeContent(new AquaAboutText());
 			
-
+			//active graph
+			/*var ag:ActiveGraph = new ActiveGraph();
+			ag.scaleX = ag.scaleY = 5;
+			ag.x = sW - ag.width;
+			addChild(ag);*/
 		}
 		private function returnHome(e:Event):void {
 			//trace("key down");
 			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
 			new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,0,.5,true);
+			
+			//kill everything except home display
+			for (var i:Number = 1;i<slaveDisplay.length;i++) {
+				while(slaveDisplay[i].numChildren) {
+					slaveDisplay[i].removeChildAt(0);
+				}
+			}
 		}
 		private function moveDisplay(dir:String):void {
 			if(dir == "right") {
@@ -246,7 +259,7 @@
 		private function powerPointClick(e:MouseEvent):void {
 			trace("power point clicked");
 			var pp:PPTViewer = new PPTViewer(slaveW,slaveH);
-			pp.addEventListener(RETURNEVENT,returnHome);
+			pp.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[2],pp);
 			moveDisplay("down");
 		}
@@ -254,14 +267,14 @@
 			trace("media clicked");
 			//load media click
 			var ss:SlideShow = new SlideShow(slaveW,slaveH);
-			ss.addEventListener(RETURNEVENT,returnHome);
+			ss.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[3],ss);
 			moveDisplay("down");
 			moveDisplay("right");
 		}
 		private function factsClick(e:MouseEvent):void { //this is top row Quick Facts button
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH);
-			sp.addEventListener(RETURNEVENT,returnHome);
+			sp.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[1],sp);
 			moveDisplay("right");
 		}
@@ -270,7 +283,7 @@
 			trace("modis click");
 			var sat:String = e.currentTarget.parent.getName();
 			var mm:ModisModule = new ModisModule(slaveW,slaveH,sat);
-			mm.addEventListener(RETURNEVENT,returnHome);
+			mm.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[3],mm);
 			moveDisplay("down");
 			moveDisplay("right");
@@ -294,14 +307,14 @@
 			var sat:String = e.currentTarget.parent.getName();
 			sat = sat.toLowerCase();
 			var sp:SpecsPage = new SpecsPage(slaveW,slaveH,sat);
-			sp.addEventListener(RETURNEVENT,returnHome);
+			sp.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[1],sp);
 			moveDisplay("right");
 		}
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
 		}
-		//silly code to fix idiot syncrasies 
+		//silly code to fix idiotsyncrasies 
 		private function killTakeOver(e:Event):void {
 			if (e.target is FLVPlayback) {
 				e.target.fullScreenTakeOver = false;
@@ -313,7 +326,7 @@
 			mc.graphics.lineStyle(3,0xffffff,1);
 			mc.graphics.drawCircle(0,0,10);
 			feedback.addChild(mc);
-			feedback.addEventListener(Event.ENTER_FRAME,redrawCircle);
+			feedback.addEventListener(Event.ENTER_FRAME,redrawCircle,false,0,true);
 			feedback.x = mouseX;
 			feedback.y = mouseY;
 			addChild(feedback);
@@ -327,12 +340,11 @@
 				removeChild(feedback);
 			}
 			//remove previous smaller circle
-			feedback.removeChildAt(0);
+			var mc:MovieClip = feedback.getChildAt(0) as MovieClip;
+			mc.graphics.clear();
 			//create new circle
-			var mc:MovieClip = new MovieClip();
 			mc.graphics.lineStyle(3,0xffffff,1- radius*.02);//fade as it expands
 			mc.graphics.drawCircle(0,0,radius+2);//increase sizes
-			feedback.addChild(mc);
 		}
 	}//end class
 	

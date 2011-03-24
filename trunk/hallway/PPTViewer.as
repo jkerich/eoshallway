@@ -51,7 +51,7 @@
 			var home:* = new HomeBtn();
 			home.x = pTitle.width;
 			home.y = (pTitle.height - home.height);
-			home.addEventListener(MouseEvent.CLICK,goHome);
+			home.addEventListener(MouseEvent.CLICK,goHome,false,0,true);
 			
 			
 			//create scroll box
@@ -72,7 +72,7 @@
 				scrollBox.addItem({label:pptFiles[i].name,data:pptFiles[i].name});
 			}
 			
-			scrollBox.addEventListener(Event.CHANGE,listItemChanged);
+			scrollBox.addEventListener(Event.CHANGE,listItemChanged,false,0,true);
 			
 			
 			//create text field
@@ -97,7 +97,7 @@
 			launch.addChild(t);
 			launch.x = scrollBox.x + scrollBox.width + 10;
 			launch.y = selectedPPT.y + selectedPPT.height + 10;
-			launch.addEventListener(MouseEvent.CLICK,launchClick);
+			launch.addEventListener(MouseEvent.CLICK,launchClick,false,0,true);
 			
 			
 			

@@ -40,7 +40,7 @@
 			newCont = c;
 			//hide
 			aT = new Tween(cont,"alpha",null,cont.alpha,0,effectSpeed,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut,false,0,true);
 		}
 		private function effectOut(e:TweenEvent):void { 
 			//trace("effecting out");
@@ -65,7 +65,7 @@
 			//trace("effecting back in");
 			//effect back in
 			bT = new Tween(cont,"alpha",null,cont.alpha,1,effectSpeed,true);
-			bT.addEventListener(TweenEvent.MOTION_FINISH,endEffect);
+			bT.addEventListener(TweenEvent.MOTION_FINISH,endEffect,false,0,true);
 		}
 		private function endEffect(e:TweenEvent):void {
 			//trace("effect end");

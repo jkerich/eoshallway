@@ -17,7 +17,7 @@
 	
 	//main one
 	public class Utils {
-
+		private var temp:Object;
 		public function Utils() {
 			// constructor code
 		}
@@ -30,7 +30,7 @@
 								//effect back in
 								new Tween(display,"alpha",null,display.alpha,1,effectSpeed,true);
 								
-								});
+								},false,0,true);
 		}
 		public static function changeContent(con:*,obj:*):void { 
 			while(con.numChildren) {
@@ -88,7 +88,7 @@
 				//create and start process
 				var process:NativeProcess = new NativeProcess();
 				if(exitListener != null) 
-					process.addEventListener(NativeProcessExitEvent.EXIT,exitListener);
+					process.addEventListener(NativeProcessExitEvent.EXIT,exitListener,false,0,true);
 				//start process
 				process.start(startInfo);
 				return true;

@@ -83,7 +83,7 @@
 				var sTab:SimpleButton = tabButtons[i];
 				sTab.name = sats[i];
 				sTab.x = sTab.width * i;
-				sTab.addEventListener(MouseEvent.CLICK,clicked);
+				sTab.addEventListener(MouseEvent.CLICK,clicked,false,0,true);
 				tabStrip.addChild(sTab);
 			}
 			tabStrip = Utils.scale(tabStrip,sW - aboutTitle.width,tabStrip.height); //resize properly
@@ -111,7 +111,7 @@
 			textContent = c;
 			//hide
 			aT = new Tween(dc,"alpha",null,dc.alpha,0,effectSpeed,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut,false,0,true);
 			
 		}
 		private function effectOut(e:TweenEvent):void { //effect used to change display is done
