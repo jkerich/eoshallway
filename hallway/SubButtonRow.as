@@ -24,14 +24,14 @@
 			this.names = names;
 			this.handlers = handlers;
 			if(names.length != handlers.length) {
-				trace("Names array and Handlers array have differeing lengths");
+				trace("Names array and Handlers array have differing lengths");
 			}
 			drawHitBox(w,h,0x000000,.65); //not necessary in this instance
 			
 			//check for a text format
 			textFormat = (tf == null) ? new TextFormat("Walkway SemiBold",26,0xFFFFFF):tf;
 			
-			this.addEventListener(Event.ADDED_TO_STAGE,init); //in order to access x and y values
+			this.addEventListener(Event.ADDED_TO_STAGE,init,false,0,true); //in order to access x and y values
 			
 		}
 		private function init(e:Event):void {
@@ -52,7 +52,7 @@
 			this.names = names;
 			this.handlers = handlers;
 			aT = new Tween(this,"y",null,this.y,this.y+jumpDistance,aSpeed,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,animateFinish);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,animateFinish,false,0,true);
 			
 		}
 		private function animateFinish(e:TweenEvent):void {
@@ -70,7 +70,7 @@
 				addChild(sbutton);
 			}
 			aT = new Tween(this,"y",null,this.y,this.y-jumpDistance,aSpeed/2,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,endReturn);
+			aT.addEventListener(TweenEvent.MOTION_FINISH,endReturn,false,0,true);
 		}
 		private function endReturn(e:TweenEvent):void {
 			animating = false;

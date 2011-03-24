@@ -37,7 +37,7 @@
 			this.addChild(t);
 			
 			//add event listener
-			this.addEventListener(MouseEvent.CLICK,handler);
+			this.addEventListener(MouseEvent.CLICK,handler,false,0,true);
 		}
 		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
 			this.graphics.clear();

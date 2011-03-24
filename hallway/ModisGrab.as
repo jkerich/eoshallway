@@ -93,14 +93,14 @@
 		
 		private function loadImage(url:String):void {
 			this.load(new URLRequest(url));
-			this.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage);
-			this.contentLoaderInfo.addEventListener(Event.COMPLETE,imageFound);
+			this.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage,false,0,true);
+			this.contentLoaderInfo.addEventListener(Event.COMPLETE,imageFound,false,0,true);
 			
 			
 		}
 		private function loadLocImage(url:String):void {
 			locImage.load(new URLRequest(url));
-			locImage.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noLocImage);
+			locImage.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noLocImage,false,0,true);
 		}
 		private function imageFound(e:Event):void {
 			//trace("Success");
