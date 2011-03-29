@@ -10,6 +10,7 @@
 	import flash.filesystem.File;
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
+	import flash.system.System;
 	
 	//import flash.text.*;
 	//import flash.net.*;
@@ -115,11 +116,23 @@
 		public static function stopPlayback(tar:Object):void {
 			//kill sounds
 			SoundMixer.stopAll();
-			
 			//stop video playback
 			for(var i=0;i<tar.numChildren;i++)
-				if(tar.getChildAt(i) is FLVPlayback) 
+				if(tar.getChildAt(i) is FLVPlayback) {
 					tar.getChildAt(i).stop();
+					
+				}
+		}
+		//force start garbage collection
+		public static function startGC():void {
+			//total memory allocated to app 
+			trace(flash.system.System.privateMemory);
+			//total memory currently in use
+			trace(flash.system.System.totalMemoryNumber);
+			
+			//run twice to delete all marks
+			flash.system.System.gc();
+			flash.system.System.gc();
 		}
 
 	}

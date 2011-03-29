@@ -15,6 +15,8 @@
 	import fl.video.FLVPlayback;
 	import flash.net.URLRequest;
 	import flash.events.IOErrorEvent;
+	import flash.utils.setInterval;
+	import flash.system.System;
 
 	//import flash.net.*;
 	//import flash.system.*;
@@ -37,6 +39,7 @@
 		private const paddingW:Number = 15;
 		private var RETURNEVENT:String = "RETURNHOME";
 		private var BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg";
+		private const MEMORYLIMIT:Number = 419430400; //400 MB
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra"];
@@ -65,6 +68,9 @@
 		private var homeRowButtons:Array;
 		private var homeRowHandlers:Array;
 		private var currentDisplay:Number = 0;
+		
+		//tweens
+		
 		
 		//check if animating
 		//private var animating:Boolean = false;
@@ -200,11 +206,14 @@
 			//load first about content
 			dc.changeContent(new AquaAboutText());
 			
-			//active graph
-			/*var ag:ActiveGraph = new ActiveGraph();
-			ag.scaleX = ag.scaleY = 5;
-			ag.x = sW - ag.width;
-			addChild(ag);*/
+			//run garbage collection when memory usage gets too high
+			addEventListener(Event.ENTER_FRAME,runGC,false,0,true);
+		}
+		private function runGC(e:Event):void {
+			if(flash.system.System.privateMemory > MEMORYLIMIT) {
+				trace("Running garbage collection b/c memory usage exceeded limit: " + MEMORYLIMIT);
+				Utils.startGC();
+			}
 		}
 		private function returnHome(e:Event):void {
 			//trace("key down");
@@ -212,11 +221,11 @@
 			new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,0,.5,true);
 			
 			//kill everything except home display
-			for (var i:Number = 1;i<slaveDisplay.length;i++) {
+			/*for (var i:Number = 1;i<slaveDisplay.length;i++) {
 				while(slaveDisplay[i].numChildren) {
 					slaveDisplay[i].removeChildAt(0);
 				}
-			}
+			}*/
 		}
 		private function moveDisplay(dir:String):void {
 			if(dir == "right") {
