@@ -8,6 +8,8 @@
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.utils.ByteArray;
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 	//import fl.managers.StyleManager;
 
 	public class PPTViewer extends MovieClip {
@@ -20,9 +22,9 @@
 		private var scrollBox:ListNoKeyboard;
 		private var selectedPPT:TextField;
 		private var fileOpen:Boolean = false;
+		private var touchTimer:Timer;
 		private var container:MovieClip; //container to contain all inner elements
-		private var RETURNEVENT:String = "RETURNHOME";
-
+		
 		//TODO: consider scaling container
 		public function PPTViewer(stageWidth:Number,stageHeight:Number,powerPointDir:String = "PowerPoints") {
 			sW = stageWidth;
@@ -99,7 +101,9 @@
 			launch.y = selectedPPT.y + selectedPPT.height + 10;
 			launch.addEventListener(MouseEvent.CLICK,launchClick,false,0,true);
 			
-			
+			//add timer
+			//touchTimer = new Timer(1000,);
+			//timer.addEventListener(TimerEvent.TIMER,disableTouch); 
 			
 			container.addChild(pTitle);
 			container.addChild(home);
@@ -114,15 +118,23 @@
 		}
 		private function pEnd(e:NativeProcessExitEvent):void {
 			trace("process exited");
-			fileOpen = false;
+			//fileOpen = false;
+			
 		}
 		private function goHome(e:MouseEvent):void {
-			dispatchEvent(new Event(RETURNEVENT));
+			dispatchEvent(new Event(Hallway.RETURNEVENT));
+		}
+		private function disableTouch(e:TimerEvent) {
+			
 		}
 		private function launchClick(e:MouseEvent):void {
 			//make sure a ppt isn't already being opened
-			if(fileOpen) 
+			//if(fileOpen) 
+				//return;
+			
+			if(touchTimer.running) {
 				return;
+			}
 			
 			//make sure a ppt has been selected
 			if(scrollBox.selectedItem == null) {

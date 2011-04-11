@@ -1,11 +1,12 @@
 ﻿package  {
 	import flash.display.MovieClip;
-	//import flash.net.*;
-	//import flash.events.*;
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.Back;
-	
+	/*
+	DisplayContainer.as
+		This class extends the movieclip class. It allows instantiation with a set size and color.
+	*/
 	public class DisplayContainer extends MovieClip{
 		private var cont:MovieClip;
 		private var newCont:*; //temporary holder
@@ -17,7 +18,16 @@
 		private var h:Number;
 		//check if animating
 		private var animating:Boolean = false;
-		
+		/*
+			Constructor 
+				
+				Parameters:
+					     w: width of the display container
+					     h: height of the display container
+					 color: color of the hitbox to be drawn in the display container, default is black
+					     a: the alpha value of the hitbox, default 0 (invisible)
+					center: flag for whether items are centered
+		*/
 		public function DisplayContainer(w:Number,h:Number,color:uint=0x000000,a:Number = 0,center:Boolean = false,initialContent:* = null, t:Tween = null) {
 			this.w = w;
 			this.h = h;
@@ -42,10 +52,13 @@
 			aT = new Tween(cont,"alpha",null,cont.alpha,0,effectSpeed,true);
 			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut,false,0,true);
 		}
+		/*
+		
+		*/
 		private function effectOut(e:TweenEvent):void { 
 			//trace("effecting out");
 			//change
-			changeChild(cont,newCont);
+			Utils.changeContent(cont,newCont);
 			cont = Utils.scale(cont,w,h);
 			
 			//center content
@@ -72,12 +85,6 @@
 			animating = false;
 		}
 		//utility
-		private function changeChild(con:*,obj:*):void { //change to default in Utils
-			while(con.numChildren) {
-				con.removeChildAt(0);
-			}
-			con.addChild(obj);
-		}
 		public function getContent():MovieClip {
 			return cont;
 		}

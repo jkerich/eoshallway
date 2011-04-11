@@ -1,4 +1,5 @@
 @echo off
+TASKKILL /T /F /IM pptview.exe
 set fileName=%1
 SHIFT
 :Loop
