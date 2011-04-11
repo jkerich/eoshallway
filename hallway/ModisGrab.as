@@ -4,7 +4,6 @@
 	import flash.events.IOErrorEvent;
 	import flash.events.Event;
 	import flash.display.MovieClip;
-	//import flash.errors.*;
 	/*
 	Based on code by Jay Kim
 	
@@ -48,12 +47,26 @@
 		private var currentSat:String;
 		private var loadingImage:LoadingSign;
 		
+		/*
+		Constructor 
+			
+			Parameters: 
+				w: the maximum width of the instance
+				h: the maximum height of the intstance
+		*/
 		public function ModisGrab(w:Number = 0,h:Number = 0) {
 			maxWidth = w;
 			maxHeight = h;
 			locImage = new Loader();
 					
 		}
+		/*
+		getLatestImage
+			Purpose: Retrieves the most current image from MODIS and loads it directly into the instance
+			
+			Parameters:
+				sat: the name of the satellite to pull MODIS information from, can be ONLY "aqua" or "terra"
+		*/
 		public function getLatestImage(sat:String):Boolean {
 			currentSat = sat;
 			urlObj = generateURLObject(sat);
@@ -68,6 +81,10 @@
 				return false;
 			}
 		}
+		/*
+		prevImage
+			Purpose: 
+		*/
 		public function prevImage():Boolean {
 			movingBack = true;
 			

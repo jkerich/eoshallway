@@ -17,9 +17,6 @@
 	import flash.events.IOErrorEvent;
 	import flash.utils.setInterval;
 	import flash.system.System;
-
-	//import flash.net.*;
-	//import flash.system.*;
 	
 	
 	public class Hallway extends MovieClip {
@@ -32,14 +29,13 @@
 		private var subButtonRow:MovieClip;
 		private var frame:MovieClip;
 		private var dc:DisplayContainer;
-		//private var feedback:MovieClip;
 		
 		//constants
-		private const paddingH:Number = 8; //do not use decimal values
+		private const paddingH:Number = 8; //space between the edge of the screen and the inner border, must be decimal value
 		private const paddingW:Number = 15;
-		private var RETURNEVENT:String = "RETURNHOME";
-		private var BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg";
-		private const MEMORYLIMIT:Number = 419430400; //400 MB
+		public static const RETURNEVENT:String = "RETURNHOME"; //event string to return to home page (this value can be found in other classes as well)
+		private const BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg"; 
+		private const MEMORYLIMIT:Number = 734003200; //maximum memory usage before forcing garbage collection (700 MB)
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra"];
@@ -69,25 +65,17 @@
 		private var homeRowHandlers:Array;
 		private var currentDisplay:Number = 0;
 		
-		//tweens
-		
-		
-		//check if animating
-		//private var animating:Boolean = false;
-		
-		/*
-		TODO:
-			-modis page needs to work on memory management
-		*/
-		
 		public function Hallway() {
 			//stage.displayState = StageDisplayState.FULL_SCREEN;
 			//Document class loaded to stage after everything thats already on the stage so wait until loaded
 			addEventListener(Event.ADDED_TO_STAGE,init,false,0,true);
 			
 		}
+		/*
+		init
+			Purpose: initialize all the various components 
+		*/
 		private function init(e:Event):void {
-			
 			//prevent flv fullscreen takeover
 			stage.addEventListener(Event.ADDED,killTakeOver,false,0,true);
 			
@@ -106,7 +94,7 @@
 			
 			titleH = (new EOSTitle()).height;//title
 			titleW = (new EOSTitle()).width;
-			
+			 
 			buttonW = slaveW/sats.length; //big buttons in middle, height is constant
 			subButtonW = slaveW;
 			
@@ -149,7 +137,7 @@
 			slaveDisplay[0].addChild(title);
 			
 			//add display container
-			dc= new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH,0x000000,.65,true);
+			dc = new DisplayContainer(slaveW,slaveH-buttonH-subButtonH-titleH,0x000000,.65,true);
 			//dc.x = paddingW;
 			dc.y = title.y + titleH;
 			slaveDisplay[0].addChild(dc);
@@ -208,13 +196,22 @@
 			
 			//run garbage collection when memory usage gets too high
 			addEventListener(Event.ENTER_FRAME,runGC,false,0,true);
+
 		}
+		/*
+		runGC
+			Purpose: runs garbage collector when the application is using too much memory
+		*/
 		private function runGC(e:Event):void {
 			if(flash.system.System.privateMemory > MEMORYLIMIT) {
-				trace("Running garbage collection b/c memory usage exceeded limit: " + MEMORYLIMIT);
+				trace("Running garbage collection b/c memory usage exceeded limit: " + MEMORYLIMIT + " bytes");
 				Utils.startGC();
 			}
 		}
+		/*
+		returnHome
+			Purpose: tweens the masterDisplay to show the top left corner which is the main screen
+		*/
 		private function returnHome(e:Event):void {
 			//trace("key down");
 			new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
@@ -227,7 +224,20 @@
 				}
 			}*/
 		}
+		/*
+		moveDisplay
+			Purpose: Tweens the masterDisplay in the specified direction. To do diagonal movements, call function twice.
+			
+			Parameters:
+				dir: direction to move the masterDisplay, can be: "right", "left", "down", "up"
+			
+			Example: 
+				- diagonal movement
+					moveDisplay(right);
+					moveDisplay(down);
+		*/
 		private function moveDisplay(dir:String):void {
+			dir = dir.toLowerCase();
 			if(dir == "right") {
 				new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,-sW+paddingW,.5,true);
 			}else if(dir == "down") {
@@ -236,9 +246,14 @@
 				new Tween(masterDisplay,"x",Back.easeOut,masterDisplay.x,0,.5,true);
 			}else if(dir == "up") {
 				new Tween(masterDisplay,"y",Back.easeOut,masterDisplay.y,sH-paddingH,.5,true);
+			}else {
+				trace("Invalid direction supplied to moveDisplay");
 			}
-			
 		}
+		/*
+		bigButtonClicked
+			Purpose: change the home screen DisplayContainer and subRow when the middle buttons are clicked
+		*/
 		private function bigButtonClicked(e:MouseEvent):void {
 			//move button highlight over
 			var tar:Object = e.currentTarget;
@@ -261,7 +276,10 @@
 			}
 			
 		}
-		//homerow handlers
+		/*
+		The following are the event handlers for the tab row across the top and the sub rows across the bottom.
+		Note some of these are not being used. 
+		*/
 		private function fullscreenMode(e:MouseEvent):void {
 			stage.displayState = StageDisplayState.FULL_SCREEN;
 		}
@@ -274,7 +292,6 @@
 		}
 		private function mediaClick(e:MouseEvent):void {
 			trace("media clicked");
-			//load media click
 			var ss:SlideShow = new SlideShow(slaveW,slaveH);
 			ss.addEventListener(RETURNEVENT,returnHome,false,0,true);
 			Utils.changeContent(slaveDisplay[3],ss);
@@ -323,12 +340,24 @@
 		private function imagesClick(e:MouseEvent):void {
 			trace("images clicked");
 		}
+		/*
+		killTakeOver
+			Purpose: 
+				This function prevents a flaw in the FLVPlayback component which defaults it to fullscreen when the
+				application is in fullscreen.
+		*/
 		//silly code to fix idiotsyncrasies 
 		private function killTakeOver(e:Event):void {
 			if (e.target is FLVPlayback) {
 				e.target.fullScreenTakeOver = false;
 			}
 		}
+		/*
+		clickFeedback, redrawCircle
+			Purpose:
+				These functions draw a fading circle on the screen whenever the user touches the screen.
+		
+		*/
 		private function clickFeedback(e:MouseEvent):void {
 			var feedback:MovieClip = new MovieClip();
 			var mc:MovieClip = new MovieClip();

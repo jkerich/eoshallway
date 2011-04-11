@@ -8,10 +8,7 @@
 	import flash.text.TextFormat;
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
-	//import flash.system.*;
-	//import flash.net.*;
-	//import fl.transitions.easing.*;
-	
+
 	public class SpecsPage extends MovieClip {
 		//mcs
 		private var dc:DisplayContainer;
@@ -25,9 +22,7 @@
 		private var titleW:Number;
 		private var titleH:Number = 65;
 		private var titleSize:Number = 35;
-		private var outlineColor:uint = 0xFFFFFF;
-		private var RETURNEVENT:String = "RETURNHOME";
-	
+		private var outlineColor:uint = 0xFFFFFF;	
 		private var tabFormat:TextFormat;
 		private var sats:Array = ["home","aqua","aura","terra"];
 		private var tabButtons:Array;
@@ -104,7 +99,7 @@
 			}else if(sat == "trmm") {
 				dc.changeContent(new TrmmSpecs());
 			}else if(sat == "home") {
-				dispatchEvent(new Event(RETURNEVENT)); // -----change this later
+				dispatchEvent(new Event(Hallway.RETURNEVENT)); 
 			}
 		}
 		public function changeDisplay(c:MovieClip):void {
