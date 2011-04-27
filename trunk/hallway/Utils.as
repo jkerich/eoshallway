@@ -75,7 +75,7 @@
 		/*
 		drawHitBox
 			Purpose:
-				This function draws a box of the specified size directly into an object using its
+				This function draws a box of the specified size directly into an object using the object's own
 				graphics properties. The default values draw an invisible box of the specified size. 
 				This is primarily used to instantiate container objects with a set size.
 				
@@ -110,7 +110,8 @@
 				BEFORE the "desktop" profile. 
 				
 			Parameters:
-				    fileName: Name of file to execute
+				    fileName: Name of file to execute. When making a script, note the file name is split up by spaces 
+							  before being passed to the script.
 				  workingDir: The directory the file is in, this directory MUST be in the application directory
 				  			  By default it is empty, which means the application directory is the working directory
 				exitListener: A function specifying what to do once the external application has finished exectuting.

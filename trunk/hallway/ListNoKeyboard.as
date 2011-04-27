@@ -3,7 +3,10 @@
 	import fl.controls.List;
 
 	public class ListNoKeyboard extends List{
-
+		/*
+		ListNoKeyboard.as
+			This class is used to override the keyboard controls of the List compononent.
+		*/
 		public function ListNoKeyboard() {
 			super();
 		}

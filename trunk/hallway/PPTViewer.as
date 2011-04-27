@@ -22,10 +22,13 @@
 		private var scrollBox:ListNoKeyboard;
 		private var selectedPPT:TextField;
 		private var fileOpen:Boolean = false;
-		private var touchTimer:Timer;
 		private var container:MovieClip; //container to contain all inner elements
 		
-		//TODO: consider scaling container
+		/*
+		PPTViewer.as
+			This class describes the PowerPoint page. It uses the "launchApp()" function which currently requires
+			a windows OS and a cmd file. See Utils.as for details.
+		*/
 		public function PPTViewer(stageWidth:Number,stageHeight:Number,powerPointDir:String = "PowerPoints") {
 			sW = stageWidth;
 			sH = stageHeight;
@@ -101,10 +104,6 @@
 			launch.y = selectedPPT.y + selectedPPT.height + 10;
 			launch.addEventListener(MouseEvent.CLICK,launchClick,false,0,true);
 			
-			//add timer
-			//touchTimer = new Timer(1000,);
-			//timer.addEventListener(TimerEvent.TIMER,disableTouch); 
-			
 			container.addChild(pTitle);
 			container.addChild(home);
 			container.addChild(scrollBox);
@@ -124,24 +123,12 @@
 		private function goHome(e:MouseEvent):void {
 			dispatchEvent(new Event(Hallway.RETURNEVENT));
 		}
-		private function disableTouch(e:TimerEvent) {
-			
-		}
 		private function launchClick(e:MouseEvent):void {
-			//make sure a ppt isn't already being opened
-			//if(fileOpen) 
-				//return;
-			
-			if(touchTimer.running) {
-				return;
-			}
-			
 			//make sure a ppt has been selected
 			if(scrollBox.selectedItem == null) {
 				trace("No item selected");
 				return;
 			}
-			
 			//launch
 			//trace(scrollBox.selectedItem.label);
 			Utils.launchApp(scrollBox.selectedItem.label,"PowerPoints",pEnd);

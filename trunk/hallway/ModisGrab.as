@@ -25,6 +25,13 @@
 		TERRA MODIS -> crefl1_143.A 
 		AQUA MODIS  -> crefl2_143.A
 		
+		
+	DIFFERENCE BETWEEN LOCATION IMAGE URL AND IMAGE URL:
+		Location Image:
+			http://rapidfire.sci.gsfc.nasa.gov/realtime/2011068/geoinfo1.A2011068122000-2011068122500.jpg
+		Actual Image:
+			http://rapidfire.sci.gsfc.nasa.gov/realtime/2011068/crefl1_143.A2011068221000-2011068221500.2km.jpg
+	
 	POSSIBLE BUGS:
 	-calling prev image too much could result in infinite loop
 	
@@ -84,6 +91,7 @@
 		/*
 		prevImage
 			Purpose: 
+				Generate older URLs until an image is found
 		*/
 		public function prevImage():Boolean {
 			movingBack = true;
@@ -93,6 +101,11 @@
 			getOlderURL();
 			return true;
 		}
+		/*
+		nextImage
+			Purpose: 
+				Generate newer URLs until an image is found. Only goes as far as the current time.
+		*/
 		public function nextImage():Boolean {
 			movingBack = false;
 			
@@ -107,17 +120,26 @@
 			getNewerURL();
 			return true;
 		}
-		
+		/*
+		loadImage
+			Purpose:
+				Attempts to load an image from the specified URL. If it fails to find an image then
+				depending on whether the user was headed backwards or forwards, it will call prevImage 
+				or nextImage. 
+			Parameters:
+				url: URL of the image
+		*/
 		private function loadImage(url:String):void {
 			this.load(new URLRequest(url));
 			this.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage,false,0,true);
 			this.contentLoaderInfo.addEventListener(Event.COMPLETE,imageFound,false,0,true);
-			
-			
 		}
-		private function loadLocImage(url:String):void {
-			locImage.load(new URLRequest(url));
-			locImage.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noLocImage,false,0,true);
+		private function noImage(e:IOErrorEvent):void {
+			//trace("URL not valid");
+			if(movingBack)
+				getOlderURL();
+			else 
+				getNewerURL();
 		}
 		private function imageFound(e:Event):void {
 			//trace("Success");
@@ -145,16 +167,27 @@
 				gettingLatestURL = false;
 			}
 		}
+		/*
+		loadLocImage
+			Purpose:				
+				Attempts to load the miniture location image of the earth that corresponds with the 
+				loaded MODIS image. If it fails, no image is loaded and an error message is traced.
+				
+			Parameter: 
+				url: URL for the location image 
+		*/
+		private function loadLocImage(url:String):void {
+			locImage.load(new URLRequest(url));
+			locImage.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noLocImage,false,0,true);
+		}
 		private function noLocImage(e:IOErrorEvent):void {
 			trace("No location image available");
 		}
-		private function noImage(e:IOErrorEvent):void {
-			//trace("URL not valid");
-			if(movingBack)
-				getOlderURL();
-			else 
-				getNewerURL();
-		}
+		/*
+		getNewerUrl 
+			Purpose:
+				Loads an image using a URL +5 mins of the current URL.
+		*/
 		private function getNewerURL():void {
 			var firstDay:Date = new Date(urlObj.year,1,null,0,0,0,0);//jan of current year
 			firstDay.setDate(1);
@@ -185,6 +218,12 @@
 			loadImage(currentURL);
 			
 		}
+		/*
+		getOlderURL
+			Purpose:
+				Loads an image using a URL -5 mins of the current URL.
+
+		*/
 		private function getOlderURL():void {
 			//The year flip is untested
 			if(urlObj.mins > 0) {//only flip mins
@@ -212,6 +251,13 @@
 			currentURL = createImageURL(urlObj.modisURL,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
 			loadImage(currentURL);
 		}
+		/*
+		generateURLObject
+			Purpose: 
+				Generates an object whose members are each of the significant pieces of the URL.
+			Parameters:
+				satName: the name of the satellite to generate the url object for, only can be "TERRA" or "AQUA"
+		*/
 		private function generateURLObject(satName:String):Object {
 			//pick which modis to get images from
 			var modisURL:String = "";
@@ -249,6 +295,17 @@
 					hours:hours,
 					mins:mins};
 		}
+		/*
+		createImageURL
+			Purpose:
+				Generates a MODIS image URL with the specifed parameters, usually taken from a url object.
+			Parameters:
+				modisURL: the part of the URL signifying the satellite
+				    year: the year of the image URL
+				     doy: the day of year of the image URL
+				   hours: the hour of the image URL
+				    mins: the minutes of the image URL
+		*/
 		private function createImageURL(modisURL:String,year:Number,doy:Number,hours:Number,mins:Number):String {
 			//get utc time + five mins
 			var endMins:Number = mins+5; //don't need to round because mins is already rounded
@@ -277,8 +334,19 @@
 					padTime(endMins)+
 					"00.2km.jpg";
 		}
-		//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011068/geoinfo1.A2011068122000-2011068122500.jpg
-		//http://rapidfire.sci.gsfc.nasa.gov/realtime/2011068/crefl1_143.A2011068221000-2011068221500.2km.jpg
+		/*
+		createLocImageURL
+			Purpose:
+				Create a URL for the location image corresponding to the MODIS image. Most parameters taken from
+				the url object.
+			Parameters:
+				 satName: name of the satellite the MODIS image is from
+				modisURL: the part of the URL signifying the satellite
+				    year: the year (same as MODIS) 
+				     doy: the day of year (same as MODIS image)
+				   hours: the hour (same as MODIS image)
+				    mins: the minute (same as MODIS image)
+		*/
 		private function createLocImageURL(satName:String,modisURL:String,year:Number,doy:Number,hours:Number,mins:Number):String {
 			//get utc time + five mins
 			var endMins:Number = mins+5; //don't need to round because mins is already rounded
@@ -317,7 +385,13 @@
 					padTime(endMins)+
 					"00.jpg";
 		}
-		//utility
+		/*
+		padTime
+			Purpose:
+				Add a leading zero to a single digit number
+			Parameter:
+				num: number to pad
+		*/
 		public function padTime(num:Number):String {
 			if(num.toString().length < 2) {
 				return "0"+num;
@@ -325,6 +399,13 @@
 				return num+"";
 			}
 		}
+		/*
+		padDOY
+			Purpose:
+				Add leading zeros to a day of year number creating a three digit number
+			Parameter:
+				day: day of year number to pad
+		*/
 		public function padDOY(day:Number):String {
 			if(day.toString().length < 2) 
 				return "00"+day;

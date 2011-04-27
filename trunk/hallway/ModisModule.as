@@ -44,7 +44,7 @@
 			t.setTextFormat(new TextFormat("Walkway Bold",26,0xFFFFFF));
 			t.autoSize = TextFieldAutoSize.LEFT;
 			t.selectable = false;
-			Utils.drawHitBox(satTitle,t.width+20,t.textHeight+40);
+			Utils.drawHitBox(satTitle,t.width+20,t.textHeight+40,0x000000,.65);
 			t.x = (satTitle.width - t.width)/2;
 			t.y = (satTitle.height - t.textHeight)/2;
 			satTitle.addChild(t);
