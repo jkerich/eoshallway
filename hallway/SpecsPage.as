@@ -29,7 +29,11 @@
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
 		
-		//insert a name title somewhere
+		/*
+		SpecsPage.as
+			This class describes the details page slideshow. Note that there is code attached to the first frames of each of the 
+			loaded slide shows.
+		*/		
 		public function SpecsPage(stageWidth:Number,stageHeight:Number,sat:String = "aqua") {
 			
 			sW = stageWidth;
@@ -70,7 +74,11 @@
 			addChild(tabs);
 			addChild(dc);
 		}
-		//creates a tabStrip
+		/*
+		createTabStrip
+			Purpose: 
+				Creates the tab strip at the top next to the title.
+		*/
 		public function createTabStrip():MovieClip {
 			var tabStrip:MovieClip = new MovieClip();
 			
@@ -84,6 +92,11 @@
 			tabStrip = Utils.scale(tabStrip,sW - aboutTitle.width,tabStrip.height); //resize properly
 			return tabStrip;
 		}
+		/*
+		clicked
+			Purpose:
+				Change slideshow based on which tab is clicked.
+		*/
 		public function clicked(e:MouseEvent) {
 			var sat:String= e.target.name;
 			//kill any flv videos playing on frame
@@ -102,29 +115,5 @@
 				dispatchEvent(new Event(Hallway.RETURNEVENT)); 
 			}
 		}
-		public function changeDisplay(c:MovieClip):void {
-			textContent = c;
-			//hide
-			aT = new Tween(dc,"alpha",null,dc.alpha,0,effectSpeed,true);
-			aT.addEventListener(TweenEvent.MOTION_FINISH,effectOut,false,0,true);
-			
-		}
-		private function effectOut(e:TweenEvent):void { //effect used to change display is done
-			//center content
-			if (textContent.width > dc.width) {
-				textContent.width = dc.width;
-			}else {
-				textContent.x = (dc.width - textContent.width)/2;
-			}
-			if (textContent.height > dc.height) {
-				textContent.height = dc.height;
-			}
-			//change
-			Utils.changeContent(dc,textContent);
-			//effect back in
-			new Tween(dc,"alpha",null,dc.alpha,1,effectSpeed,true);
-		}
-		
 	}
-	
 }

@@ -7,9 +7,12 @@
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import flash.events.Event;
-	//import fl.transitions.easing.*;
 
-	public class SubButtonRow extends MovieClip{
+	/*
+	SubButtonRow.as
+		This class describes the bottom row of buttons on the main page.
+	*/
+	public class SubButtonRow extends MovieClip {
 		private var satName:String;
 		private var aT:Tween;
 		private var textFormat:TextFormat;
@@ -26,7 +29,7 @@
 			if(names.length != handlers.length) {
 				trace("Names array and Handlers array have differing lengths");
 			}
-			drawHitBox(w,h,0x000000,.65); //not necessary in this instance
+			Utils.drawHitBox(this,w,h,0x000000,.65); //not necessary in this instance
 			
 			//check for a text format
 			textFormat = (tf == null) ? new TextFormat("Walkway SemiBold",26,0xFFFFFF):tf;
@@ -37,12 +40,16 @@
 		private function init(e:Event):void {
 			this.changeSat(this.getName(),this.names,this.handlers);
 		}
-		
+		/*
+		changeSat
+			Purpose:
+				Switch buttons based on which sat was selected. This function starts an animation.
+			Parameters:
+				     sn: satellite name
+				  names: an array of names of the buttons 
+				handler: an array of handler functions for the buttons
+		*/
 		public function changeSat(sn:String,names:Array,handlers:Array):void {
-			//reset
-			/*if(aT) {
-				this.y = aT.finish;
-			}*/
 			if(animating) {
 				return;
 			}
@@ -55,6 +62,12 @@
 			aT.addEventListener(TweenEvent.MOTION_FINISH,animateFinish,false,0,true);
 			
 		}
+		/*
+		animateFinish
+			Purpose:
+				This function swaps the buttons and finishes the animation started by changeSat. 
+
+		*/
 		private function animateFinish(e:TweenEvent):void {
 			aT.removeEventListener(TweenEvent.MOTION_FINISH,animateFinish);
 			//reset
@@ -72,18 +85,18 @@
 			aT = new Tween(this,"y",null,this.y,this.y-jumpDistance,aSpeed/2,true);
 			aT.addEventListener(TweenEvent.MOTION_FINISH,endReturn,false,0,true);
 		}
+		/*
+		endReturn
+			Purpose: 
+				Sets off the flag that states whether the SubButtonRow is currently animating 
+		*/
 		private function endReturn(e:TweenEvent):void {
 			animating = false;
 		}
 		public function getName():String {
 			return this.satName;
 		}
-		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			this.graphics.clear();
-			this.graphics.beginFill(color,a);
-			this.graphics.drawRect(0,0,w,h);
-			this.graphics.endFill();
-		}
+		
 	}
 	
 }

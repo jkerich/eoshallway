@@ -6,7 +6,10 @@
 	import flash.text.TextFieldAutoSize;
 
 	public class SubButton extends MovieClip{
-
+		/*
+		SubButton.as
+			This class describes the buttons inside the SubButtonRow
+		*/
 		public function SubButton(n:String,w:Number,h:Number,handler:Function,textFormat:TextFormat = null) {
 			//add text
 			var t:TextField = new TextField();
@@ -15,6 +18,7 @@
 			t.text = n;
 			t.selectable = false;
 			t.autoSize = TextFieldAutoSize.CENTER;
+			
 			//make sure it fits
 			if(w>=t.width) {
 				t.x = (w-t.width)/2;
@@ -31,7 +35,7 @@
 			}
 			
 			//draw hit box
-			drawHitBox(w,h);
+			Utils.drawHitBox(this,w,h);
 			
 			//add text field
 			this.addChild(t);
@@ -39,13 +43,6 @@
 			//add event listener
 			this.addEventListener(MouseEvent.CLICK,handler,false,0,true);
 		}
-		private function drawHitBox(w:Number,h:Number,color:uint = 0xFFFFFF,a:Number = 0):void {
-			this.graphics.clear();
-			this.graphics.beginFill(color,a);
-			this.graphics.drawRect(0,0,w,h);
-			this.graphics.endFill();
-		}
-
 	}
 	
 }
