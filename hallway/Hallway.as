@@ -35,7 +35,7 @@
 		private const paddingW:Number = 15;
 		public static const RETURNEVENT:String = "RETURNHOME"; //event string to return to home page (this value can be found in other classes as well)
 		private const BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg"; 
-		private const MEMORYLIMIT:Number = 734003200; //maximum memory usage before forcing garbage collection (700 MB)
+		private const MEMORYLIMIT:Number = 1610612736 ; //maximum memory usage before forcing garbage collection (1.5 GB)
 		
 		//arrays
 		private var sats:Array = ["aqua","aura","terra"];
@@ -105,7 +105,7 @@
 			//slave containers
 			masterDisplay = new MovieClip();
 			slaveDisplay = new Array();
-			for(var a:Number = 0;a<4;a++) {  //4 displays
+			for(var a:Number = 0;a<4;a++) {  //4 displays CHANGE THIS VALUE IF YOU WANT MORE DISPLAYS
 				//random color
 				var sd:MovieClip = new MovieClip(); 
 				var color:uint = Math.random()*0xFFFFFF;
@@ -142,7 +142,7 @@
 			dc.y = title.y + titleH;
 			slaveDisplay[0].addChild(dc);
 			
-			//add home buttons
+			//add home buttons (top row)
 			homeRow = new MovieClip();
 			for (var b:Number = 0;b<homeRowButtons.length;b++) {
 				homeRowButtons[b].x = homeRowButtons[b].width * b;

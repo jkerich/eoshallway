@@ -130,6 +130,7 @@
 				url: URL of the image
 		*/
 		private function loadImage(url:String):void {
+			trace(url);
 			this.load(new URLRequest(url));
 			this.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,noImage,false,0,true);
 			this.contentLoaderInfo.addEventListener(Event.COMPLETE,imageFound,false,0,true);
@@ -249,6 +250,7 @@
 				urlObj.year -= 1;
 			}
 			currentURL = createImageURL(urlObj.modisURL,urlObj.year,urlObj.doy,urlObj.hours,urlObj.mins);
+			trace(currentURL);
 			loadImage(currentURL);
 		}
 		/*
@@ -319,7 +321,7 @@
 					endHours = 0;
 			}
 			
-			return "http://rapidfire.sci.gsfc.nasa.gov/realtime/"+
+			return "http://lance-modis.eosdis.nasa.gov/imagery/realtime/"+
 					year+
 					padDOY(doy)+
 					modisURL+
@@ -370,7 +372,7 @@
 				return null;
 			}
 			
-			return "http://rapidfire.sci.gsfc.nasa.gov/realtime/"+
+			return "http://lance-modis.eosdis.nasa.gov/imagery/realtime/"+
 					year+
 					padDOY(doy)+
 					locModisURL+
