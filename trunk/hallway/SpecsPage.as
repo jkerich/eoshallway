@@ -24,7 +24,7 @@
 		private var titleSize:Number = 35;
 		private var outlineColor:uint = 0xFFFFFF;	
 		private var tabFormat:TextFormat;
-		private var sats:Array = ["home","aqua","aura","terra"];
+		private var tabButtonNames:Array;
 		private var tabButtons:Array;
 		private var aT:Tween;
 		private var effectSpeed:Number = .5;
@@ -42,8 +42,17 @@
 			textContent = new MovieClip();
 			aboutTitle = new MovieClip();
 			tabFormat = new TextFormat("Arial",26,0xFFFFFF);
+			
+			/* 
+			ADD/CHANGE tab row buttons here make sure the array indicies match
+			GENERIC EXAMPLE:
+				tabButtonNames = ["New Button"];
+				tabButtons = [new newButtonLibraryAsset()];
+			*/
+			tabButtonNames = ["home","aqua","aura","terra"];
 			tabButtons = [new HomeBtn(),new AquaTab(),new AuraTab(),new TerraTab()];
-			//add title
+			
+			//CHANGE library asset for page title here
 			aboutTitle.addChild(new AboutTitle());
 			
 			//create tabs
@@ -57,7 +66,12 @@
 			dc.x = 0;
 			dc.y = tabs.y + tabs.height;
 			
-			//initialize sat
+			//load first sat detail slide
+			/*
+			GENERIC EXAMPLE:
+				else if(sat == <sat_name>)
+					dc.changeContent(<library_instance>)
+			*/
 			sat = sat.toLowerCase();
 			if(sat == "aqua") {
 				dc.changeContent(new AquaDetails());
@@ -84,7 +98,7 @@
 			
 			for(var i:Number = 0; i<tabButtons.length;i++) {
 				var sTab:SimpleButton = tabButtons[i];
-				sTab.name = sats[i];
+				sTab.name = tabButtonNames[i];
 				sTab.x = sTab.width * i;
 				sTab.addEventListener(MouseEvent.CLICK,clicked,false,0,true);
 				tabStrip.addChild(sTab);
@@ -102,7 +116,13 @@
 			//kill any flv videos playing on frame
 			Utils.stopPlayback(dc.getContent());
 			
-			//find out which sat was clicked
+			//find out which tab was clicked
+			/*
+			GENERIC EXAMPLE:
+				if(sat == <sat_name>) 
+					dc.changeContent(<library_asset>);
+					//or whatever else needs to be done
+			*/
 			if(sat == "aqua") {
 				dc.changeContent(new AquaDetails());
 			}else if(sat == "aura") {
