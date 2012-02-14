@@ -34,6 +34,7 @@
 		private const paddingH:Number = 8; //space between the edge of the screen and the inner border, must be decimal value
 		private const paddingW:Number = 15;
 		public static const RETURNEVENT:String = "RETURNHOME"; //event string to return to home page (this value can be found in other classes as well)
+		public static const NETCONNERROR:String = "NETERROR";
 		private const BACKGROUNDIMAGE:String = "localImages/general/earth_from_space.jpg"; 
 		private const MEMORYLIMIT:Number = 1610612736 ; //maximum memory usage before forcing garbage collection (1.5 GB)
 		
