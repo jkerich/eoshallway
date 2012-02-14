@@ -6,6 +6,8 @@
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	/*
 	ModisModule.as
@@ -80,6 +82,37 @@
 												  loadingImage.gotoAndPlay(1);
 												  loadingImage.alpha = 1;
 												  },false,0,true);
+			mg.addEventListener(Hallway.NETCONNERROR,function() {
+									//hide loading image
+									loadingImage.alpha = 0; 
+									//destroy event listeners
+									removeEventListener(MouseEvent.CLICK,nextPic);
+									removeEventListener(MouseEvent.CLICK,prevPic);
+									
+									//create and show error message
+									var tim:Timer = new Timer(1000,10);
+									
+									var netErrText:TextField = new TextField();
+									netErrText.autoSize = TextFieldAutoSize.LEFT;
+									netErrText.selectable = false;
+									netErrText.text = "Network Error: Unable to access MODIS realtime imagery. Returning Home in: "+(tim.repeatCount - tim.currentCount);
+									netErrText.setTextFormat(new TextFormat("Walkway Bold",24,0xFFFFFF));
+									netErrText.x = (sW - netErrText.width)/2;
+									netErrText.y = (sH - netErrText.height)/2;
+									addChild(netErrText);
+									
+									//return home
+									tim.addEventListener(TimerEvent.TIMER,function() {
+														 netErrText.text = "Network Error: Unable to access MODIS realtime imagery. Returning Home in: "+(tim.repeatCount - tim.currentCount);
+														 netErrText.setTextFormat(new TextFormat("Walkway Bold",24,0xFFFFFF));
+														 },false,0,true);
+									tim.addEventListener(TimerEvent.TIMER_COMPLETE,function() {
+														 dispatchEvent(new Event(Hallway.RETURNEVENT));
+														 },false,0,true);
+									
+									tim.start();
+									
+								},false,0,true);
 			
 			mg.y = satTitle.height + satTitle.y;
 			

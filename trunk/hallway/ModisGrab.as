@@ -53,6 +53,8 @@
 		public var locImage:Loader; //tiny image of location of sat
 		private var currentSat:String;
 		private var loadingImage:LoadingSign;
+		private var MAX_URL_FAILS:Number = 150;
+		private var urlFailCount:Number = 0;
 		
 		/*
 		Constructor 
@@ -137,6 +139,13 @@
 		}
 		private function noImage(e:IOErrorEvent):void {
 			//trace("URL not valid");
+			urlFailCount++;
+			//trace(urlFailCount);
+			if(urlFailCount >= MAX_URL_FAILS) {
+				trace("URL FAIL COUNT EXCEEDED!");
+				dispatchEvent(new Event(Hallway.NETCONNERROR)); 
+				return;
+			}
 			if(movingBack)
 				getOlderURL();
 			else 
