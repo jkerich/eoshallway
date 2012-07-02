@@ -1,0 +1,70 @@
+
+TODO:
+
+Main Page:
+	Need to make the button row highlight.
+	Need to make outline going around the black areas
+
+Specs:
+	Add orbits videos to each 
+
+General:
+	Confusing Nomenclature:
+		'DisplayContainer.as' has a function 'changeContent' but so does 'Utils.as' each does something different. Changing either will involve a fair amount of find and replace.
+
+	Look into TouchEvents
+
+	Make 'sats' array global
+
+	Clean up import lists so it only imports what it needs. Should cut down on bloat and compile time.
+
+
+Python Script:
+	Rename "media" folder to "feedMedia" 
+
+
+
+Top Story:
+
+Aura: http://aura.gsfc.nasa.gov/outreach/missionnews.html
+
+Terra: http://terra.nasa.gov/ -> just images from terra
+
+Aura: http://aqua.nasa.gov/highlight.php -> just image highlights
+
+
+
+
+
+
+\\\\\\
+
+SpecsPage:
+
+The details page for each sat has a 'bg' layer that acts as a method to keep size so the resize function doesn't clip away the nav buttons at the bottom **Did the same for about page text
+
+
+General:
+
+'sats' array location
+
+	Currently:
+		Hallway.as
+			-on top
+		SpecsPage.as
+			-on top
+			-'tabButtons' array
+
+
+Flvplayback instances need unique instance names in order to display properly across frames. This is apparently because flash reuses an unnamed instance from the previous frame to playback the video in the next frame and their positions and parameters do not get changed.
+
+
+In order to stop FLV playback there is a function in 'Utils.as' called 'stopPlayback' which kills the sound and applies a '.stop()' to all FLVPlayback instances on frame. It must be used when changing frames or navigating to another part of the application, otherwise the stream will continue to play.
+
+In Hallway-app.xml "extendedDesktop" must appear before "desktop" in "<supportedProfiles>"
+
+
+Main Page:
+	Details Pages:
+		In order to prevent flvplayback from taking over the screen a function has been added in 'Hallway.as' that looks at every object added to the stage, checks if it's an flvplayback instance and sets the fullscreentakeover property to false.
+
